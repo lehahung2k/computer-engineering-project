@@ -15,6 +15,7 @@ function App() {
         <Route path='/search' element={<SearchEvent/>}/>
         <Route path='/event' element={<BasicTable/>}/>
         <Route path='/view-event' element={<ViewEvent/>}/>
+        <Route path='/view-event/:event_id' element={<ViewEvent/>}/>
       </Routes>
     </div>
   );

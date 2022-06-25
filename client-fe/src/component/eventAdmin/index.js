@@ -8,25 +8,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import "./index.css";
+import { Link, useParams } from 'react-router-dom'
 import { WebcamCapture } from "../Webcam";
-
-// import Box from "@mui/material/Box";
-// import Drawer from "@mui/material/Drawer";
-// import CssBaseline from "@mui/material/CssBaseline";
-// import AppBar from "@mui/material/AppBar";
-// import Toolbar from "@mui/material/Toolbar";
-// import List from "@mui/material/List";
-// import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-// import ListItem from "@mui/material/ListItem";
-// import ListItemButton from "@mui/material/ListItemButton";
-// import ListItemIcon from "@mui/material/ListItemIcon";
-// import ListItemText from "@mui/material/ListItemText";
-// import HomeIcon from "@mui/icons-material/Home";
-// import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
-// import FactCheckIcon from "@mui/icons-material/FactCheck";
 import SideBar from "../navigation";
 import { useEffect } from "react";
+import ViewEventInfo from "./viewEventInfo";
 
 function createData(ID, eventName, start, end, POC) {
   return { ID, eventName, start, end, POC };
@@ -117,6 +104,12 @@ export default function ViewEvent() {
   //     };
   //   });
   // }, []);
+
+
+  let {event_id} = useParams();
+  if(event_id === undefined)
+  event_id = '';
+  console.log(event_id);
 
   return (
     <div>
@@ -379,14 +372,14 @@ export default function ViewEvent() {
                       <TableCell>{row.POC}</TableCell>
                       <TableCell>
                         {new Date(row.start) > currentDate ? (
-                          <div class="event-action">
-                            <div class="event-action-edit">Sửa</div>
-                            <div class="event-action-del">Xóa</div>
+                          <div className="event-action">
+                            <div className="event-action-edit">Sửa</div>
+                            <div className="event-action-del">Xóa</div>
                           </div>
                         ) : (
-                          <div class="event-action">
-                            <div class="event-action-view">Xem</div>
-                            <div class="event-action-del">Xóa</div>
+                          <div className="event-action">
+                            <div className="event-action-view"><Link to={'/view-event/'+row.ID}>Xem</Link></div>
+                            <div className="event-action-del">Xóa</div>
                           </div>
                         )}
                       </TableCell>
@@ -398,98 +391,7 @@ export default function ViewEvent() {
           </div>
 
           <Divider />
-          <div id="view-event-info">
-            <div id="view-event-info-main">
-              <div id="view-event-info-event-name-label">
-                <p>Tên sự kiện</p>
-              </div>
-              <div id="view-event-info-event-name">
-                <p>Event name</p>
-              </div>
-
-              <div id="view-event-info-event-ID-label">
-                <p>Mã sự kiện</p>
-              </div>
-              <div id="view-event-info-event-ID">
-                <p>Event ID</p>
-              </div>
-
-              <div id="view-event-info-event-start-label">
-                <p>Bắt đầu</p>
-              </div>
-              <div id="view-event-info-event-start">
-                <p>Start</p>
-              </div>
-
-              <div id="view-event-info-event-end-label">
-                <p>Kết thúc</p>
-              </div>
-              <div id="view-event-info-event-end">
-                <p>End</p>
-              </div>
-
-              <div id="view-event-info-event-note-label">
-                <p>Ghi chú</p>
-              </div>
-              <div id="view-event-info-event-note">
-                
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-                semper erat sapien. Pellentesque eu varius augue. Praesent lacus
-                eros, pellentesque in tempor at, dapibus et libero. Vestibulum
-                vehicula blandit urna vehicula hendrerit. Nulla nec viverra
-                justo, quis faucibus metus. Praesent ut nisl erat. Vestibulum
-                vulputate pulvinar mi id sollicitudin. Ut facilisis lectus eu
-                placerat mattis. Sed pulvinar odio sit amet felis luctus, sit
-                amet consectetur purus dapibus. Duis viverra fermentum
-                imperdiet. Donec est nisl, vehicula eu fringilla dapibus, tempor
-                at dolor. Quisque feugiat iaculis sagittis.
-                
-              </div>
-            </div>
-            <div id="view-event-info-map-thumbnail">
-              <img src="./image/map_example.jpg" />
-            </div>
-          </div>
-<Divider/>
-          <div>
-          <TableContainer
-              component={Paper}
-              id="POC-list-table"
-              style={{ height: 200 }}
-            >
-              <Table stickyHeader sx={{ minWidth: 650 }}>
-                <TableHead id="POC-list-TableHead">
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Tên sự kiện</TableCell>
-                    <TableCell>Mã POC</TableCell>
-                    <TableCell>Ghi chú</TableCell>
-                    <TableCell>Vị trí</TableCell>
-                    <TableCell>Thao tác</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((row) => (
-                    <TableRow
-                      key={row.name}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>{row.ID}</TableCell>
-                      <TableCell component="th" scope="row">
-                        {row.eventName}
-                      </TableCell>
-                      <TableCell>Mã POC</TableCell>
-                      <TableCell>Ghi chú</TableCell>
-                      <TableCell><a href="#">Map</a></TableCell>
-                      <TableCell>
-                        <div>Xóa</div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </div>
+<ViewEventInfo eventId={event_id}/>
         </Grid>
       </Grid>
     </div>
