@@ -4,6 +4,7 @@ import BasicTable from './component/event/HomeEvent';
 import ViewEvent from './component/eventAdmin';
 import { WebcamCapture } from './component/Webcam';
 import SearchEvent from './component/search';
+import EventAction from './component/eventAction';
 import {Routes, Route} from 'react-router-dom';
 
 // import Footer from './components/Footer'
@@ -16,6 +17,7 @@ function App() {
         <Route path='/event' element={<BasicTable/>}/>
         <Route path='/view-event' element={<ViewEvent/>}/>
         <Route path='/view-event/:event_id' element={<ViewEvent/>}/>
+        <Route path='/event-action' element={<EventAction/>}/>
       </Routes>
     </div>
   );

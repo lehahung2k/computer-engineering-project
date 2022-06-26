@@ -56,7 +56,7 @@ export default function SideBar(id) {
           </a>
         </ListItem>
         <ListItem>
-          <a href="/edit-event">
+          <a href="/event-action">
             <ListItemButton>Thêm, sửa sự kiện</ListItemButton>
           </a>
         </ListItem>
