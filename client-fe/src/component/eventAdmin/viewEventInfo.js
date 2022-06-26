@@ -77,7 +77,16 @@ export default function ViewEventInfo({eventId = ''}) {
   if (eventId==='') return <h3>Hãy chọn sự kiện để xem</h3>
   if (loading) return <h3>Đang tải thông tin sự kiện ...</h3>;
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
-  if (data)
+  if (data){
+
+    var showMap = document.querySelectorAll(".view-event-info-show-map");
+    showMap.forEach(e=>{
+      e.onclick = ()=>{
+        console.log("hello");
+        window.open('https://source.unsplash.com/user/c_v_r/1900x800');
+      }
+    });
+
     return (
         
       <div>
@@ -162,7 +171,7 @@ export default function ViewEventInfo({eventId = ''}) {
                     <TableCell>Mã POC</TableCell>
                     <TableCell>Ghi chú</TableCell>
                     <TableCell>
-                      <a href="#">Map</a>
+                      <div className="view-event-info-show-map" >Map</div>
                     </TableCell>
                     <TableCell>
                       <div>Xóa</div>
@@ -175,4 +184,6 @@ export default function ViewEventInfo({eventId = ''}) {
         </div>
       </div>
     );
+
+  }
 }

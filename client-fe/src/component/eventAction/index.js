@@ -69,7 +69,7 @@ export default function EventAction() {
   const [open, setOpen] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
-
+  var imgFiles;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -80,15 +80,33 @@ export default function EventAction() {
 
   const handleUploadImage = (e) => {
     if (e.target.files.length > 0) {
-      const files = e.target.files;
-      var src = URL.createObjectURL(files[0]);
+      imgFiles = e.target.files;
+      var src = URL.createObjectURL(imgFiles[0]);
+      var base = imgFiles[0].convertToBase64();
+      console.log(base);
       var preview = document.querySelector("#map-img-preview");
       preview.src = src;
-      preview.style.display = "block";
-      preview.style.height = "150px";
-      preview.style.width = "200px";
+      // preview.style.display = "block";
+      preview.style.height = "200px";
+      preview.style.width = "300px";
+      // window.open(src);
     }
   };
+
+  const handleNewEvent = ()=>{
+    var newEvent = new FormData();
+    var eventName = document.querySelector("#event-action-info-value-event-name");
+    console.log('hello');
+    console.log(eventName.value);
+    newEvent.append('event-name', eventName.value);
+    let r = (Math.random() + 1).toString(36).slice(2,6);
+    newEvent.append('event-ID', r);
+    newEvent.append('map-img', imgFiles[0])
+    for (let pair of newEvent.entries()) {
+      console.log(pair[0] + ':' + pair[1]);
+    }
+}
+  
 
   return (
     <div>
@@ -165,7 +183,7 @@ export default function EventAction() {
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="text"></input>
+                    <input type="text" id="event-action-info-value-event-name"></input>
                   </div>
                 </Grid>
 
@@ -183,7 +201,7 @@ export default function EventAction() {
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="date" id="startDate" name="startDate" />
+                    <input type="date" id="event-action-info-value-startDate" name="startDate" />
                   </div>
                 </Grid>
 
@@ -192,7 +210,7 @@ export default function EventAction() {
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="date" id="endDate" name="endDate" />
+                    <input type="date" id="event-action-info-value-endDate" name="endDate" />
                   </div>
                 </Grid>
 
@@ -204,16 +222,19 @@ export default function EventAction() {
                     <textarea id="note"></textarea>
                   </div>
                 </Grid>
+                <Grid item xs={4}>
+                    <button id="event-action-add-new-event" onClick={handleNewEvent}>Thêm mới sự kiện</button>
+                  </Grid>
               </Grid>
-              <Grid item>
-                <div height="300px" width="400px">
+              <Grid item  width="500px">
+                <div id="map-img-div">
                   <input
                     type="file"
                     id="file-upload-img"
                     accept="image/*"
                     onChange={handleUploadImage}
                   />
-                  <img id="map-img-preview" max-height="200px" max-width="200px"/>
+                  <img id="map-img-preview" height="200px" width="300px"/>
                 </div>
               </Grid>
             </Grid>
@@ -251,6 +272,8 @@ export default function EventAction() {
                       <textarea></textarea>
                     </div>
                   </Grid>
+
+
                 </Grid>
               </DialogContentText>
             </DialogContent>
