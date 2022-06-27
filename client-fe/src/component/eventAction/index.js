@@ -69,7 +69,7 @@ export default function EventAction() {
   const [open, setOpen] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
-  var imgFiles;
+  var imgFile;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -78,11 +78,26 @@ export default function EventAction() {
     setOpen(false);
   };
 
-  const handleUploadImage = (e) => {
+  const convertBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleUploadImage = async (e) => {
     if (e.target.files.length > 0) {
-      imgFiles = e.target.files;
-      var src = URL.createObjectURL(imgFiles[0]);
-      var base = imgFiles[0].convertToBase64();
+      imgFile = e.target.files[0];
+      var src = URL.createObjectURL(imgFile);
+      var base = await convertBase64(imgFile);
       console.log(base);
       var preview = document.querySelector("#map-img-preview");
       preview.src = src;
@@ -101,7 +116,7 @@ export default function EventAction() {
     newEvent.append('event-name', eventName.value);
     let r = (Math.random() + 1).toString(36).slice(2,6);
     newEvent.append('event-ID', r);
-    newEvent.append('map-img', imgFiles[0])
+    newEvent.append('map-img', imgFile)
     for (let pair of newEvent.entries()) {
       console.log(pair[0] + ':' + pair[1]);
     }
