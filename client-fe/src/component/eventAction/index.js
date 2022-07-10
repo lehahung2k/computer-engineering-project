@@ -122,7 +122,10 @@ export default function EventAction() {
     }
 }
   
-
+let {event_id} = useParams();
+if(event_id === undefined)
+event_id = '';
+console.log(event_id);
   return (
     <div>
       <Grid container spacing={0}>
@@ -169,7 +172,7 @@ export default function EventAction() {
                       <TableCell>
                         {new Date(row.start) > currentDate ? (
                           <div className="event-action">
-                            <div className="event-action-edit">Sửa</div>
+                            <div className="event-action-edit"><Link to={'/event-action/'+row.ID}>Sửa</Link></div>
                             <div className="event-action-del">Xóa</div>
                           </div>
                         ) : (

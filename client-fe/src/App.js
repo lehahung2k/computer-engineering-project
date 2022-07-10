@@ -18,6 +18,7 @@ function App() {
         <Route path='/view-event' element={<ViewEvent/>}/>
         <Route path='/view-event/:event_id' element={<ViewEvent/>}/>
         <Route path='/event-action' element={<EventAction/>}/>
+        <Route path='/event-action/:event_id' element={<EventAction/>}/>
       </Routes>
     </div>
   );

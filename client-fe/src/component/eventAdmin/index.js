@@ -373,7 +373,7 @@ export default function ViewEvent() {
                       <TableCell>
                         {new Date(row.start) > currentDate ? (
                           <div className="event-action">
-                            <div className="event-action-edit">Sửa</div>
+                            <div className="event-action-edit"><Link to={'/event-action/'+row.ID}>Sửa</Link></div>
                             <div className="event-action-del">Xóa</div>
                           </div>
                         ) : (
