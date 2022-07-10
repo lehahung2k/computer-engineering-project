@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Webcam from "react-webcam";
 
 
-const WebcamComponent = () => <Webcam />;
 
 // const videoConstraints = {
 //     width: 220,
@@ -10,12 +9,14 @@ const WebcamComponent = () => <Webcam />;
 //     facingMode: "user"
 // };
 
-export const WebcamCapture = () => {
+export const WebcamCapture = (capture)=>{
 
     const [image,setImage]=useState('');
     const webcamRef = React.useRef(null);
     const [deviceId, setDeviceId] = React.useState();
     const [devices, setDevices] = React.useState([]);
+    const [captureState, setCaptureState] = React.useState(capture['capture']);
+    console.log('capture state',captureState);
 
     const videoConstraints = (deviceId==="")?{
         width: 220,
@@ -41,7 +42,7 @@ export const WebcamCapture = () => {
         [handleDevices]
       );
     
-    const capture = React.useCallback(
+    const captureCamera = React.useCallback(
         () => {
         const imageSrc = webcamRef.current.getScreenshot();
         setImage(imageSrc)
@@ -81,7 +82,7 @@ export const WebcamCapture = () => {
             <button
               onClick={(e) => {
                 e.preventDefault();
-                capture();
+                captureCamera();
               }}
               className="webcam-btn"
             >

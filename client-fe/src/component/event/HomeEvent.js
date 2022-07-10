@@ -26,6 +26,8 @@ import HomeIcon from "@mui/icons-material/Home";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import SideBar from "../navigation";
+import Webcam from "react-webcam";
+
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -40,17 +42,55 @@ const rows = [
 ];
 
 export default function BasicTable() {
+  const [capture, setCapture] = React.useState("hello");
+  const [image,setImage]=React.useState('');
+  const webcamRef = React.useRef(null);
+  const [deviceId, setDeviceId] = React.useState();
+  const [devices, setDevices] = React.useState([]);
+  const [captureState, setCaptureState] = React.useState(capture['capture']);
+  console.log('capture state',capture);
+
+  const videoConstraints = (deviceId==="")?{
+      width: 220,
+      height: 200,
+      facingMode: "user"
+  }:{
+      width: 220,
+      height: 200,
+      facingMode: "user",
+      deviceId: deviceId
+  };
+
+  const handleDevices = React.useCallback(
+      mediaDevices =>
+        setDevices(mediaDevices.filter(({ kind }) => kind === "videoinput")),
+      [setDevices]
+    );
+  
+  React.useEffect(
+      () => {
+        navigator.mediaDevices.enumerateDevices().then(handleDevices);
+      },
+      [handleDevices]
+    );
+  
+  const captureCamera = React.useCallback(
+      () => {
+      const imageSrc = webcamRef.current.getScreenshot();
+      setImage(imageSrc)
+      });
+  
   return (
     <div>
       <Grid container spacing={0}>
         <Grid xs="auto">
           <div>
-            <SideBar id='1'></SideBar>
+            <SideBar id="1"></SideBar>
           </div>
         </Grid>
         <Grid xs>
           <div id="header" color="blue">
-            <h3>Trang quản lý sự kiện</h3>
+            <h3>Trang quản lý sự kiện {capture}</h3>
           </div>
 
           <div id="poc-info">
@@ -79,13 +119,123 @@ export default function BasicTable() {
             <Grid container spacing={2}>
               <Grid item xs={4}>
                 <div className="poc-cam">
-                  <WebcamCapture />
+                  <div className="webcam-container">
+                    <div className="webcam-img">
+                      {image == "" ? (
+                        <Webcam
+                          audio={false}
+                          height={200}
+                          ref={webcamRef}
+                          screenshotFormat="image/jpeg"
+                          width={220}
+                          videoConstraints={videoConstraints}
+                        />
+                      ) : (
+                        <img src={image} />
+                      )}
+                      {image == "" ? <div></div> : console.log(image)}
+                    </div>
+                    <div>
+                      {image != "" ? (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setImage("");
+                          }}
+                          className="webcam-btn"
+                        >
+                          Retake Image
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            captureCamera();
+                          }}
+                          className="webcam-btn"
+                        >
+                          Capture
+                        </button>
+                      )}
+                    </div>
+                    <div>
+                      <select
+                        id="device-selection"
+                        onChange={(e) => setDeviceId(e.target.value)}
+                      >
+                        {devices.map((device, key) => (
+                          <option>
+                            {/* <Webcam audio={false} videoConstraints={{ deviceId: device.deviceId }} /> */}
+                            {device.label || `Device ${key + 1}`}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* <p id="demo">Hello 'device-selection'</p>
+{deviceId===null?console.log('empty device'):(<p>{deviceId}</p>)} */}
+                    </div>
+                  </div>
                 </div>
               </Grid>
 
               <Grid item xs={4}>
                 <div className="poc-cam">
-                  <WebcamCapture />
+                  <div className="webcam-container">
+                    <div className="webcam-img">
+                      {image == "" ? (
+                        <Webcam
+                          audio={false}
+                          height={200}
+                          ref={webcamRef}
+                          screenshotFormat="image/jpeg"
+                          width={220}
+                          videoConstraints={videoConstraints}
+                        />
+                      ) : (
+                        <img src={image} />
+                      )}
+                      {image == "" ? <div></div> : console.log(image)}
+                    </div>
+                    <div>
+                      {image != "" ? (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setImage("");
+                          }}
+                          className="webcam-btn"
+                        >
+                          Retake Image
+                        </button>
+                      ) : (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            captureCamera();
+                          }}
+                          className="webcam-btn"
+                        >
+                          Capture
+                        </button>
+                      )}
+                    </div>
+                    <div>
+                      <select
+                        id="device-selection"
+                        onChange={(e) => setDeviceId(e.target.value)}
+                      >
+                        {devices.map((device, key) => (
+                          <option>
+                            {/* <Webcam audio={false} videoConstraints={{ deviceId: device.deviceId }} /> */}
+                            {device.label || `Device ${key + 1}`}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* <p id="demo">Hello 'device-selection'</p>
+{deviceId===null?console.log('empty device'):(<p>{deviceId}</p>)} */}
+                    </div>
+                  </div>
                 </div>
               </Grid>
 
@@ -99,6 +249,13 @@ export default function BasicTable() {
                       id="student-id"
                       name="student-id"
                       autofocus="true"
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          console.log("Enter");
+                          e.preventDefault();
+                          captureCamera();
+                        }
+                      }}
                     ></input>
                     <br />
 

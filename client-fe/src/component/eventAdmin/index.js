@@ -332,7 +332,7 @@ export default function ViewEvent() {
       <Grid container spacing={0}>
         <Grid xs="auto">
           <div>
-            <SideBar id="0"></SideBar>
+            <SideBar id="admin"></SideBar>
           </div>
         </Grid>
         <Grid xs>

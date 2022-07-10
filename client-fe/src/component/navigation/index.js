@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import './index.css';
 
 export default function SideBar(id) {
+  console.log(id['id']==='admin');
   return (
     <Drawer
       sx={{
@@ -27,7 +28,7 @@ export default function SideBar(id) {
         <img src="/soict_logo.png" />
       </div>
       <Divider />
-      {id==='1'?<List id='navigation-list'>
+      {id['id']!=='admin'?<List id='navigation-list'>
         <ListItem>
           <a href="/">
             <ListItemButton>Trang chủ</ListItemButton>

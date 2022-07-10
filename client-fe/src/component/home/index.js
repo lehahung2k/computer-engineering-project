@@ -18,7 +18,7 @@ export default function Home() {
       <Grid container spacing={0}>
         <Grid xs="auto">
           <div>
-            <SideBar id='1' />
+            <SideBar id="admin" />
           </div>
         </Grid>
         <Grid xs>
@@ -40,7 +40,7 @@ export default function Home() {
                     <TableCell>Bắt đầu</TableCell>
                     <TableCell>Kết thúc</TableCell>
                     <TableCell>POC</TableCell>
-                    <TableCell>Thao tác</TableCell>
+                    <TableCell>Xem chi tiết thống kê</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
