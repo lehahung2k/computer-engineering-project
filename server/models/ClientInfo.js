@@ -1,41 +1,32 @@
 module.exports = (sequelize, DataTypes) => {
-    const Users = sequelize.define("Users", {
-        user_id: {
+    const ClientInfo = sequelize.define("ClientInfo", {
+        client_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        username: {
+        client_code: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        passwd: {
+        client_description: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        full_name: {
-            type: DataTypes.STRING,
+        client_img_f: {
+            type: DataTypes.BLOB,
             allowNull: false,
         },
-        active: {
-            type: DataTypes.INTEGER,
-        },
-        create_at: {
-            type: DataTypes.DATE,
-        },
-        updated_at: {
-            type: DataTypes.TIME,
-        },
-        role: {
-            type: DataTypes.INTEGER,
+        client_img_b: {
+            type: DataTypes.BLOB,
             allowNull: false,
         },
     }, 
     {
-        tableName: 'users',
+        tableName: 'client_info',
         createdAt: false,
         updatedAt: false,
     });
-    return Users;
+    return ClientInfo;
 }

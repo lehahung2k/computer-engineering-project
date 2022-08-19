@@ -8,19 +8,19 @@ const db = require("./models");
 
 app.use(express.json());
 
-// const db = mysql.createConnection({
-//     user: "eventmgnt",
-//     host: "mycel.app",
-//     port: "3306",
-//     password: "hung22hieu",
-//     database: "eventmgnt"
-// });
+app.get('/hello', (req, res) => {
+    res.send('Hello World!')
+})
+
+//Routes:
+const eventsController = require("./routes/EventController");
+app.use("/events-management", eventsController);
+
+const pointCheckin = require("./routes/PointController");
+app.use("/point-of-checkin", pointCheckin);
+
 db.sequelize.sync().then(() => {
     app.listen(port, () => {
         console.log("Hello NodeJS");
     });
 });
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
