@@ -38,3 +38,7 @@
 #map-img-div{
     text-align:center;
 }
+
+.event-action a{
+    text-decoration:none;
+}

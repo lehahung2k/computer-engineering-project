@@ -19,6 +19,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import './index.css';
+import eventApi from '../../api/eventAPI.js';
 
 function createData(ID, eventName, start, end, POC) {
   return { ID, eventName, start, end, POC };
@@ -69,7 +70,22 @@ export default function EventAction() {
   const [open, setOpen] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
-  var imgFile;
+  const [listEvents, setListEvents] = React.useState([]);
+  const [addNewEvent, setAddNewEvent] = React.useState(false);
+  var imgFile = React.useRef('');
+  var baseImage = React.useRef('');
+
+  const getListEvents = async ()=>{
+    const response = await eventApi.getAll();
+    
+  }
+
+  useEffect(() => {
+    const responseGetListEvents = eventApi.getAll();
+    responseGetListEvents.then(listEvents => {console.log(listEvents); setListEvents(listEvents.data)})
+    .catch(error=>console.error(error));
+  },[addNewEvent]);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -95,10 +111,10 @@ export default function EventAction() {
 
   const handleUploadImage = async (e) => {
     if (e.target.files.length > 0) {
-      imgFile = e.target.files[0];
-      var src = URL.createObjectURL(imgFile);
-      var base = await convertBase64(imgFile);
-      console.log(base);
+      imgFile.current = e.target.files[0];
+      var src = URL.createObjectURL(imgFile.current);
+      baseImage.current = await convertBase64(imgFile.current);
+      console.log(baseImage);
       var preview = document.querySelector("#map-img-preview");
       preview.src = src;
       // preview.style.display = "block";
@@ -109,18 +125,44 @@ export default function EventAction() {
   };
 
   const handleNewEvent = ()=>{
-    var newEvent = new FormData();
     var eventName = document.querySelector("#event-action-info-value-event-name");
-    console.log('hello');
-    console.log(eventName.value);
-    newEvent.append('event-name', eventName.value);
-    let r = (Math.random() + 1).toString(36).slice(2,6);
-    newEvent.append('event-ID', r);
-    newEvent.append('map-img', imgFile)
-    for (let pair of newEvent.entries()) {
-      console.log(pair[0] + ':' + pair[1]);
-    }
-}
+    var eventCode = document.querySelector("#event-action-info-value-id");
+    var startTime = document.querySelector("#event-action-info-value-startDate");
+    var endTime = document.querySelector("#event-action-info-value-endDate");
+    var eventNote = document.querySelector("#note")
+    var img = baseImage.current;
+    var eventId = (Math.random() + 1).toString(36).slice(2,6);
+
+    const params = {
+      event_id: listEvents.length + 1,
+      event_code: eventCode.value,
+      event_name: eventName.value,
+      is_active: 1,
+      event_description: eventNote.value,
+      start_date: startTime.value,
+      end_date: endTime.value,
+    };
+    
+    console.log('Post new event');
+  
+    const response = eventApi.addNew(params);
+    response.then(response => {
+      alert("Thêm mới sự kiện thành công");
+      setAddNewEvent(true);
+    })
+    .catch(err => console.log(err))
+    
+    
+    // console.log('hello');
+    // console.log(eventName.value);
+    // newEvent.append('event-name', eventName.value);
+    // let r = (Math.random() + 1).toString(36).slice(2,6);
+    // newEvent.append('event-ID', r);
+    // newEvent.append('map-img', imgFile)
+    // for (let pair of newEvent.entries()) {
+    //   console.log(pair[0] + ':' + pair[1]);
+    // }
+  };
   
 let {event_id} = useParams();
 if(event_id === undefined)
@@ -139,7 +181,7 @@ console.log(event_id);
             <h3>Trang thêm, sửa sự kiện</h3>
           </div>
           <div id="event-list">
-            <h3>Danh sách sự kiễn đã có</h3>
+            <h3>Danh sách sự kiện đã có</h3>
             <TableContainer
               component={Paper}
               id="event-list-table"
@@ -157,20 +199,20 @@ console.log(event_id);
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {listEvents.map((row) => (
                     <TableRow
-                      key={row.name}
+                      key={row['event_id']}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{row.ID}</TableCell>
-                      <TableCell component="th" scope="row">
-                        {row.eventName}
-                      </TableCell>
-                      <TableCell>{row.start}</TableCell>
-                      <TableCell>{row.end}</TableCell>
-                      <TableCell>{row.POC}</TableCell>
+                      <TableCell>{row['event_code']}</TableCell>
                       <TableCell>
-                        {new Date(row.start) > currentDate ? (
+                        {row['event_name']}
+                      </TableCell>
+                      <TableCell>{row['start_date']}</TableCell>
+                      <TableCell>{row['end_date']}</TableCell>
+                      <TableCell>10</TableCell>
+                      <TableCell>
+                        {new Date(row['start_date']) > currentDate ? (
                           <div className="event-action">
                             <div className="event-action-edit"><Link to={'/event-action/'+row.ID}>Sửa</Link></div>
                             <div className="event-action-del">Xóa</div>
@@ -178,7 +220,7 @@ console.log(event_id);
                         ) : (
                           <div className="event-action">
                             <div className="event-action-view">
-                              <Link to={"/view-event/" + row.ID}>Xem</Link>
+                              <a href={'/view-event/'+row.ID}>Xem</a>
                             </div>
                             <div className="event-action-del">Xóa</div>
                           </div>
@@ -210,7 +252,7 @@ console.log(event_id);
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="text"></input>
+                    <input type="text" id="event-action-info-value-id"></input>
                   </div>
                 </Grid>
 

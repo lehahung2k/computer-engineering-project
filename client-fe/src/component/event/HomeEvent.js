@@ -8,23 +8,23 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import "./HomeEvent.css";
-import { WebcamCapture } from "../Webcam";
+// import { WebcamCapture } from "../Webcam";
 
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
+// import Box from "@mui/material/Box";
+// import Drawer from "@mui/material/Drawer";
+// import CssBaseline from "@mui/material/CssBaseline";
+// import AppBar from "@mui/material/AppBar";
+// import Toolbar from "@mui/material/Toolbar";
+// import List from "@mui/material/List";
+// import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import HomeIcon from "@mui/icons-material/Home";
-import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
+// import ListItem from "@mui/material/ListItem";
+// import ListItemButton from "@mui/material/ListItemButton";
+// import ListItemIcon from "@mui/material/ListItemIcon";
+// import ListItemText from "@mui/material/ListItemText";
+// import HomeIcon from "@mui/icons-material/Home";
+// import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+// import FactCheckIcon from "@mui/icons-material/FactCheck";
 import SideBar from "../navigation";
 import Webcam from "react-webcam";
 
@@ -48,6 +48,13 @@ export default function BasicTable() {
   const [deviceId, setDeviceId] = React.useState();
   const [devices, setDevices] = React.useState([]);
   const [captureState, setCaptureState] = React.useState(capture['capture']);
+  const [clientId, setClientId] = React.useState();
+  const [clientDescription, setClientDescription] = React.useState();
+  const [checkinTime, setCheckinTime] = React.useState();
+  const [listClientCheckin, setListClientCheckin] = React.useState({clients:[]});
+  const [error, setError] = React.useState();
+
+
   console.log('capture state',capture);
 
   const videoConstraints = (deviceId==="")?{
@@ -73,6 +80,16 @@ export default function BasicTable() {
       },
       [handleDevices]
     );
+
+
+  
+  fetch(`http://localhost:4000/client_checkin`)
+    .then((data) => data.json())
+    .then(setListClientCheckin)
+    .then(console.log("List client checkin"))
+    .then(console.log(listClientCheckin))
+    .catch(console.error);
+  
   
   const captureCamera = React.useCallback(
       () => {
@@ -80,6 +97,12 @@ export default function BasicTable() {
       setImage(imageSrc)
       });
   
+  const handleSubmitForm = (e)=>{
+    const clientId = '';
+    const clientDescription = '';
+
+  }
+
   return (
     <div>
       <Grid container spacing={0}>
@@ -299,16 +322,16 @@ export default function BasicTable() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {listClientCheckin.clients.map((client) => (
                     <TableRow
-                      key={row.name}
+                      key={client.client_id}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row.name}
+                        {client.client_id}
                       </TableCell>
-                      <TableCell>{row.calories}</TableCell>
-                      <TableCell>{row.fat}</TableCell>
+                      <TableCell>{client.client_code}</TableCell>
+                      <TableCell>{client.client_description}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
