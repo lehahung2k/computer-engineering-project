@@ -41,5 +41,12 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: false,
         updatedAt: false,
     });
+
+    EventsMng.associate = (models) => {
+        EventsMng.hasMany(models.PointCheckin, {
+            onDelete: "cascade",
+        });
+    };
+    
     return EventsMng;
 }

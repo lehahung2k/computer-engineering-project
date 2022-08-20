@@ -20,5 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: false,
         updatedAt: false,
     });
+
+    PointCheckin.associate = (models) => {
+        PointCheckin.hasMany(models.ClientInfo, {
+            onDelete: "cascade",
+        });
+    };
+
     return PointCheckin;
 }

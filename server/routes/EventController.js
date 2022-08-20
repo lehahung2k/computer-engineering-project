@@ -7,6 +7,12 @@ router.get("/", async (req, res) => {
     res.json(listEvents);
 });
 
+router.get("/find-event-by-id/:event_id", async (req, res) => {
+    const event_id = req.params.event_id;
+    const event = await EventsMng.findByPk(event_id);
+    res.json(event);
+})
+
 router.post("/add-event", async (req, res) => {
     const post = req.body;
     await EventsMng.create(post);

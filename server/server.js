@@ -24,6 +24,9 @@ app.use("/point-of-checkin", pointCheckin);
 const checkinController = require("./routes/CheckinController");
 app.use("/checkin", checkinController);
 
+const userController = require("./routes/UserController");
+app.use("/auth", userController);
+
 db.sequelize.sync().then(() => {
     app.listen(port, () => {
         console.log("Hello NodeJS");
