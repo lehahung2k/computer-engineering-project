@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const PointChenckin = sequelize.define("PointChenckin", {
+    const PointCheckin = sequelize.define("PointCheckin", {
         point_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -20,5 +20,5 @@ module.exports = (sequelize, DataTypes) => {
         createdAt: false,
         updatedAt: false,
     });
-    return PointChenckin;
+    return PointCheckin;
 }
