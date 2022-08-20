@@ -21,12 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         active: {
             type: DataTypes.INTEGER,
         },
-        create_at: {
-            type: DataTypes.DATE,
-        },
-        updated_at: {
-            type: DataTypes.TIME,
-        },
         role: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -34,8 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     }, 
     {
         tableName: 'users',
-        createdAt: false,
-        updatedAt: false,
     });
+
     return Users;
 }
