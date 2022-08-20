@@ -134,7 +134,7 @@ export default function EventAction() {
     var eventId = (Math.random() + 1).toString(36).slice(2,6);
 
     const params = {
-      event_id: 5,
+      event_id: listEvents.length + 1,
       event_code: eventCode.value,
       event_name: eventName.value,
       is_active: 1,
