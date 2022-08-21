@@ -2,95 +2,97 @@
     margin: 0;
     width: 100vw;
     height: 100vh;
-    background: #c0ffe7;
+    background: #f5fffb;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .left-login {
+}
+
+.left-login {
     width: 50vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  }
-  
-  .left-login h1 {
-    color: #77ffc0;
-  }
-  
-  .right-login {
+}
+
+.left-login h1 {
+    color: #000000;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.right-login {
     width: 50vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .card-login {
+}
+
+.card-login {
     width: 60%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     padding: 30px 35px;
-    background-color: #113059;
+    background-image: linear-gradient(#ebebf9, rgb(245, 253, 255));
     border-radius: 20px;
-    box-shadow: 0px 10px 40px #00000056;
-  }
-  
-  .card-login h1 {
-    color: #91B7D9;
+    box-shadow: 0px 0px 20px #00000056;
+}
+
+.card-login h1 {
+    color: #000000;
     font-weight: 800;
     margin: 0;
-  }
-  
-  .chart{
+}
+
+.chart {
     width: 80%;
-  }
-  
-  
-  .form-group {
+}
+
+
+.form-group {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     margin: 10px 0px;
-  }
-  
-  .form-field {
+}
+
+.form-field {
     width: 100%;
     border: none;
     border-radius: 10px;
     padding: 15px;
-    background-color: #514869;
-    color: #f0ffffde;
+    background-color: #ffffff;
+    color: #000000de;
     font-size: 12pt;
-    box-shadow: 0px 10px 40px #00000056;
+    box-shadow: 0px 0px 10px #00000056;
     box-sizing: border-box;
     outline: none;
-  }
-  
-  .form-group label {
-    color: #f0ffffde;
+}
+
+.form-group label {
+    color: #000000de;
     margin-bottom: 10px;
-  
-  }
-  
-  .form-error {
+
+}
+
+.form-error {
     display: block;
     color: #fff;
     font-size: 0.8em;
-  }
-  
-  .form-field ::placeholder {
+}
+
+.form-field ::placeholder {
     color: #f0ffff94;
-  }
-  
-  .button {
+}
+
+.button {
     width: 100%;
     padding: 16px 0px;
     border: none;
@@ -101,33 +103,37 @@
     letter-spacing: 3px;
     cursor: pointer;
     margin-top: 15px;
-    background: #B3DAF2;
-    color: black;
-  }
-  
-  @media (max-width: 950px){
-    .card-login{
-      width: 100%;
-    }
-  }
-  
-  @media (max-width: 600px){
-    .body{
-      flex-direction: column;
-    }
-  
-    .left-login {
-      width: 100%;
-      height: auto;
-    }
-  
-    .right-login {
-      width: 100%;
-      height: auto;
-    }
-  
+    background: rgb(12,171,109);
+    color: rgb(255, 255, 255);
+}
+
+.register {
+    margin-top: 10px;
+}
+
+@media (max-width: 950px) {
     .card-login {
-      width: 90%;
-      
+        width: 100%;
     }
-  }
+}
+
+@media (max-width: 600px) {
+    .body {
+        flex-direction: column;
+    }
+
+    .left-login {
+        width: 100%;
+        height: auto;
+    }
+
+    .right-login {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-login {
+        width: 90%;
+
+    }
+}
