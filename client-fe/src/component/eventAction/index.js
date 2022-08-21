@@ -97,7 +97,7 @@ export default function EventAction() {
 
   useEffect(() => {
     console.log(eventId.current);
-    const responseGetListPoc = pocApi.findAll({ id: eventId.current });
+    const responseGetListPoc = pocApi.findAllBasedEventId({ id: eventId.current });
     responseGetListPoc
       .then((listPocs) => {
         console.log(listPocs);
