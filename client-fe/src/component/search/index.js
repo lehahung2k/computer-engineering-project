@@ -15,14 +15,14 @@ export default function SearchEvent() {
         <Grid xs>
           <div id="header">
             <h3>Trang quản lý sự kiện</h3>
-            <div>
-              <button>
-                <a href="/login">Đăng nhập</a>
-              </button>
-              <button>
-                <a href="/register">Đăng ký</a>
-              </button>
-            </div>
+            {!sessionStorage.getItem("accessToken") && (
+              <>
+                <div>
+                  <button><a href='/login'>Đăng nhập</a></button>
+                  <button><a href="/register">Đăng ký</a></button>
+                </div>
+              </>
+            )}
           </div>
           <Grid container spacing="0" id="container">
             <Grid xs={6} id="search-input">

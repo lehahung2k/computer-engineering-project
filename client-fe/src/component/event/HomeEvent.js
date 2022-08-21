@@ -141,10 +141,14 @@ export default function BasicTable() {
         <Grid xs>
           <div id="header" color="blue">
             <h3>Trang quản lý sự kiện </h3>
-            <div>
-            <button><a href='/login'>Đăng nhập</a></button>
-              <button><a href="/register">Đăng ký</a></button>
-            </div>
+            {!sessionStorage.getItem("accessToken") && (
+              <>
+                <div>
+                  <button><a href='/login'>Đăng nhập</a></button>
+                  <button><a href="/register">Đăng ký</a></button>
+                </div>
+              </>
+            )}
           </div>
 
           <div id="poc-info">

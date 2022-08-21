@@ -236,10 +236,14 @@ export default function EventAction() {
         <Grid xs>
           <div id="header" color="blue">
             <h3>Trang thêm, sửa sự kiện</h3>
-            <div>
-            <button><a href='/login'>Đăng nhập</a></button>
-              <button><a href="/register">Đăng ký</a></button>
-            </div>
+            {!sessionStorage.getItem("accessToken") && (
+              <>
+                <div>
+                  <button><a href='/login'>Đăng nhập</a></button>
+                  <button><a href="/register">Đăng ký</a></button>
+                </div>
+              </>
+            )}
           </div>
           <div id="event-list">
             <h3>Danh sách sự kiện đã có</h3>
