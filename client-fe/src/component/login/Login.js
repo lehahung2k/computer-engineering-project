@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 import axios from "axios";
 import Img from "../login/Frame-1729.webp"
-import "./index.css";
+import "./index.css"
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -16,34 +17,37 @@ function Login() {
   return (
     <div className='body'>
       <div className='left-login'>
-        <img src={Img} alt="Pessoas olhando gráficos" className="chart" />
+        <h1>EVENT CHECK-IN MANAGEMENT</h1>
+        <img src={Img} alt="Logo web" className="chart" />
       </div>
       <div className='right-login'>
         <div className="card-login">
           <h1>WELCOME</h1>
-          <div className="login-form">
+
             <div className="form-group">
-              <label>Username</label>
-              < input
-                type="text"
+              <label></label>
+              < input className="form-field"
+                type="text" placeholder='Username'
                 onChange={
                   (event) => {setUsername(event.target.value);}
                 }/>
             </div>
 
             <div className="form-group">
-              <label>Password</label>
-              <input 
-                type="password"
+              <label></label>
+              <input className="form-field"
+                type="password" placeholder='Password'
                 onChange={(event) => {
                   setPasswd(event.target.value);
                 }}/>
             </div>
-            <button className="button" onClick={login} >Login</button>
+          <button className="button" onClick={login} >Login</button>
+          <div className='register'> 
+            If you don't have account? {<Link to="/register">Register</Link>} here
           </div>
         </div>
       </div>
-  
+
     </div>
   )
 }
