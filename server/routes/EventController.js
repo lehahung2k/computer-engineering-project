@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { EventsMng } = require("../models")
+const {validateToken} = require('../middlewares/AuthMiddlewares');
 
 router.get("/", async (req, res) => {
     const listEvents = await EventsMng.findAll();
@@ -13,7 +14,7 @@ router.get("/find-event-by-id/:event_id", async (req, res) => {
     res.json(event);
 })
 
-router.post("/add-event", async (req, res) => {
+router.post("/add-event", validateToken, async (req, res) => {
     const post = req.body;
     await EventsMng.create(post);
     res.json(post);

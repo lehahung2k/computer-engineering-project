@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { PointCheckin } = require("../models")
+const {validateToken} = require('../middlewares/AuthMiddlewares');
 
 router.get("/:event_id", async (req, res) => {
     const id = req.params.event_id;
@@ -11,7 +12,7 @@ router.get("/:event_id", async (req, res) => {
     res.json(listPointOfCheck);
 });
 
-router.post("/add-point", async (req, res) => {
+router.post("/add-point", validateToken, async (req, res) => {
     const post = req.body;
     await PointCheckin.create(post);
     res.json(post);

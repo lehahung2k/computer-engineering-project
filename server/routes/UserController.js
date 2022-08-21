@@ -33,8 +33,11 @@ router.post("/login", async (req, res) => {
         if (!match) {
             res.json({error: "Wrong username or password"});
         }
-        const accessToken = sign({username: user.username, user_id: user.user_id}, "importantsecret");
-        res.json("Login success");
+        const accessToken = sign(
+            {username: user.username, user_id: user.user_id}, 
+            "importantsecret"
+        );
+        res.json(accessToken);
     });
 })
 
