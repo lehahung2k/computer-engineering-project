@@ -68,7 +68,7 @@ export default function SideBar(id) {
           
           { !sessionStorage.getItem("accessToken") && (
             <>
-              <ListItem>
+              {/* <ListItem>
                 <a href="/login">
                   <ListItemButton>Đăng nhập</ListItemButton>
                 </a>
@@ -78,7 +78,7 @@ export default function SideBar(id) {
                 <a href="/register">
                   <ListItemButton>Register</ListItemButton>
                 </a>
-              </ListItem>
+              </ListItem> */}
             </>
           )}
 
