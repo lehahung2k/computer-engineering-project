@@ -1,6 +1,6 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import axios from "axios";
 import "./index.css"
@@ -19,9 +19,17 @@ function Register() {
         full_name: Yup.string().required()
     });
 
+    const navigate = useNavigate();
+
     const onSubmit = (data) => {
-        axios.post("http://localhost:8080/auth", data).then(() => {
+        axios.post("http://localhost:8080/auth", data).then((response) => {
             console.log(data);
+            if (response.data.error) {
+                alert(response.data.error);
+            } else {
+                alert("Register success");
+                navigate("/login");
+            }
         });
     };
 

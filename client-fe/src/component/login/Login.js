@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Img from "../login/Frame-1729.webp"
 import "./index.css"
@@ -8,10 +8,17 @@ function Login() {
   const [username, setUsername] = useState("");
   const [passwd, setPasswd] = useState("");
 
+  const navigate = useNavigate();
+
   const login = () => {
     const data = { username: username, passwd: passwd };
     axios.post("http://localhost:8080/auth/login", data).then((response) => {
-      console.log(response.data);
+      if (response.data.error) {
+        alert(response.data.error);
+      } else {
+        sessionStorage.setItem("accessToken", response.data);
+        navigate("/");
+      }
     });
   }
   return (
