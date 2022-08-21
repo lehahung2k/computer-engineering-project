@@ -21,45 +21,6 @@ function createData(ID, eventName, start, end, POC) {
   return { ID, eventName, start, end, POC };
 }
 
-const rows = [
-  createData(1, "Frozen yoghurt", "2021-03-05", "2021-04-05", 24),
-  createData(
-    2,
-    "Frozen yoghurt",
-    "2021-05-05T08:00:00",
-    "2021-06-05T08:00:00",
-    24
-  ),
-  createData(
-    3,
-    "Frozen yoghurt",
-    "2021-07-05T08:00:00",
-    "2021-08-05T08:00:00",
-    24
-  ),
-  createData(
-    4,
-    "Frozen yoghurt",
-    "2021-09-05T08:00:00",
-    "2021-10-05T08:00:00",
-    24
-  ),
-  createData(
-    5,
-    "Frozen yoghurt",
-    "2022-10-05T08:00:00",
-    "2022-11-05T08:00:00",
-    24
-  ),
-  createData(
-    6,
-    "Frozen yoghurt",
-    "2022-03-05T08:00:00",
-    "2022-04-05T08:00:00",
-    24
-  ),
-];
-
 const currentDate = new Date();
 
 export default function ViewEvent() {
@@ -94,6 +55,10 @@ export default function ViewEvent() {
         <Grid xs>
           <div id="header" color="blue">
             <h3>Trang theo dõi sự kiện</h3>
+            <div>
+            <button><a href='/login'>Đăng nhập</a></button>
+              <button><a href="/register">Đăng ký</a></button>
+            </div>
           </div>
           <div id="event-list">
             <h3>Chọn sự kiện</h3>
