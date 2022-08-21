@@ -6,6 +6,8 @@ import { WebcamCapture } from './component/Webcam';
 import SearchEvent from './component/search';
 import EventAction from './component/eventAction';
 import {Routes, Route} from 'react-router-dom';
+import Login from './component/login/Login';
+import Register from './component/register/Register';
 
 // import Footer from './components/Footer'
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path='/view-event/:event_id' element={<ViewEvent/>}/>
         <Route path='/event-action' element={<EventAction/>}/>
         <Route path='/event-action/:event_id' element={<EventAction/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/register' element={<Register/>}/>
       </Routes>
     </div>
   );

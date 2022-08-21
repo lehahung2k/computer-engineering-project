@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import './index.css';
 
 export default function SideBar(id) {
-  console.log(id['id']==='admin');
+  console.log(id['id'] === 'admin');
   return (
     <Drawer
       sx={{
@@ -25,10 +25,10 @@ export default function SideBar(id) {
       {/* <Toolbar /> */}
       {/* <Divider /> */}
       <div>
-        <img src="/soict_logo.png" />
+        <img src="/logo-soict-hust.png"/>
       </div>
       <Divider />
-      {id['id']!=='admin'?<List id='navigation-list'>
+      {id['id'] !== 'admin' ? <List id='navigation-list'>
         <ListItem>
           <a href="/">
             <ListItemButton>Trang chủ</ListItemButton>
@@ -44,25 +44,39 @@ export default function SideBar(id) {
             <ListItemButton>Quản lý sự kiện</ListItemButton>
           </a>
         </ListItem>
-      </List>:
-      <List id='navigation-list'>
-        <ListItem>
-          <a href="/">
-            <ListItemButton>Trang chủ</ListItemButton>
-          </a>
-        </ListItem>
-        <ListItem>
-          <a href="/view-event">
-            <ListItemButton>Xem sự kiện</ListItemButton>
-          </a>
-        </ListItem>
-        <ListItem>
-          <a href="/event-action">
-            <ListItemButton>Thêm, sửa sự kiện</ListItemButton>
-          </a>
-        </ListItem>
-      </List> }
-      
+      </List> :
+        <List id='navigation-list'>
+          <ListItem>
+            <a href="/">
+              <ListItemButton>Trang chủ</ListItemButton>
+            </a>
+          </ListItem>
+          <ListItem>
+            <a href="/view-event">
+              <ListItemButton>Xem sự kiện</ListItemButton>
+            </a>
+          </ListItem>
+          <ListItem>
+            <a href="/event-action">
+              <ListItemButton>Thêm, sửa sự kiện</ListItemButton>
+            </a>
+          </ListItem>
+
+          <ListItem>
+            <a href="/login">
+              <ListItemButton>Đăng nhập</ListItemButton>
+            </a>
+          </ListItem>
+
+          <ListItem>
+            <a href="/register">
+              <ListItemButton>Register</ListItemButton>
+            </a>
+          </ListItem>
+
+        </List>
+      }
+
       {/* <Divider /> */}
     </Drawer>
   );
