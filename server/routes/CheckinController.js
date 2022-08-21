@@ -10,10 +10,10 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/add-client", //validateToken, 
-async (req, res) => {
-    const post = req.body;
-    await ClientInfo.create(post);
-    res.json(post);
-})
+    async (req, res) => {
+        const post = req.body;
+        await ClientInfo.create(post);
+        res.json(post);
+    })
 
 module.exports = router;
