@@ -18,4 +18,28 @@ router.post("/add-point", validateToken, async (req, res) => {
     res.json(post);
 });
 
+router.put("/:event_id/update-point/:point_id", async (req, res) => {
+    const event_id = req.params.event_id;
+    const point_id = req.params.point_id;
+    await PointCheckin.update(req.body, {
+        where: { 
+            event_id: event_id,
+            point_id: point_id
+        },
+    })
+    res.json("Update success!");
+});
+
+router.delete("/:event_id/delete-point/:point_id", async (req, res) => {
+    const event_id = req.params.event_id;
+    const point_id = req.params.point_id;
+    await PointCheckin.destroy({
+        where: { 
+            event_id: event_id,
+            point_id: point_id
+        },
+    })
+    res.json("Delete success");
+});
+
 module.exports = router;

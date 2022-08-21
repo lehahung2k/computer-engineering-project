@@ -11,7 +11,7 @@ function Register() {
         passwd: "",
         full_name: "",
         active: 1,
-        role: 1
+        role: 2
     };
     const validationSchema = Yup.object().shape({
         username: Yup.string().min(3).max(15).required(),

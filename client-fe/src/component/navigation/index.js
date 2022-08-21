@@ -8,6 +8,9 @@ import { Link } from "react-router-dom";
 import './index.css';
 
 export default function SideBar(id) {
+  const logout = () => {
+    sessionStorage.removeItem("accessToken");
+  }
   console.log(id['id'] === 'admin');
   return (
     <Drawer
@@ -63,22 +66,12 @@ export default function SideBar(id) {
                   <ListItemButton>Thêm, sửa sự kiện</ListItemButton>
                 </a>
               </ListItem>
-            </>
-          )}
-          
-          { !sessionStorage.getItem("accessToken") && (
-            <>
-              {/* <ListItem>
-                <a href="/login">
-                  <ListItemButton>Đăng nhập</ListItemButton>
+              <ListItem></ListItem>
+              <ListItem>
+                <a href="/" className="logout">
+                  <ListItemButton onClick={logout}>Đăng xuất</ListItemButton>
                 </a>
               </ListItem>
-
-              <ListItem>
-                <a href="/register">
-                  <ListItemButton>Register</ListItemButton>
-                </a>
-              </ListItem> */}
             </>
           )}
 
