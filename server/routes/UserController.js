@@ -27,11 +27,11 @@ router.post("/login", async (req, res) => {
     });
 
     if (!user) {
-        res.json("User not found!");
+        res.json({error: "User not found!"});
     }
     bcrypt.compare(passwd, user.passwd).then(async (match) => {
         if (!match) {
-            res.json("Wrong username or password");
+            res.json({error: "Wrong username or password"});
         }
         const accessToken = sign(
             {username: user.username, user_id: user.user_id}, 
