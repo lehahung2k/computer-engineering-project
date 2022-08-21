@@ -14,13 +14,19 @@ function App() {
   return (
     <div className="App">
       <Routes>
+      {sessionStorage.getItem("accessToken") && (
+        <>
+          <Route path='/search' element={<SearchEvent />} />
+          <Route path='/event' element={<BasicTable />} />
+          <Route path='/view-event' element={<ViewEvent />} />
+          <Route path='/view-event/:event_id' element={<ViewEvent />} />
+          <Route path='/event-action' element={<EventAction />} />
+          <Route path='/event-action/:event_id' element={<EventAction />} />
+        </>
+      )}
         <Route path='/' element={<Home/>}/>
-        <Route path='/search' element={<SearchEvent/>}/>
-        <Route path='/event' element={<BasicTable/>}/>
-        <Route path='/view-event' element={<ViewEvent/>}/>
-        <Route path='/view-event/:event_id' element={<ViewEvent/>}/>
-        <Route path='/event-action' element={<EventAction/>}/>
-        <Route path='/event-action/:event_id' element={<EventAction/>}/>
+        <Route path='/home' element={<Home/>}/>
+
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
       </Routes>

@@ -30,7 +30,7 @@ export default function SideBar(id) {
       <Divider />
       {id['id'] !== 'admin' ? <List id='navigation-list'>
         <ListItem>
-          <a href="/">
+          <a href="/home">
             <ListItemButton>Trang chủ</ListItemButton>
           </a>
         </ListItem>
@@ -46,33 +46,41 @@ export default function SideBar(id) {
         </ListItem>
       </List> :
         <List id='navigation-list'>
-          <ListItem>
-            <a href="/">
-              <ListItemButton>Trang chủ</ListItemButton>
-            </a>
-          </ListItem>
-          <ListItem>
-            <a href="/view-event">
-              <ListItemButton>Xem sự kiện</ListItemButton>
-            </a>
-          </ListItem>
-          <ListItem>
-            <a href="/event-action">
-              <ListItemButton>Thêm, sửa sự kiện</ListItemButton>
-            </a>
-          </ListItem>
+          {sessionStorage.getItem("accessToken") && (
+            <>
+              <ListItem>
+                <a href="/">
+                  <ListItemButton>Trang chủ</ListItemButton>
+                </a>
+              </ListItem>
+              <ListItem>
+                <a href="/view-event">
+                  <ListItemButton>Xem sự kiện</ListItemButton>
+                </a>
+              </ListItem>
+              <ListItem>
+                <a href="/event-action">
+                  <ListItemButton>Thêm, sửa sự kiện</ListItemButton>
+                </a>
+              </ListItem>
+            </>
+          )}
+          
+          { !sessionStorage.getItem("accessToken") && (
+            <>
+              <ListItem>
+                <a href="/login">
+                  <ListItemButton>Đăng nhập</ListItemButton>
+                </a>
+              </ListItem>
 
-          <ListItem>
-            <a href="/login">
-              <ListItemButton>Đăng nhập</ListItemButton>
-            </a>
-          </ListItem>
-
-          <ListItem>
-            <a href="/register">
-              <ListItemButton>Register</ListItemButton>
-            </a>
-          </ListItem>
+              <ListItem>
+                <a href="/register">
+                  <ListItemButton>Register</ListItemButton>
+                </a>
+              </ListItem>
+            </>
+          )}
 
         </List>
       }
