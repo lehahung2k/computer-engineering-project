@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import "./HomeEvent.css";
+import checkinApi from "../../api/CheckinAPI";
 // import { WebcamCapture } from "../Webcam";
 
 // import Box from "@mui/material/Box";
@@ -43,8 +44,11 @@ const rows = [
 
 export default function BasicTable() {
   const [capture, setCapture] = React.useState("hello");
-  const [image,setImage]=React.useState('');
-  const webcamRef = React.useRef(null);
+  const [image1,setImage1]=React.useState('');
+  const [image2,setImage2]=React.useState('');
+
+  const webcamRef1 = React.useRef(null);
+  const webcamRef2 = React.useRef(null);
   const [deviceId, setDeviceId] = React.useState();
   const [devices, setDevices] = React.useState([]);
   const [captureState, setCaptureState] = React.useState(capture['capture']);
@@ -83,24 +87,47 @@ export default function BasicTable() {
 
 
   
-  fetch(`http://localhost:4000/client_checkin`)
-    .then((data) => data.json())
-    .then(setListClientCheckin)
-    .then(console.log("List client checkin"))
-    .then(console.log(listClientCheckin))
-    .catch(console.error);
+  // fetch(`http://localhost:4000/client_checkin`)
+  //   .then((data) => data.json())
+  //   .then(setListClientCheckin)
+  //   .then(console.log("List client checkin"))
+  //   .then(console.log(listClientCheckin))
+  //   .catch(console.error);
   
   
-  const captureCamera = React.useCallback(
+  const captureCamera1 = React.useCallback(
       () => {
-      const imageSrc = webcamRef.current.getScreenshot();
-      setImage(imageSrc)
+      const imageSrc = webcamRef1.current.getScreenshot();
+      console.log(webcamRef1.current)
+      console.log(imageSrc);
+      setImage1(imageSrc)
       });
+
+  const captureCamera2 = React.useCallback(
+    () => {
+    const imageSrc = webcamRef2.current.getScreenshot();
+    console.log(webcamRef2.current)
+    console.log(imageSrc);
+    setImage2(imageSrc)
+    });
   
   const handleSubmitForm = (e)=>{
-    const clientId = '';
-    const clientDescription = '';
+    const clientId = document.querySelector('#student-id');
+    const clientDescription = document.querySelector('#check-in-note');
+    
+    const params={
+      client_code:clientId.value,
+      client_description: clientDescription.value,
+      client_img_f: image1,
+      client_img_b: image2
+    }
 
+    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(params);
+
+    responseAddNewCheckinClient.then((response)=>{
+      alert("Khách checkin thành công")
+    })
+    .catch((error)=>{console.log(error)})
   }
 
   return (
@@ -148,26 +175,26 @@ export default function BasicTable() {
                 <div className="poc-cam">
                   <div className="webcam-container">
                     <div className="webcam-img">
-                      {image == "" ? (
+                      {image1 == "" ? (
                         <Webcam
                           audio={false}
                           height={200}
-                          ref={webcamRef}
+                          ref={webcamRef1}
                           screenshotFormat="image/jpeg"
                           width={220}
                           videoConstraints={videoConstraints}
                         />
                       ) : (
-                        <img src={image} />
+                        <img src={image1} />
                       )}
-                      {image == "" ? <div></div> : console.log(image)}
+                      {image1 == "" ? <div></div> : console.log(image1)}
                     </div>
                     <div>
-                      {image != "" ? (
+                      {image1 != "" ? (
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setImage("");
+                            setImage1("");
                           }}
                           className="webcam-btn"
                         >
@@ -177,7 +204,7 @@ export default function BasicTable() {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            captureCamera();
+                            captureCamera1();
                           }}
                           className="webcam-btn"
                         >
@@ -209,26 +236,26 @@ export default function BasicTable() {
                 <div className="poc-cam">
                   <div className="webcam-container">
                     <div className="webcam-img">
-                      {image == "" ? (
+                      {image2 == "" ? (
                         <Webcam
                           audio={false}
                           height={200}
-                          ref={webcamRef}
+                          ref={webcamRef2}
                           screenshotFormat="image/jpeg"
                           width={220}
                           videoConstraints={videoConstraints}
                         />
                       ) : (
-                        <img src={image} />
+                        <img src={image2} />
                       )}
-                      {image == "" ? <div></div> : console.log(image)}
+                      {image2 == "" ? <div></div> : console.log(image2)}
                     </div>
                     <div>
-                      {image != "" ? (
+                      {image2 != "" ? (
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setImage("");
+                            setImage2("");
                           }}
                           className="webcam-btn"
                         >
@@ -238,7 +265,7 @@ export default function BasicTable() {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            captureCamera();
+                            captureCamera2();
                           }}
                           className="webcam-btn"
                         >
@@ -280,7 +307,8 @@ export default function BasicTable() {
                         if (e.key === "Enter") {
                           console.log("Enter");
                           e.preventDefault();
-                          captureCamera();
+                          captureCamera1();
+                          captureCamera2();
                         }
                       }}
                     ></input>
@@ -296,9 +324,7 @@ export default function BasicTable() {
                     <br />
                   </form>
                   <button
-                    type="submit"
-                    form="check-in-info-form"
-                    value="Submit"
+                    onClick={handleSubmitForm}
                   >
                     Submit
                   </button>
