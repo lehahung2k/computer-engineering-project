@@ -12,9 +12,11 @@ import { Link, useParams } from "react-router-dom";
 import { WebcamCapture } from "../Webcam";
 import Divider from "@mui/material/Divider";
 import SideBar from "../navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import pocApi from "../../api/PocApi";
+import eventApi from "../../api/eventAPI.js";
 
-export default function ViewEventInfo({eventId = ''}) {
+export default function ViewEventInfo({ eventId = "" }) {
   function createData(ID, eventName, start, end, POC) {
     return { ID, eventName, start, end, POC };
   }
@@ -58,37 +60,66 @@ export default function ViewEventInfo({eventId = ''}) {
     ),
   ];
 
-  const [data, setData] = useState();
   const [error, setError] = useState();
-  const [loading, setLoading] = useState(true);
+  const [loadingEvent, setLoadingEvent] = useState(true);
+  const [loadingPoc, setLoadingPoc] = useState(true);
+  const event_id = useRef("");
+  const [eventInfo, setEventInfo] = useState({});
+  const [listPocs, setListPocs] = useState([]);
 
   useEffect(() => {
-    if (eventId==='') return;
-    if (!loading) return;
-    fetch(`https://api.github.com/users/`+eventId)
-      .then((data) => data.json())
-      .then(setData)
-      .then(console.log('data'))
-      .then(() => setLoading(false))
-      .catch(setError);
+    if (eventId === "") return;
+    if (!loadingEvent) return;
+    const responseEventInfo = eventApi.fetchEventInfo({ id: eventId });
+    
+    responseEventInfo
+      .then((response) => {
+        setEventInfo(response.data);
+        console.log(response.data);
+        setLoadingEvent(false);
+      })
+      .catch((err) => console.log(err));
+    
   });
 
-    console.log(eventId);
-  if (eventId==='') return <h3>Hãy chọn sự kiện để xem</h3>
-  if (loading) return <h3>Đang tải thông tin sự kiện ...</h3>;
-  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
-  if (data){
+  useEffect(() => {
+    if (eventId === "") return;
+    if (!loadingPoc) return;
+    const responseListPocs = pocApi.findAllBasedEventId({id: eventId});
 
+    responseListPocs.then((response) => {
+      console.log(response);
+      setListPocs(response.data);
+      setLoadingPoc(false);
+    })
+    .catch((err) => console.log(err));
+  })
+
+  console.log(eventId);
+  if (eventId === "") return <h3>Hãy chọn sự kiện để xem</h3>;
+  if (loadingEvent) return <h3>Đang tải thông tin sự kiện ...</h3>;
+  if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>;
+  if (eventInfo) {
     var showMap = document.querySelectorAll(".view-event-info-show-map");
-    showMap.forEach(e=>{
-      e.onclick = ()=>{
+    showMap.forEach((e) => {
+      e.onclick = () => {
         console.log("hello");
-        window.open('https://source.unsplash.com/user/c_v_r/1900x800');
-      }
+        window.open("https://source.unsplash.com/user/c_v_r/1900x800");
+      };
     });
 
+    const startDate = new Date(eventInfo["start_date"]);
+    const endDate = new Date(eventInfo["end_date"]);
+
+    const startDateFormatted =
+      startDate.getDate().toString().padStart(2, "0") + '/' + 
+      (startDate.getMonth() + 1).toString().padStart(2, "0") + '/' +
+      startDate.getFullYear().toString();
+    const endDateFormatted =
+      endDate.getDate().toString().padStart(2, "0") + '/' +
+      (endDate.getMonth() + 1).toString().padStart(2, "0") + '/' +
+      endDate.getFullYear().toString();
     return (
-        
       <div>
         <div id="view-event-info">
           <div id="view-event-info-main">
@@ -96,44 +127,35 @@ export default function ViewEventInfo({eventId = ''}) {
               <p>Tên sự kiện</p>
             </div>
             <div id="view-event-info-event-name">
-              <p>Event name</p>
+              <p>{eventInfo["event_name"]}</p>
             </div>
 
             <div id="view-event-info-event-ID-label">
               <p>Mã sự kiện</p>
             </div>
             <div id="view-event-info-event-ID">
-              <p>Event ID</p>
+              <p>{eventInfo["event_code"]}</p>
             </div>
 
             <div id="view-event-info-event-start-label">
               <p>Bắt đầu</p>
             </div>
             <div id="view-event-info-event-start">
-              <p>Start</p>
+              <p>{startDateFormatted}</p>
             </div>
 
             <div id="view-event-info-event-end-label">
               <p>Kết thúc</p>
             </div>
             <div id="view-event-info-event-end">
-              <p>End</p>
+              <p>{endDateFormatted}</p>
             </div>
 
             <div id="view-event-info-event-note-label">
               <p>Ghi chú</p>
             </div>
             <div id="view-event-info-event-note">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              semper erat sapien. Pellentesque eu varius augue. Praesent lacus
-              eros, pellentesque in tempor at, dapibus et libero. Vestibulum
-              vehicula blandit urna vehicula hendrerit. Nulla nec viverra justo,
-              quis faucibus metus. Praesent ut nisl erat. Vestibulum vulputate
-              pulvinar mi id sollicitudin. Ut facilisis lectus eu placerat
-              mattis. Sed pulvinar odio sit amet felis luctus, sit amet
-              consectetur purus dapibus. Duis viverra fermentum imperdiet. Donec
-              est nisl, vehicula eu fringilla dapibus, tempor at dolor. Quisque
-              feugiat iaculis sagittis.
+              {eventInfo["event_description"]}
             </div>
           </div>
           <div id="view-event-info-map-thumbnail">
@@ -150,28 +172,28 @@ export default function ViewEventInfo({eventId = ''}) {
             <Table stickyHeader sx={{ minWidth: 650 }}>
               <TableHead id="POC-list-TableHead">
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Tên sự kiện</TableCell>
-                  <TableCell>Mã POC</TableCell>
+                  <TableCell>ID POC</TableCell>
+                  <TableCell>ID sự kiện</TableCell>
+                  <TableCell>Tên POC</TableCell>
                   <TableCell>Ghi chú</TableCell>
                   <TableCell>Vị trí</TableCell>
                   <TableCell>Thao tác</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {listPocs.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row['point_id']}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    <TableCell>{row.ID}</TableCell>
+                    <TableCell>{row['point_id']}</TableCell>
                     <TableCell component="th" scope="row">
-                      {row.eventName}
+                      {row['event_id']}
                     </TableCell>
-                    <TableCell>Mã POC</TableCell>
+                    <TableCell>{row['point_name']}</TableCell>
                     <TableCell>Ghi chú</TableCell>
                     <TableCell>
-                      <div className="view-event-info-show-map" >Map</div>
+                      <div className="view-event-info-show-map">Map</div>
                     </TableCell>
                     <TableCell>
                       <div>Xóa</div>
@@ -184,6 +206,5 @@ export default function ViewEventInfo({eventId = ''}) {
         </div>
       </div>
     );
-
   }
 }
