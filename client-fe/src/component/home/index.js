@@ -24,10 +24,14 @@ export default function Home() {
         <Grid xs>
           <div id="header">
             <h3>Trang chủ</h3>
-            <div>
-              <button><a href='/login'>Đăng nhập</a></button>
-              <button><a href="/register">Đăng ký</a></button>
-            </div>
+            {!sessionStorage.getItem("accessToken") && (
+              <>
+                <div>
+                  <button><a href='/login'>Đăng nhập</a></button>
+                  <button><a href="/register">Đăng ký</a></button>
+                </div>
+              </>
+            )}
           </div>
 <div><h3>Danh sách tổng hợp các sự kiện</h3> 
 

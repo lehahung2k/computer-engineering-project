@@ -55,10 +55,14 @@ export default function ViewEvent() {
         <Grid xs>
           <div id="header" color="blue">
             <h3>Trang theo dõi sự kiện</h3>
-            <div>
-            <button><a href='/login'>Đăng nhập</a></button>
-              <button><a href="/register">Đăng ký</a></button>
-            </div>
+            {!sessionStorage.getItem("accessToken") && (
+              <>
+                <div>
+                  <button><a href='/login'>Đăng nhập</a></button>
+                  <button><a href="/register">Đăng ký</a></button>
+                </div>
+              </>
+            )}
           </div>
           <div id="event-list">
             <h3>Chọn sự kiện</h3>
