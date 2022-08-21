@@ -17,4 +17,23 @@ router.post("/", async (req, res) => {
     });
 })
 
+router.post("/login", async (req, res) => {
+    const { username, passwd } = req.body;
+    const user = await Users.findOne({
+        where: {
+            username: username
+        }
+    });
+
+    if (!user) {
+        res.json({error: "User not found!"});
+    }
+    bcrypt.compare(passwd, user.passwd).then((match) => {
+        if (!match) {
+            res.json({error: "Wrong username or password"});
+        }
+        res.json("Login success");
+    });
+})
+
 module.exports = router;
