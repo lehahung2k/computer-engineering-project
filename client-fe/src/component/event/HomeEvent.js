@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import "./HomeEvent.css";
+import checkinApi from "../../api/CheckinAPI";
 // import { WebcamCapture } from "../Webcam";
 
 // import Box from "@mui/material/Box";
@@ -112,13 +113,21 @@ export default function BasicTable() {
   
   const handleSubmitForm = (e)=>{
     const clientId = document.querySelector('#student-id');
-    const clientDescription = document.querySelector('#checkin-note');
+    const clientDescription = document.querySelector('#check-in-note');
     
     const params={
       client_code:clientId.value,
       client_description: clientDescription.value,
-      // client_img_f
+      client_img_f: image1,
+      client_img_b: image2
     }
+
+    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(params);
+
+    responseAddNewCheckinClient.then((response)=>{
+      alert("Khách checkin thành công")
+    })
+    .catch((error)=>{console.log(error)})
   }
 
   return (
@@ -315,9 +324,7 @@ export default function BasicTable() {
                     <br />
                   </form>
                   <button
-                    type="submit"
-                    form="check-in-info-form"
-                    value="Submit"
+                    onClick={handleSubmitForm}
                   >
                     Submit
                   </button>
