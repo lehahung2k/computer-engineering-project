@@ -10,7 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
+import './index.css';
 
 export default function Home() {
   return (
@@ -24,6 +24,10 @@ export default function Home() {
         <Grid xs>
           <div id="header">
             <h3>Trang chủ</h3>
+            <div>
+              <button><a href='/login'>Đăng nhập</a></button>
+              <button><a href="/register">Đăng ký</a></button>
+            </div>
           </div>
 <div><h3>Danh sách tổng hợp các sự kiện</h3> 
 
