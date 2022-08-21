@@ -18,9 +18,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import './index.css';
-import eventApi from '../../api/eventAPI.js';
-import pocApi from '../../api/PocApi.js';
+import "./index.css";
+import eventApi from "../../api/eventAPI.js";
+import pocApi from "../../api/PocApi.js";
 
 function createData(ID, eventName, start, end, POC) {
   return { ID, eventName, start, end, POC };
@@ -76,33 +76,38 @@ export default function EventAction() {
   const [addNewEvent, setAddNewEvent] = React.useState(false);
   const [addNewPOC, setAddNewPOC] = React.useState(false);
 
-  var imgFile = React.useRef('');
-  var baseImage = React.useRef('');
+  var imgFile = React.useRef("");
+  var baseImage = React.useRef("");
   var eventId = React.useRef(0);
 
-  const getListEvents = async ()=>{
+  const getListEvents = async () => {
     const response = await eventApi.getAll();
-    
-  }
+  };
 
   useEffect(() => {
     const responseGetListEvents = eventApi.getAll();
-    responseGetListEvents.then(listEvents => {console.log(listEvents); setListEvents(listEvents.data)})
-    .catch(error=>console.error(error));
+    responseGetListEvents
+      .then((listEvents) => {
+        console.log(listEvents);
+        setListEvents(listEvents.data);
+      })
+      .catch((error) => console.error(error));
     setAddNewEvent(false);
-  },[addNewEvent]);
+  }, [addNewEvent]);
 
   useEffect(() => {
     console.log(eventId.current);
-    const responseGetListPoc = pocApi.findAll({id: eventId.current});
-    responseGetListPoc.then(listPocs => {console.log(listPocs); setListPOCs(listPocs.data);})
-    .catch(error => console.log(error));
+    const responseGetListPoc = pocApi.findAll({ id: eventId.current });
+    responseGetListPoc
+      .then((listPocs) => {
+        console.log(listPocs);
+        setListPOCs(listPocs.data);
+      })
+      .catch((error) => console.log(error));
     setAddNewPOC(false);
   }, [addNewPOC]);
 
-  useEffect(()=>{
-
-  }, [addNewPOC]);
+  useEffect(() => {}, [addNewPOC]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -142,18 +147,22 @@ export default function EventAction() {
     }
   };
 
-  const handleNewEvent = ()=>{
-    var eventName = document.querySelector("#event-action-info-value-event-name");
+  const handleNewEvent = () => {
+    var eventName = document.querySelector(
+      "#event-action-info-value-event-name"
+    );
     var eventCode = document.querySelector("#event-action-info-value-id");
-    var startTime = document.querySelector("#event-action-info-value-startDate");
+    var startTime = document.querySelector(
+      "#event-action-info-value-startDate"
+    );
     var endTime = document.querySelector("#event-action-info-value-endDate");
-    var eventNote = document.querySelector("#note")
+    var eventNote = document.querySelector("#note");
     var img = baseImage.current;
-    var id = (Math.random() + 1).toString(36).slice(2,6);
+    var id = (Math.random() + 1).toString(36).slice(2, 6);
 
     eventId.current = listEvents.length + 1;
     const params = {
-      event_id: listEvents.length + 1,
+      // event_id: listEvents.length + 1,
       event_code: eventCode.value,
       event_name: eventName.value,
       is_active: 1,
@@ -161,17 +170,17 @@ export default function EventAction() {
       start_date: startTime.value,
       end_date: endTime.value,
     };
-    
-    console.log('Post new event');
-  
+
+    console.log("Post new event");
+
     const response = eventApi.addNew(params);
-    response.then(response => {
-      alert("Thêm mới sự kiện thành công");
-      setAddNewEvent(true);
-    })
-    .catch(err => console.log(err))
-    
-    
+    response
+      .then((response) => {
+        alert("Thêm mới sự kiện thành công");
+        setAddNewEvent(true);
+      })
+      .catch((err) => console.log(err));
+
     // console.log('hello');
     // console.log(eventName.value);
     // newEvent.append('event-name', eventName.value);
@@ -183,36 +192,39 @@ export default function EventAction() {
     // }
   };
 
-  const handleAddNewPOC = ()=>{
-    var event_id = document.querySelector("#event-action-add-new-POC-event-id-value");
+  const handleAddNewPOC = () => {
+    var event_id = document.querySelector(
+      "#event-action-add-new-POC-event-id-value"
+    );
     var pocId = document.querySelector("#event-action-add-new-POC-id-value");
-    var pocName = document.querySelector("#event-action-add-new-POC-name-value");
-    
+    var pocName = document.querySelector(
+      "#event-action-add-new-POC-name-value"
+    );
+
     eventId.current = event_id.value;
 
     var params = {
-      point_id: pocId.value,
-      event_id: event_id.value, 
+      // point_id: pocId.value,
+      event_id: event_id.value,
       point_name: pocName.value,
-    }
+    };
 
     console.log(params);
     console.log(eventId.current);
 
     const response = pocApi.addNew(params);
 
-    response.then(response =>{
-      alert("Thêm mới điểm checkin thành công");
-      setAddNewPOC(true);
-    })
-    .catch(err => console.error(err))
-
+    response
+      .then((response) => {
+        alert("Thêm mới điểm checkin thành công");
+        setAddNewPOC(true);
+      })
+      .catch((err) => console.error(err));
   };
-  
-let {event_id} = useParams();
-if(event_id === undefined)
-event_id = '';
-console.log(event_id);
+
+  let { event_id } = useParams();
+  if (event_id === undefined) event_id = "";
+  console.log(event_id);
   return (
     <div>
       <Grid container spacing={0}>
@@ -246,26 +258,26 @@ console.log(event_id);
                 <TableBody>
                   {listEvents.map((row) => (
                     <TableRow
-                      key={row['event_id']}
+                      key={row["event_id"]}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{row['event_code']}</TableCell>
-                      <TableCell>
-                        {row['event_name']}
-                      </TableCell>
-                      <TableCell>{row['start_date']}</TableCell>
-                      <TableCell>{row['end_date']}</TableCell>
+                      <TableCell>{row["event_code"]}</TableCell>
+                      <TableCell>{row["event_name"]}</TableCell>
+                      <TableCell>{row["start_date"]}</TableCell>
+                      <TableCell>{row["end_date"]}</TableCell>
                       <TableCell>10</TableCell>
                       <TableCell>
-                        {new Date(row['start_date']) > currentDate ? (
+                        {new Date(row["start_date"]) > currentDate ? (
                           <div className="event-action">
-                            <div className="event-action-edit"><Link to={'/event-action/'+row.ID}>Sửa</Link></div>
+                            <div className="event-action-edit">
+                              <a href={"/event-action/" + row["event_id"]}>Sửa</a>
+                            </div>
                             <div className="event-action-del">Xóa</div>
                           </div>
                         ) : (
                           <div className="event-action">
                             <div className="event-action-view">
-                              <a href={'/view-event/'+row.ID}>Xem</a>
+                              <a href={"/view-event/" + row["event_id"]}>Xem</a>
                             </div>
                             <div className="event-action-del">Xóa</div>
                           </div>
@@ -288,7 +300,10 @@ console.log(event_id);
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="text" id="event-action-info-value-event-name"></input>
+                    <input
+                      type="text"
+                      id="event-action-info-value-event-name"
+                    ></input>
                   </div>
                 </Grid>
 
@@ -306,7 +321,11 @@ console.log(event_id);
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="date" id="event-action-info-value-startDate" name="startDate" />
+                    <input
+                      type="date"
+                      id="event-action-info-value-startDate"
+                      name="startDate"
+                    />
                   </div>
                 </Grid>
 
@@ -315,7 +334,11 @@ console.log(event_id);
                 </Grid>
                 <Grid item xs={3}>
                   <div className="event-action-info-value">
-                    <input type="date" id="event-action-info-value-endDate" name="endDate" />
+                    <input
+                      type="date"
+                      id="event-action-info-value-endDate"
+                      name="endDate"
+                    />
                   </div>
                 </Grid>
 
@@ -323,15 +346,23 @@ console.log(event_id);
                   <div className="event-action-info-label">Ghi chú :</div>
                 </Grid>
                 <Grid item xs={9}>
-                  <div className="event-action-info-value" id="event-action-info-value-note">
+                  <div
+                    className="event-action-info-value"
+                    id="event-action-info-value-note"
+                  >
                     <textarea id="note"></textarea>
                   </div>
                 </Grid>
                 <Grid item xs={4}>
-                    <button id="event-action-add-new-event" onClick={handleNewEvent}>Thêm mới sự kiện</button>
-                  </Grid>
+                  <button
+                    id="event-action-add-new-event"
+                    onClick={handleNewEvent}
+                  >
+                    Thêm mới sự kiện
+                  </button>
+                </Grid>
               </Grid>
-              <Grid item  width="500px">
+              <Grid item width="500px">
                 <div id="map-img-div">
                   <input
                     type="file"
@@ -339,55 +370,71 @@ console.log(event_id);
                     accept="image/*"
                     onChange={handleUploadImage}
                   />
-                  <img id="map-img-preview" height="200px" width="300px"/>
+                  <img id="map-img-preview" height="200px" width="300px" />
                 </div>
               </Grid>
             </Grid>
           </div>
-<br/>
-          <div id="event-action-add-POC-form-button"><button onClick={handleClickOpen}>Thêm mới POC</button></div>
+          <br />
+          <div id="event-action-add-POC-form-button">
+            <button onClick={handleClickOpen}>Thêm mới POC</button>
+          </div>
           <Dialog
             open={open}
             onClose={handleClose}
             aria-labelledby="responsive-dialog-title"
-            fullWidth='true'
-            maxWidth='sm'
+            fullWidth="true"
+            maxWidth="sm"
           >
             <DialogTitle id="responsive-dialog-title">
               {"Thêm thông tin POC mới"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-              <Grid container spacing={2} xs={12}>
-              <Grid item xs={4}>
-                    <div className="event-action-add-new-POC-event-id">ID của sự kiện</div>
+                <Grid container spacing={2} xs={12}>
+                  <Grid item xs={4}>
+                    <div className="event-action-add-new-POC-event-id">
+                      ID của sự kiện
+                    </div>
                   </Grid>
                   <Grid item xs={8}>
                     <div>
-                      <input type="text" id="event-action-add-new-POC-event-id-value" defaultValue={eventId.current}/>
+                      <input
+                        type="text"
+                        id="event-action-add-new-POC-event-id-value"
+                        defaultValue={eventId.current}
+                      />
                     </div>
                   </Grid>
 
                   <Grid item xs={4}>
-                    <div className="event-action-add-new-POC-label">ID của POC</div>
+                    <div className="event-action-add-new-POC-label">
+                      ID của POC
+                    </div>
                   </Grid>
                   <Grid item xs={8}>
                     <div>
-                      <input type="text" id="event-action-add-new-POC-id-value"></input>
+                      <input
+                        type="text"
+                        id="event-action-add-new-POC-id-value"
+                      ></input>
                     </div>
                   </Grid>
 
                   <Grid item xs={4}>
-                    <div className="event-action-add-new-POC-label">Tên POC</div>
+                    <div className="event-action-add-new-POC-label">
+                      Tên POC
+                    </div>
                   </Grid>
 
                   <Grid item xs={8}>
                     <div>
-                      <input type="text" id="event-action-add-new-POC-name-value"></input>
+                      <input
+                        type="text"
+                        id="event-action-add-new-POC-name-value"
+                      ></input>
                     </div>
                   </Grid>
-
-
                 </Grid>
               </DialogContentText>
             </DialogContent>
@@ -420,14 +467,14 @@ console.log(event_id);
                 <TableBody>
                   {listPOCs.map((row) => (
                     <TableRow
-                      key={row['point_id']}
+                      key={row["point_id"]}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{row['point_id']}</TableCell>
+                      <TableCell>{row["point_id"]}</TableCell>
                       <TableCell component="th" scope="row">
-                        {row['event_id']}
+                        {row["event_id"]}
                       </TableCell>
-                      <TableCell>{row['point_name']}</TableCell>
+                      <TableCell>{row["point_name"]}</TableCell>
                       <TableCell>Ghi chú</TableCell>
                       <TableCell>
                         <a href="#">Map</a>

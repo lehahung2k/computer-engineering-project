@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { PointCheckin } = require("../models")
 
-router.post("/", async (req, res) => {
-    const id = req.body.id;
+router.get("/:event_id", async (req, res) => {
+    const id = req.params.event_id;
     console.log(id);
     const listPointOfCheck = await PointCheckin.findAll({
         where: {event_id: id}

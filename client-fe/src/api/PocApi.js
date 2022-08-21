@@ -6,10 +6,9 @@ class PocApi{
         return axios.post(url, params);
     }
 
-    findAll = (params)=>{
-        const url = "http://localhost:8080/point-of-checkin";
-        console.log(params);
-        return axios.post(url, params);
+    findAllBasedEventId = (params)=>{
+        const url = "http://localhost:8080/point-of-checkin/"+params.id;
+        return axios.get(url);
     }
 }
 
