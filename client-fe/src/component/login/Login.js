@@ -25,8 +25,9 @@ function Login() {
   return (
     <div className='body'>
       <div className='left-login'>
-        <h1>EVENT CHECK-IN MANAGEMENT</h1>
+        <h1 className='chart'>EVENT CHECK-IN MANAGEMENT</h1>
         <img src={Img} alt="Logo web" className="chart" />
+        <div class="center"></div>
       </div>
       <div className='right-login'>
         <div className="card-login">
@@ -54,6 +55,7 @@ function Login() {
             If you don't have account? {<Link to="/register">Register</Link>} here
           </div>
         </div>
+        <div class="center1"></div>
       </div>
 
     </div>
