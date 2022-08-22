@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import ViewEventInfo from "./viewEventInfo";
 import eventApi from "../../api/eventAPI.js";
 import pocApi from "../../api/PocApi.js";
+import EventTable from "../eventTable";
 
 function createData(ID, eventName, start, end, POC) {
   return { ID, eventName, start, end, POC };
@@ -27,7 +28,7 @@ export default function ViewEvent() {
   const [listEvents, setListEvents] = React.useState([]);
   
   useEffect(() => {
-    const responseGetListEvents = eventApi.getAll();
+    const responseGetListEvents = eventApi.getAll(sessionStorage.getItem('accessToken'));
     responseGetListEvents
       .then((listEvents) => {
         console.log(listEvents);
@@ -66,55 +67,7 @@ export default function ViewEvent() {
           </div>
           <div id="event-list">
             <h3>Chọn sự kiện</h3>
-            <TableContainer
-              component={Paper}
-              id="event-list-table"
-              style={{ height: 200 }}
-            >
-              <Table stickyHeader sx={{ minWidth: 650 }}>
-                <TableHead id="event-list-TableHead">
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Tên sự kiện</TableCell>
-                    <TableCell>Bắt đầu</TableCell>
-                    <TableCell>Kết thúc</TableCell>
-                    <TableCell>POC</TableCell>
-                    <TableCell>Thao tác</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {listEvents.map((row) => (
-                    <TableRow
-                      key={row["event_id"]}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>{row["event_code"]}</TableCell>
-                      <TableCell>{row["event_name"]}</TableCell>
-                      <TableCell>{row["start_date"]}</TableCell>
-                      <TableCell>{row["end_date"]}</TableCell>
-                      <TableCell>10</TableCell>
-                      <TableCell>
-                        {new Date(row["start_date"]) > currentDate ? (
-                          <div className="event-action">
-                            <div className="event-action-edit">
-                              <a href={"/event-action/" + row["event_id"]}>Sửa</a>
-                            </div>
-                            <div className="event-action-del">Xóa</div>
-                          </div>
-                        ) : (
-                          <div className="event-action">
-                            <div className="event-action-view">
-                              <a href={"/view-event/" + row["event_id"]}>Xem</a>
-                            </div>
-                            <div className="event-action-del">Xóa</div>
-                          </div>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <EventTable listEvents={listEvents} type='CRUD'></EventTable>
           </div>
 
           <Divider />

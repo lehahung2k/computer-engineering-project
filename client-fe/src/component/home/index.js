@@ -11,8 +11,23 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import './index.css';
+import EventTable from "../eventTable";
+import { useEffect } from "react";
+import eventApi from "../../api/eventAPI.js";
+
 
 export default function Home() {
+  const [listEvents, setListEvents] = React.useState([]);
+
+  useEffect(() => {
+    const responseGetListEvents = eventApi.getAll(sessionStorage.getItem('accessToken'));
+    responseGetListEvents
+      .then((listEvents) => {
+        console.log(listEvents);
+        setListEvents(listEvents.data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
   return (
     <div>
       <Grid container spacing={0}>
@@ -34,28 +49,8 @@ export default function Home() {
             )}
           </div>
 <div><h3>Danh sách tổng hợp các sự kiện</h3> 
-
-<TableContainer
-              component={Paper}
-              id="event-list-table"
-              style={{ height: 200 }}
-            >
-              <Table stickyHeader sx={{ minWidth: 650 }}>
-                <TableHead id="event-list-TableHead">
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Tên sự kiện</TableCell>
-                    <TableCell>Bắt đầu</TableCell>
-                    <TableCell>Kết thúc</TableCell>
-                    <TableCell>POC</TableCell>
-                    <TableCell>Xem chi tiết thống kê</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  
-                </TableBody>
-              </Table>
-            </TableContainer></div>
+<EventTable listEvents={listEvents} type='View'></EventTable>
+</div>
 <Divider />
           <div>
   <h3>Số liệu thống kê các sự kiện</h3>

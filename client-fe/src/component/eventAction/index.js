@@ -21,54 +21,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import "./index.css";
 import eventApi from "../../api/eventAPI.js";
 import pocApi from "../../api/PocApi.js";
-
-function createData(ID, eventName, start, end, POC) {
-  return { ID, eventName, start, end, POC };
-}
-
-const rows = [
-  createData(1, "Frozen yoghurt", "2021-03-05", "2021-04-05", 24),
-  createData(
-    2,
-    "Frozen yoghurt",
-    "2021-05-05T08:00:00",
-    "2021-06-05T08:00:00",
-    24
-  ),
-  createData(
-    3,
-    "Frozen yoghurt",
-    "2021-07-05T08:00:00",
-    "2021-08-05T08:00:00",
-    24
-  ),
-  createData(
-    4,
-    "Frozen yoghurt",
-    "2021-09-05T08:00:00",
-    "2021-10-05T08:00:00",
-    24
-  ),
-  createData(
-    5,
-    "Frozen yoghurt",
-    "2022-10-05T08:00:00",
-    "2022-11-05T08:00:00",
-    24
-  ),
-  createData(
-    6,
-    "Frozen yoghurt",
-    "2022-03-05T08:00:00",
-    "2022-04-05T08:00:00",
-    24
-  ),
-];
+import PocTable from "../pocTable";
+import EventTable from "../eventTable";
 
 const currentDate = new Date();
 
 export default function EventAction() {
   const [open, setOpen] = React.useState(false);
+  const [confirmPOCDelete, setConfirmPOCDelete] = React.useState(false);
+  const [confirmEventDelete, setConfirmEventDelete] = React.useState(false);
   const [startDate, setStartDate] = React.useState(new Date());
   const [endDate, setEndDate] = React.useState(new Date());
   const [listEvents, setListEvents] = React.useState([]);
@@ -81,11 +42,11 @@ export default function EventAction() {
   var eventId = React.useRef(0);
 
   const getListEvents = async () => {
-    const response = await eventApi.getAll();
+    const response = await eventApi.getAll(sessionStorage.getItem('accessToken'));
   };
 
   useEffect(() => {
-    const responseGetListEvents = eventApi.getAll();
+    const responseGetListEvents = eventApi.getAll(sessionStorage.getItem('accessToken'));
     responseGetListEvents
       .then((listEvents) => {
         console.log(listEvents);
@@ -97,7 +58,7 @@ export default function EventAction() {
 
   useEffect(() => {
     console.log(eventId.current);
-    const responseGetListPoc = pocApi.findAllBasedEventId({ id: eventId.current });
+    const responseGetListPoc = pocApi.findAllBasedEventId({ id: eventId.current }, sessionStorage.getItem("accessToken"));
     responseGetListPoc
       .then((listPocs) => {
         console.log(listPocs);
@@ -116,6 +77,14 @@ export default function EventAction() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const confirmEventDeletion = () => {
+    setConfirmEventDelete(!confirmEventDelete);
+  }
+
+  const confirmPOCDeletion = () => {
+    setConfirmPOCDelete(!confirmPOCDelete);
+  }
 
   const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -150,30 +119,32 @@ export default function EventAction() {
   const handleNewEvent = () => {
     var eventName = document.querySelector(
       "#event-action-info-value-event-name"
-    );
-    var eventCode = document.querySelector("#event-action-info-value-id");
+    ).value;
+    var eventCode = document.querySelector("#event-action-info-value-id").value;
     var startTime = document.querySelector(
       "#event-action-info-value-startDate"
-    );
-    var endTime = document.querySelector("#event-action-info-value-endDate");
-    var eventNote = document.querySelector("#note");
+    ).value;
+    var endTime = document.querySelector("#event-action-info-value-endDate").value;
+    var eventNote = document.querySelector("#note").value;
     var img = baseImage.current;
     var id = (Math.random() + 1).toString(36).slice(2, 6);
 
+      if (!eventName || !eventCode || !startTime || !endTime || !eventNote || !img)
+        return alert("Hãy điền đầy đủ thông tin sự kiện")
     eventId.current = listEvents.length + 1;
     const params = {
       // event_id: listEvents.length + 1,
-      event_code: eventCode.value,
-      event_name: eventName.value,
+      event_code: eventCode,
+      event_name: eventName,
       is_active: 1,
-      event_description: eventNote.value,
-      start_date: startTime.value,
-      end_date: endTime.value,
+      event_description: eventNote,
+      start_date: startTime,
+      end_date: endTime,
     };
 
     console.log("Post new event");
 
-    const response = eventApi.addNew(params);
+    const response = eventApi.addNew(params,sessionStorage.getItem('accessToken'));
     response
       .then((response) => {
         alert("Thêm mới sự kiện thành công");
@@ -212,7 +183,7 @@ export default function EventAction() {
     console.log(params);
     console.log(eventId.current);
 
-    const response = pocApi.addNew(params);
+    const response = pocApi.addNew(params, sessionStorage.getItem("accessToken"));
 
     response
       .then((response) => {
@@ -221,6 +192,14 @@ export default function EventAction() {
       })
       .catch((err) => console.error(err));
   };
+
+  const handleDeleteEvent = ()=>{
+    console.log('Xác nhận xóa sự kiện')
+  }
+
+  const handleDeletePOC = ()=>{
+    console.log('Xác nhận xóa POC')
+  }
 
   let { event_id } = useParams();
   if (event_id === undefined) event_id = "";
@@ -247,7 +226,7 @@ export default function EventAction() {
           </div>
           <div id="event-list">
             <h3>Danh sách sự kiện đã có</h3>
-            <TableContainer
+            {/* <TableContainer
               component={Paper}
               id="event-list-table"
               style={{ height: 200 }}
@@ -280,14 +259,14 @@ export default function EventAction() {
                             <div className="event-action-edit">
                               <a href={"/event-action/" + row["event_id"]}>Sửa</a>
                             </div>
-                            <div className="event-action-del">Xóa</div>
+                            <div className="event-action-del" onClick={confirmEventDeletion}>Xóa</div>
                           </div>
                         ) : (
                           <div className="event-action">
                             <div className="event-action-view">
                               <a href={"/view-event/" + row["event_id"]}>Xem</a>
                             </div>
-                            <div className="event-action-del">Xóa</div>
+                            <div className="event-action-del" onClick={confirmEventDeletion}>Xóa</div>
                           </div>
                         )}
                       </TableCell>
@@ -295,9 +274,35 @@ export default function EventAction() {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </TableContainer> */} 
+            <EventTable listEvents={listEvents} type='CRUD'></EventTable>
           </div>
+          {/* <Dialog
+            open={confirmEventDelete}
+            onClose={handleClose}
+            aria-labelledby="responsive-dialog-title"
+            fullWidth="true"
+            maxWidth="sm"
+          >
+            <DialogTitle id="responsive-dialog-title">
+              {"Xóa thông tin sự kiện"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                <p>Bạn có muốn xóa thông tin sự kiện này không?</p>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleDeleteEvent}>
+                Xác nhận
+              </Button>
+              <Button onClick={confirmEventDeletion} autoFocus>
+                Hủy
+              </Button>
+            </DialogActions>
+          </Dialog> */}
 
+         
           <Divider />
           <br />
           <div>
@@ -362,22 +367,27 @@ export default function EventAction() {
                   </div>
                 </Grid>
                 <Grid item xs={4}>
-                  <button
+
+                  <Button
                     id="event-action-add-new-event"
                     onClick={handleNewEvent}
                   >
-                    Thêm mới sự kiện
-                  </button>
+                    {event_id===""?'Thêm mới sự kiện':'Sửa thông tin sự kiện'}
+                  </Button>
                 </Grid>
               </Grid>
               <Grid item width="500px">
                 <div id="map-img-div">
-                  <input
+                  <Button   component="label">
+                    Chọn ảnh tải lên
+                    <input
                     type="file"
                     id="file-upload-img"
                     accept="image/*"
                     onChange={handleUploadImage}
+                    hidden
                   />
+                  </Button>
                   <img id="map-img-preview" height="200px" width="300px" />
                 </div>
               </Grid>
@@ -385,7 +395,7 @@ export default function EventAction() {
           </div>
           <br />
           <div id="event-action-add-POC-form-button">
-            <button onClick={handleClickOpen}>Thêm mới POC</button>
+            <Button onClick={handleClickOpen}>Thêm mới POC</Button>
           </div>
           <Dialog
             open={open}
@@ -456,7 +466,7 @@ export default function EventAction() {
             </DialogActions>
           </Dialog>
           <div>
-            <TableContainer
+            {/* <TableContainer
               component={Paper}
               id="POC-list-table"
               style={{ height: 200 }}
@@ -488,13 +498,40 @@ export default function EventAction() {
                         <a href="#">Map</a>
                       </TableCell>
                       <TableCell>
-                        <div>Xóa</div>
+                        <button onClick={confirmPOCDeletion}>Xóa</button>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
+
+            <Dialog
+            open={confirmPOCDelete}
+            onClose={handleClose}
+            aria-labelledby="responsive-dialog-title"
+            fullWidth="true"
+            maxWidth="sm"
+          >
+            <DialogTitle id="responsive-dialog-title">
+              {"Xác nhận xóa thông tin POC"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                <p>Bạn có muốn xóa thông tin POC này không?</p>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button autoFocus onClick={handleDeletePOC}>
+                Xác nhận
+              </Button>
+              <Button onClick={confirmPOCDeletion} autoFocus>
+                Hủy
+              </Button>
+            </DialogActions>
+          </Dialog> */}
+
+          <PocTable listPocs={listPOCs}></PocTable>
           </div>
         </Grid>
       </Grid>

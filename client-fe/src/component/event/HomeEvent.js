@@ -122,7 +122,7 @@ export default function BasicTable() {
       client_img_b: image2
     }
 
-    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(params);
+    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(params, sessionStorage.getItem("accessToken"));
 
     responseAddNewCheckinClient.then((response)=>{
       alert("Khách checkin thành công")

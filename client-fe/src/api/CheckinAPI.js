@@ -1,9 +1,12 @@
 import axios from "axios";
 
 class CheckinAPI{
-    addNewCheckinClient=(params)=>{
+    addNewCheckinClient=(params, token)=>{
         const url="http://localhost:8080/checkin/add-client";
-        return axios.post(url,params);
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.post(url,params, config);
     }
 }
 
