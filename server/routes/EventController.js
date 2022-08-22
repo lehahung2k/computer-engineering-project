@@ -25,15 +25,13 @@ router.get("/find-event-by-code/:event_code", async (req, res) => {
     res.json(listEvents);
 })
 
-router.post("/add-event", //authPermission([1]), 
-validateToken, async (req, res) => {
+router.post("/add-event", validateToken, async (req, res) => {
     const post = req.body;
     await EventsMng.create(post);
     res.json(post);
 });
 
-router.put("/update-event/:event_id", //authPermission([1]), 
-validateToken, async (req, res) => {
+router.put("/update-event/:event_id", validateToken, async (req, res) => {
     const event_id = req.params.event_id;
     await EventsMng.update(req.body, {
         where: { event_id: event_id },
@@ -41,8 +39,7 @@ validateToken, async (req, res) => {
     res.json("Update success!");
 })
 
-router.delete("/delete-event-by-id/:event_id", //authPermission([1]), 
-validateToken, async (req, res) => {
+router.delete("/delete-event-by-id/:event_id", validateToken, async (req, res) => {
     const event_id = req.params.event_id;
     await EventsMng.destroy({
         where: { event_id: event_id},
