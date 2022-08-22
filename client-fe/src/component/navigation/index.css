@@ -1,8 +1,13 @@
-#navigation-list a{
+#navigation-list .listBtn{
     text-decoration: none;
     width: 100%;
     color: black;
 }
+
+.iconPage {
+    padding-right: 5px;
+}
+
 img {
     width: 80%;
     height: auto;
@@ -10,5 +15,9 @@ img {
 }
 .logout {
     background-color: brown;
+    text-decoration: none;
+    align-items: center;
+    width: 100%;
     border-radius: 20px;
+    color: white;
 }
