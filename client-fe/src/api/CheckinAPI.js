@@ -8,6 +8,12 @@ class CheckinAPI{
         };
         return axios.post(url,params, config);
     }
+
+    getALLCheckinClient=()=>{
+        const url="http://localhost:8080/checkin";
+        
+        return axios.get(url);
+    }
 }
 
 const checkinApi = new CheckinAPI();

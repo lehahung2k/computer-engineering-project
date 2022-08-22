@@ -19,17 +19,19 @@ const currentDate = new Date();
 
 export default function EventTable({ listEvents, type }) {
   const [confirmEventDelete, setConfirmEventDelete] = React.useState(false);
-
-  const confirmEventDeletion = () => {
+  const event_name_deletion = React.useRef("");
+  const confirmEventDeletion = (id, name) => {
+    event_name_deletion.current = name;
     setConfirmEventDelete(!confirmEventDelete);
   };
 
   const handleDeleteEvent = () => {
     console.log("Xác nhận xóa sự kiện");
+    setConfirmEventDelete(!confirmEventDelete);
   };
 
   return (
-    <>
+    <div>
       <TableContainer
         component={Paper}
         id="event-list-table"
@@ -43,7 +45,9 @@ export default function EventTable({ listEvents, type }) {
               <TableCell>Bắt đầu</TableCell>
               <TableCell>Kết thúc</TableCell>
               <TableCell>POC</TableCell>
-              <TableCell>{type=="CRUD"?'Thao tác':'Xem chi tiết thống kê'}</TableCell>
+              <TableCell>
+                {type == "CRUD" ? "Thao tác" : "Xem chi tiết thống kê"}
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -57,36 +61,59 @@ export default function EventTable({ listEvents, type }) {
                 <TableCell>{row["start_date"]}</TableCell>
                 <TableCell>{row["end_date"]}</TableCell>
                 <TableCell>10</TableCell>
-                {type=="CRUD"?<TableCell>
-                  {
-                  
-                  new Date(row["start_date"]) > currentDate ? (
-                    <div className="event-action">
-                      <Button className="event-action-edit">
-                        <a href={"/event-action/" + row["event_id"]}>Sửa</a>
-                      </Button>
-                      <Button
-                        className="event-action-del"
-                        onClick={confirmEventDeletion}
-                      >
-                        Xóa
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="event-action">
-                      <Button className="event-action-view">
-                        <a href={"/view-event/" + row["event_id"]}>Xem</a>
-                      </Button>
-                      <Button
-                        className="event-action-del"
-                        onClick={confirmEventDeletion}
-                      >
-                        Xóa
-                      </Button>
-                    </div>
-                  )}
-                </TableCell>:<TableCell>
-                    <Button>Xem</Button></TableCell>}
+                {type === "CRUD" ? (
+                  <TableCell>
+                    {new Date(row["start_date"]) > currentDate ? (
+                      <div className="event-action">
+                        <Button className="event-action-edit">
+                          <a
+                            style={{ color: "#1976d2", textDecoration: "none" }}
+                            href={"/event-action/" + row["event_id"]}
+                          >
+                            Sửa
+                          </a>
+                        </Button>
+                        <Button
+                          className="event-action-del"
+                          onClick={() =>
+                            confirmEventDeletion(
+                              row["event_id"],
+                              row["event_name"]
+                            )
+                          }
+                        >
+                          Xóa
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="event-action">
+                        <Button className="event-action-view">
+                          <a
+                            style={{ color: "#1976d2", textDecoration: "none" }}
+                            href={"/view-event/" + row["event_id"]}
+                          >
+                            Xem
+                          </a>
+                        </Button>
+                        <Button
+                          className="event-action-del"
+                          onClick={() =>
+                            confirmEventDeletion(
+                              row["event_id"],
+                              row["event_name"]
+                            )
+                          }
+                        >
+                          Xóa
+                        </Button>
+                      </div>
+                    )}
+                  </TableCell>
+                ) : (
+                  <TableCell>
+                    <Button onClick={() =>alert("Tính năng đang được cập nhật cho phiên bản sau")}>Xem</Button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
@@ -94,29 +121,32 @@ export default function EventTable({ listEvents, type }) {
       </TableContainer>
 
       <Dialog
-            open={confirmEventDelete}
-            onClose={confirmEventDeletion}
-            aria-labelledby="responsive-dialog-title"
-            fullWidth="true"
-            maxWidth="sm"
-          >
-            <DialogTitle id="responsive-dialog-title">
-              {"Xóa thông tin sự kiện"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                <p>Bạn có muốn xóa thông tin sự kiện này không?</p>
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button autoFocus onClick={handleDeleteEvent}>
-                Xác nhận
-              </Button>
-              <Button onClick={confirmEventDeletion} autoFocus>
-                Hủy
-              </Button>
-            </DialogActions>
-          </Dialog>
-    </>
+        open={confirmEventDelete}
+        onClose={confirmEventDeletion}
+        aria-labelledby="responsive-dialog-title"
+        fullWidth="true"
+        maxWidth="sm"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Xóa thông tin sự kiện"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <p>
+              Bạn có muốn xóa thông tin sự kiện {event_name_deletion.current}{" "}
+              không?
+            </p>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleDeleteEvent}>
+            Xác nhận
+          </Button>
+          <Button onClick={confirmEventDeletion} autoFocus>
+            Hủy
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 }
