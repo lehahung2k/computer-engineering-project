@@ -12,14 +12,15 @@ function Login() {
 
   const login = () => {
     const data = { username: username, passwd: passwd };
-    axios.post("http://localhost:8080/auth/login", data).then((response) => {
-      if (response.data.error) {
-        alert(response.data.error);
-      } else {
-        sessionStorage.setItem("accessToken", response.data);
-        navigate("/");
-      }
-    });
+    axios.post("http://localhost:8080/auth/login", data)
+      .then((response) => {
+        if (response.data.error) {
+          alert(response.data.error);
+        } else {
+          sessionStorage.setItem("accessToken", response.data);
+          navigate("/");
+        }
+      });
   }
   return (
     <div className='body'>
