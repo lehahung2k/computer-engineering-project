@@ -1,20 +1,42 @@
 import axios from 'axios';
 
 class EventApi{
-    getAll = ()=>{
+    getAll = (token)=>{
         const url="http://localhost:8080/events-management";
-        return axios.get(url);
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.get(url, config);
     };
 
-    addNew = (params)=>{
+    searchByCode = (params)=>{
+        const url='http://localhost:8080/events-management/find-event-by-code/'+params['event_code'];
+        return axios.get(url)
+    }
+
+    addNew = (params, token)=>{
         const url='http://localhost:8080/events-management/add-event';
-        return axios.post(url, params);
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.post(url, params, config);
     };
 
-    fetchEventInfo = (params)=>{
+    fetchEventInfo = (params, token)=>{
         const url='http://localhost:8080/events-management/find-event-by-id/'+ params.id;
-        return axios.get(url);
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.get(url, config);
     };
+
+    updateEventInfo = (params, token)=>{
+        const url='http://localhost:8080/events-management/update-event/'+ params.id;
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.put(url,params.event, config);
+    }
 }
 
 const eventApi = new EventApi();

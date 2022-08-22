@@ -15,50 +15,12 @@ import SideBar from "../navigation";
 import { useState, useEffect, useRef } from "react";
 import pocApi from "../../api/PocApi";
 import eventApi from "../../api/eventAPI.js";
+import PocTable from "../pocTable";
 
 export default function ViewEventInfo({ eventId = "" }) {
   function createData(ID, eventName, start, end, POC) {
     return { ID, eventName, start, end, POC };
   }
-
-  const rows = [
-    createData(1, "Frozen yoghurt", "2021-03-05", "2021-04-05", 24),
-    createData(
-      2,
-      "Frozen yoghurt",
-      "2021-05-05T08:00:00",
-      "2021-06-05T08:00:00",
-      24
-    ),
-    createData(
-      3,
-      "Frozen yoghurt",
-      "2021-07-05T08:00:00",
-      "2021-08-05T08:00:00",
-      24
-    ),
-    createData(
-      4,
-      "Frozen yoghurt",
-      "2021-09-05T08:00:00",
-      "2021-10-05T08:00:00",
-      24
-    ),
-    createData(
-      5,
-      "Frozen yoghurt",
-      "2022-10-05T08:00:00",
-      "2022-11-05T08:00:00",
-      24
-    ),
-    createData(
-      6,
-      "Frozen yoghurt",
-      "2022-03-05T08:00:00",
-      "2022-04-05T08:00:00",
-      24
-    ),
-  ];
 
   const [error, setError] = useState();
   const [loadingEvent, setLoadingEvent] = useState(true);
@@ -70,8 +32,8 @@ export default function ViewEventInfo({ eventId = "" }) {
   useEffect(() => {
     if (eventId === "") return;
     if (!loadingEvent) return;
-    const responseEventInfo = eventApi.fetchEventInfo({ id: eventId });
-    
+    const responseEventInfo = eventApi.fetchEventInfo({ id: eventId }, sessionStorage.getItem("accessToken"));
+    console.log(sessionStorage.getItem("accessToken"))
     responseEventInfo
       .then((response) => {
         setEventInfo(response.data);
@@ -85,7 +47,7 @@ export default function ViewEventInfo({ eventId = "" }) {
   useEffect(() => {
     if (eventId === "") return;
     if (!loadingPoc) return;
-    const responseListPocs = pocApi.findAllBasedEventId({id: eventId});
+    const responseListPocs = pocApi.findAllBasedEventId({id: eventId}, sessionStorage.getItem("accessToken"));
 
     responseListPocs.then((response) => {
       console.log(response);
@@ -164,7 +126,7 @@ export default function ViewEventInfo({ eventId = "" }) {
         </div>
         <Divider />
         <div>
-          <TableContainer
+          {/* <TableContainer
             component={Paper}
             id="POC-list-table"
             style={{ height: 200 }}
@@ -196,13 +158,15 @@ export default function ViewEventInfo({ eventId = "" }) {
                       <div className="view-event-info-show-map">Map</div>
                     </TableCell>
                     <TableCell>
-                      <div>Xóa</div>
+                    <button >Xóa</button>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer> */}
+
+          <PocTable listPocs={listPocs}></PocTable>
         </div>
       </div>
     );
