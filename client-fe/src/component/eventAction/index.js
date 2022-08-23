@@ -216,7 +216,7 @@ export default function EventAction() {
     var event_id = document.querySelector(
       "#event-action-add-new-POC-event-id-value"
     );
-    var pocId = document.querySelector("#event-action-add-new-POC-id-value");
+    // var pocId = document.querySelector("#event-action-add-new-POC-id-value");
     var pocName = document.querySelector(
       "#event-action-add-new-POC-name-value"
     );
@@ -484,7 +484,7 @@ const handleRerender = ()=>{
                     </div>
                   </Grid>
 
-                  <Grid item xs={4}>
+                  {/* <Grid item xs={4}>
                     <div className="event-action-add-new-POC-label">
                       ID của POC
                     </div>
@@ -496,7 +496,7 @@ const handleRerender = ()=>{
                         id="event-action-add-new-POC-id-value"
                       ></input>
                     </div>
-                  </Grid>
+                  </Grid> */}
 
                   <Grid item xs={4}>
                     <div className="event-action-add-new-POC-label">

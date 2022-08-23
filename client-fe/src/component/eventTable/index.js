@@ -16,6 +16,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import eventApi from "../../api/eventAPI";
 import pocApi from "../../api/PocApi";
+import checkinApi from "../../api/CheckinAPI";
 
 const currentDate = new Date();
 
@@ -65,20 +66,27 @@ export default function EventTable({ listEvents, type, rerender = (f) => f }) {
       .then(() => {
         console.log("Đã xóa các POC liên quan");
 
-        const responseDeleteEvent = eventApi.deleteEvent(
-          { id: event_id_deletion.current },
-          sessionStorage.getItem("accessToken")
-        );
+        const deleteTranslations = checkinApi.deleteCheckinInfo({
+          event_id: event_id_deletion.current
+        }, sessionStorage.getItem('accessToken'));
 
-        responseDeleteEvent
-          .then(() => {
-            alert("Đã xóa sự kiện thành công");
-            setConfirmEventDelete(!confirmEventDelete);
-            window.location.reload();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        deleteTranslations.then(() => {
+          const responseDeleteEvent = eventApi.deleteEvent(
+            { id: event_id_deletion.current },
+            sessionStorage.getItem("accessToken")
+          );
+  
+          responseDeleteEvent
+            .then(() => {
+              alert("Đã xóa sự kiện thành công");
+              setConfirmEventDelete(!confirmEventDelete);
+              window.location.reload();
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {console.log(err);});
       })
       .catch((err) => {
         console.log(err);
@@ -208,9 +216,9 @@ export default function EventTable({ listEvents, type, rerender = (f) => f }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleDeleteEvent}>
+          {enable.current?<Button autoFocus onClick={handleDeleteEvent}>
             Xác nhận
-          </Button>
+          </Button>:<></>}
           <Button onClick={confirmEventDeletion} autoFocus>
             Hủy
           </Button>
