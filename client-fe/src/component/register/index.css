@@ -26,6 +26,7 @@
     background-image: linear-gradient(#ebebf9, rgb(245, 253, 255));
     border-radius: 20px;
     box-shadow: 0px 0px 20px #00000056;
+    z-index: 1;
 }
 
 .card-login h1 {
@@ -126,4 +127,40 @@
         width: 90%;
 
     }
+}
+
+.center {
+    background: rgb(12,171,109);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    display: flex;
+    position: absolute;
+    left: -100px;
+    top: -100px;
+    z-index: 0;
+}
+
+.center1 {
+    background: rgb(12,171,109);
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    display: flex;
+    position: absolute;
+    left: 700px;
+    bottom: 100px;
+    z-index: 0;
+}
+
+.center2 {
+    background: rgb(12,171,109);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    position: absolute;
+    left: 1000px;
+    bottom: 200px;
+    z-index: 0;
 }

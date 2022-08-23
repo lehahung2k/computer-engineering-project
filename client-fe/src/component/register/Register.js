@@ -82,6 +82,9 @@ function Register() {
                         </Form>
                     </Formik>
                 </div>
+                <div class="center"></div>
+                <div class="center1"></div>
+                <div class="center2"></div>
             </div>
         </div>
     )
