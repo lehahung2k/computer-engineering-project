@@ -21,11 +21,14 @@ app.use("/events-management", eventsController);
 const pointCheckin = require("./routes/PointController");
 app.use("/point-of-checkin", pointCheckin);
 
-const checkinController = require("./routes/CheckinController");
-app.use("/checkin", checkinController);
+const clientController = require("./routes/ClientController");
+app.use("/client", clientController);
 
 const userController = require("./routes/UserController");
 app.use("/auth", userController);
+
+const transactionController = require("./routes/TransactionController");
+app.use("/transaction", transactionController);
 
 db.sequelize.sync().then(() => {
     app.listen(port, () => {
