@@ -17,17 +17,14 @@ import pocApi from "../../api/PocApi";
 import eventApi from "../../api/eventAPI.js";
 import PocTable from "../pocTable";
 
-export default function ViewEventInfo({ eventId = "" }) {
-  function createData(ID, eventName, start, end, POC) {
-    return { ID, eventName, start, end, POC };
-  }
-
+export default function ViewEventInfo( {eventId = "", rerender=f=>f} ) {
   const [error, setError] = useState();
   const [loadingEvent, setLoadingEvent] = useState(true);
   const [loadingPoc, setLoadingPoc] = useState(true);
   const event_id = useRef("");
   const [eventInfo, setEventInfo] = useState({});
   const [listPocs, setListPocs] = useState([]);
+  // const [rerender, setRerender] = useState(false);
 
   useEffect(() => {
     if (eventId === "") return;
@@ -81,12 +78,19 @@ export default function ViewEventInfo({ eventId = "" }) {
       endDate.getDate().toString().padStart(2, "0") + '/' +
       (endDate.getMonth() + 1).toString().padStart(2, "0") + '/' +
       endDate.getFullYear().toString();
+
+    const handleRerender = ()=>{
+      rerender();
+    }
+
+
+
     return (
       <div>
         <div id="view-event-info">
           <div id="view-event-info-main">
             <div id="view-event-info-event-name-label">
-              <p>Tên sự kiện</p>
+              <p>Tên sự kiện </p>
             </div>
             <div id="view-event-info-event-name">
               <p>{eventInfo["event_name"]}</p>
@@ -166,7 +170,7 @@ export default function ViewEventInfo({ eventId = "" }) {
             </Table>
           </TableContainer> */}
 
-          <PocTable listPocs={listPocs}></PocTable>
+          <PocTable listPocs={listPocs} rerender={handleRerender}></PocTable>
         </div>
       </div>
     );

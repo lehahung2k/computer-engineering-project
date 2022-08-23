@@ -18,14 +18,10 @@ import eventApi from "../../api/eventAPI.js";
 import pocApi from "../../api/PocApi.js";
 import EventTable from "../eventTable";
 
-function createData(ID, eventName, start, end, POC) {
-  return { ID, eventName, start, end, POC };
-}
-
-const currentDate = new Date();
 
 export default function ViewEvent() {
   const [listEvents, setListEvents] = React.useState([]);
+  const [rerender, setRerender] = React.useState(false);
   
   useEffect(() => {
     const responseGetListEvents = eventApi.getAll(sessionStorage.getItem('accessToken'));
@@ -39,6 +35,9 @@ export default function ViewEvent() {
   }, []);
 
 
+  const handleRerender = ()=>{
+    setRerender(!rerender);
+  }
 
   let {event_id} = useParams();
   if(event_id === undefined)
@@ -71,7 +70,7 @@ export default function ViewEvent() {
           </div>
 
           <Divider />
-<ViewEventInfo eventId={event_id}/>
+<ViewEventInfo eventId={event_id} rerender={handleRerender}/>
         </Grid>
       </Grid>
     </div>
