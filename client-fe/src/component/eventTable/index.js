@@ -209,8 +209,7 @@ export default function EventTable({ listEvents, type, rerender = (f) => f }) {
             ) : (
               <p>
                 Sự kiện đang có thông tin POC, hãy xóa các POC trước khi xóa sự
-                kiện. Nếu bạn tiếp tục hệ thống sẽ tự động xóa toàn bộ thông tin
-                POC liên quan. Bạn có muốn tiếp tục ?
+                kiện. 
               </p>
             )}
           </DialogContentText>
