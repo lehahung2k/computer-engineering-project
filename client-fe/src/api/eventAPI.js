@@ -37,6 +37,14 @@ class EventApi{
         };
         return axios.put(url,params.event, config);
     }
+
+    deleteEvent = (params, token) =>{
+        const url='http://localhost:8080/events-management/delete-event-by-id/'+ params.id;
+        const config = {
+            headers: {  'accessToken': token}
+        };
+        return axios.delete(url, config);
+    }
 }
 
 const eventApi = new EventApi();

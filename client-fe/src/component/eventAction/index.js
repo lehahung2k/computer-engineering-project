@@ -29,6 +29,7 @@ export default function EventAction() {
   const [listPOCs, setListPOCs] = React.useState([]);
   const [addNewEvent, setAddNewEvent] = React.useState(false);
   const [addNewPOC, setAddNewPOC] = React.useState(false);
+  const [rerender, setRerender] = React.useState(false);
   const [eventInfo, setEventInfo] = React.useState();
 
   const imgFile = React.useRef("");
@@ -248,6 +249,10 @@ export default function EventAction() {
       .catch((err) => console.error(err));
   };
 
+const handleRerender = ()=>{
+  setRerender(!rerender);
+}
+
 /* Format date to "YYYY-MM-DD" */
   const startDateFormatted = React.useRef();
   const endDateFormatted = React.useRef();
@@ -295,7 +300,7 @@ export default function EventAction() {
           </div>
           <div id="event-list">
             <h3>Danh sách sự kiện đã có</h3>
-            <EventTable listEvents={listEvents} type="CRUD"></EventTable>
+            <EventTable listEvents={listEvents} type="CRUD" rerender={handleRerender}></EventTable>
           </div>
 
           <Divider />

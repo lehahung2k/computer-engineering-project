@@ -12,6 +12,7 @@ import checkinApi from "../../api/CheckinAPI";
 import Divider from "@mui/material/Divider";
 import SideBar from "../navigation";
 import Webcam from "react-webcam";
+import moment from "moment";
 
 export default function BasicTable() {
   const [capture, setCapture] = React.useState("hello");
@@ -34,7 +35,16 @@ export default function BasicTable() {
     const response = checkinApi.getALLCheckinClient();
     response
       .then((response) => {
-        setListClientCheckin(response.data);
+        const newList = [];
+        console.log(response.data)
+        response.data.map((data) => {
+          const tmp = {};
+          tmp.note = data.note;
+          tmp.client_id = data.client_id;
+          tmp.create_time = moment(data.create_time).format('DD-MM-YYYY HH:mm:ss');
+          newList.push(tmp);
+        });
+        setListClientCheckin(newList);
       })
       .catch((error) => console.log(error));
 
@@ -86,10 +96,10 @@ export default function BasicTable() {
     const clientDescription = document.querySelector("#check-in-note");
 
     const params = {
-      client_code: clientId.value,
-      client_description: clientDescription.value,
-      client_img_f: image1,
-      client_img_b: image2,
+      event_id: 1,
+      client_id: clientId.value,
+      create_time: moment().format(),
+      note: clientDescription.value,
     };
 
     const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
@@ -101,6 +111,8 @@ export default function BasicTable() {
       .then((response) => {
         alert("Khách checkin thành công");
         setNewCheckin(true);
+        setImage1('');
+        setImage2('');
       })
       .catch((error) => {
         console.log(error);
@@ -327,7 +339,7 @@ export default function BasicTable() {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead id="check-in-TableHead">
                   <TableRow>
-                    {/* <TableCell>Thời điểm</TableCell> */}
+                    <TableCell>Thời điểm</TableCell>
                     <TableCell>Mã số sinh viên</TableCell>
                     <TableCell>Ghi chú</TableCell>
                   </TableRow>
@@ -335,14 +347,14 @@ export default function BasicTable() {
                 <TableBody>
                   {listClientCheckin.map((client) => (
                     <TableRow
-                      key={client.client_id}
+                      key={client.create_time}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      {/* <TableCell component="th" scope="row">
-                        {client.client_id}
-                      </TableCell> */}
-                      <TableCell>{client.client_code}</TableCell>
-                      <TableCell>{client.client_description}</TableCell>
+                      <TableCell component="th" scope="row">
+                        {client.create_time}
+                      </TableCell>
+                      <TableCell>{client.client_id}</TableCell>
+                      <TableCell>{client.note}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

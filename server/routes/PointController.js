@@ -42,4 +42,15 @@ router.delete("/:event_id/delete-point/:point_id", async (req, res) => {
     res.json("Delete success");
 });
 
+router.delete("/delete-all-poc/:event_id", validateToken, async (req, res)=>{
+    const event_id = req.params.event_id;
+    await PointCheckin.destroy({
+        where:{
+            event_id: event_id
+        }
+    })
+
+    res.json("Delete success");
+})
+
 module.exports = router;

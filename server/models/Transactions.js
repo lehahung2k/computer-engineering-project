@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        created_time: {
+        create_time: {
             type: DataTypes.TIME,
         },
         note: {

@@ -2,7 +2,7 @@ import axios from "axios";
 
 class CheckinAPI{
     addNewCheckinClient=(params, token)=>{
-        const url="http://localhost:8080/checkin/add-client";
+        const url="http://localhost:8080/transaction/add-transaction";
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -10,7 +10,7 @@ class CheckinAPI{
     }
 
     getALLCheckinClient=()=>{
-        const url="http://localhost:8080/checkin";
+        const url="http://localhost:8080/transaction/1";
         
         return axios.get(url);
     }

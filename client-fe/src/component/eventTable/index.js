@@ -14,20 +14,32 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import eventApi from '../../api/eventAPI';
 
 const currentDate = new Date();
 
-export default function EventTable({ listEvents, type }) {
+export default function EventTable({ listEvents, type, rerender=f=>f, }) {
   const [confirmEventDelete, setConfirmEventDelete] = React.useState(false);
+  
   const event_name_deletion = React.useRef("");
+  const event_id_deletion = React.useRef(0);
+
   const confirmEventDeletion = (id, name) => {
     event_name_deletion.current = name;
+    event_id_deletion.current = id;
     setConfirmEventDelete(!confirmEventDelete);
   };
 
   const handleDeleteEvent = () => {
     console.log("Xác nhận xóa sự kiện");
-    setConfirmEventDelete(!confirmEventDelete);
+    const response = eventApi.deleteEvent({id: event_id_deletion.current}, sessionStorage.getItem('accessToken'))
+    
+    response.then(() => {
+      alert("Đã xóa sự kiện thành công");    
+      setConfirmEventDelete(!confirmEventDelete);
+      rerender();
+    })
+    .catch(err => {console.log(err)})
   };
 
   return (
@@ -111,7 +123,13 @@ export default function EventTable({ listEvents, type }) {
                   </TableCell>
                 ) : (
                   <TableCell>
-                    <Button onClick={() =>alert("Tính năng đang được cập nhật cho phiên bản sau")}>Xem</Button>
+                    <Button
+                      onClick={() =>
+                        alert("Tính năng đang được cập nhật cho phiên bản sau")
+                      }
+                    >
+                      Xem
+                    </Button>
                   </TableCell>
                 )}
               </TableRow>
