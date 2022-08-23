@@ -24,6 +24,14 @@ class PocApi{
         };
         return axios.delete(url, config);
     }
+
+    deleteAllPoc = (params, token)=>{
+        const url = "http://localhost:8080/point-of-checkin/delete-all-poc/"+params.event_id;
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.delete(url, config);
+    }
 }
 
 const pocApi = new PocApi();

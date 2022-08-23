@@ -14,34 +14,75 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import eventApi from '../../api/eventAPI';
+import eventApi from "../../api/eventAPI";
+import pocApi from "../../api/PocApi";
 
 const currentDate = new Date();
 
-export default function EventTable({ listEvents, type, rerender=f=>f, }) {
+export default function EventTable({ listEvents, type, rerender = (f) => f }) {
   const [confirmEventDelete, setConfirmEventDelete] = React.useState(false);
-  
+
+  const enable = React.useRef(false);
   const event_name_deletion = React.useRef("");
   const event_id_deletion = React.useRef(0);
 
   const confirmEventDeletion = (id, name) => {
     event_name_deletion.current = name;
     event_id_deletion.current = id;
-    setConfirmEventDelete(!confirmEventDelete);
+    const responseListPoc = pocApi.findAllBasedEventId(
+      { id: event_id_deletion.current },
+      sessionStorage.getItem("accessToken")
+    );
+
+    responseListPoc
+      .then((response) => {
+        console.log(response.data);
+        console.log("Length", response.data.length);
+        console.log("response.data.length>0", response.data.length > 0);
+        if (response.data.length > 0) {
+          enable.current = false;
+        } else {
+          enable.current = true;
+        }
+        setConfirmEventDelete(!confirmEventDelete);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async () => {
     console.log("Xác nhận xóa sự kiện");
-    // const response = eventApi.deleteEvent({id: event_id_deletion.current}, sessionStorage.getItem('accessToken'))
-    
-    // response.then(() => {
-    //   alert("Đã xóa sự kiện thành công");    
-    //   setConfirmEventDelete(!confirmEventDelete);
-    //   rerender();
-    // })
-    // .catch(err => {console.log(err)})
 
-    rerender();
+    const responseDeletePOC = pocApi.deleteAllPoc(
+      {
+        event_id: event_id_deletion.current,
+      },
+      sessionStorage.getItem("accessToken")
+    );
+
+    responseDeletePOC
+      .then(() => {
+        console.log("Đã xóa các POC liên quan");
+
+        const responseDeleteEvent = eventApi.deleteEvent(
+          { id: event_id_deletion.current },
+          sessionStorage.getItem("accessToken")
+        );
+
+        responseDeleteEvent
+          .then(() => {
+            alert("Đã xóa sự kiện thành công");
+            setConfirmEventDelete(!confirmEventDelete);
+            window.location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -152,10 +193,18 @@ export default function EventTable({ listEvents, type, rerender=f=>f, }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>
-              Bạn có muốn xóa thông tin sự kiện {event_name_deletion.current}{" "}
-              không?
-            </p>
+            {enable.current ? (
+              <p>
+                Bạn có muốn xóa thông tin sự kiện {event_name_deletion.current}{" "}
+                không?
+              </p>
+            ) : (
+              <p>
+                Sự kiện đang có thông tin POC, hãy xóa các POC trước khi xóa sự
+                kiện. Nếu bạn tiếp tục hệ thống sẽ tự động xóa toàn bộ thông tin
+                POC liên quan. Bạn có muốn tiếp tục ?
+              </p>
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
