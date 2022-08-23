@@ -16,6 +16,14 @@ class PocApi{
         };
         return axios.get(url, config);
     }
+
+    deletePoc = (params, token)=>{
+        const url = "http://localhost:8080/point-of-checkin/"+params.event_id + '/delete-point/'+params.point_id;
+        const config = {
+            headers: {  'accessToken': token,'Content-Type': 'application/json' }
+        };
+        return axios.delete(url, config);
+    }
 }
 
 const pocApi = new PocApi();

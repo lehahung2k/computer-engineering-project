@@ -250,6 +250,7 @@ export default function EventAction() {
   };
 
 const handleRerender = ()=>{
+  console.log("Rerender");
   setRerender(!rerender);
 }
 
@@ -524,7 +525,7 @@ const handleRerender = ()=>{
             </DialogActions>
           </Dialog>
           <div>
-            <PocTable listPocs={listPOCs}></PocTable>
+            <PocTable listPocs={listPOCs} rerender={handleRerender}></PocTable>
           </div>
         </Grid>
       </Grid>

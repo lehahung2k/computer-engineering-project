@@ -32,14 +32,16 @@ export default function EventTable({ listEvents, type, rerender=f=>f, }) {
 
   const handleDeleteEvent = () => {
     console.log("Xác nhận xóa sự kiện");
-    const response = eventApi.deleteEvent({id: event_id_deletion.current}, sessionStorage.getItem('accessToken'))
+    // const response = eventApi.deleteEvent({id: event_id_deletion.current}, sessionStorage.getItem('accessToken'))
     
-    response.then(() => {
-      alert("Đã xóa sự kiện thành công");    
-      setConfirmEventDelete(!confirmEventDelete);
-      rerender();
-    })
-    .catch(err => {console.log(err)})
+    // response.then(() => {
+    //   alert("Đã xóa sự kiện thành công");    
+    //   setConfirmEventDelete(!confirmEventDelete);
+    //   rerender();
+    // })
+    // .catch(err => {console.log(err)})
+
+    rerender();
   };
 
   return (
