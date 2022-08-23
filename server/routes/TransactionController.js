@@ -18,4 +18,15 @@ router.post("/add-transaction", async (req, res) => {
     res.json(post);
 })
 
+router.delete("/delete-transaction/:event_id", async (req, res) => {
+    const event_id = req.params.event_id;
+    await Transactions.destroy({
+        where:{
+            event_id: event_id
+        }
+    })
+
+    res.json("Delete success");
+})
+
 module.exports = router;

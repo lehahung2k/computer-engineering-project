@@ -38,7 +38,7 @@ export default function SideBar(id) {
         <img src={Img} alt="Logo soict" />
       </div>
       <Divider />
-      {id['id'] !== 'admin' ? <List id='navigation-list'>
+      {id['id'] !== "admin" ? <List id='navigation-list'>
         {sessionStorage.getItem("accessToken") && (
           <>
             <ListItem>

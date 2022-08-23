@@ -6,7 +6,7 @@ class PocApi{
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
-        return axios.post(url, config);
+        return axios.post(url,params, config);
     }
 
     findAllBasedEventId = (params, token)=>{
