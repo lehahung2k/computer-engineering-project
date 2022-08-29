@@ -72,17 +72,17 @@ export default function DashBoard() {
         </Grid>
 
         <Grid item xs={6}>
-            <div id="dashboard-overview-info">
-                <div className="dashboard-overview-card">
-<h1>100</h1><p>Sự kiện được tổ chức</p>
-                </div>
-                <div className="dashboard-overview-card">
-<h1>1000</h1><p>POC đăng ký tham gia</p>
-                </div>
-                <div className="dashboard-overview-card">
-<h1>10000</h1><p>Người tham dự</p>
-                </div>
+          <div id="dashboard-overview-info">
+            <div className="dashboard-overview-card">
+              <h1>100</h1><p>Sự kiện được tổ chức</p>
             </div>
+            <div className="dashboard-overview-card">
+              <h1>1000</h1><p>POC đăng ký tham gia</p>
+            </div>
+            <div className="dashboard-overview-card">
+              <h1>10000</h1><p>Người tham dự</p>
+            </div>
+          </div>
         </Grid>
       </Grid>
     </>

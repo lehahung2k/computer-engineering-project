@@ -1,8 +1,9 @@
 import axios from "axios";
 
+const baseUrl = 'http://localhost:8080/transaction';
 class CheckinAPI{
     addNewCheckinClient=(params, token)=>{
-        const url="http://localhost:8080/transaction/add-transaction";
+        const url= baseUrl + "/add-transaction";
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -10,13 +11,13 @@ class CheckinAPI{
     }
 
     getALLCheckinClient=()=>{
-        const url="http://localhost:8080/transaction/1";
+        const url= baseUrl + "/1";
         
         return axios.get(url);
     }
 
     deleteCheckinInfo=(params, token)=>{
-        const url="http://localhost:8080/transaction/delete-transaction/"+params.event_id;
+        const url= baseUrl + "/delete-transaction/"+params.event_id;
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };

@@ -1,8 +1,10 @@
 import axios from 'axios';
 
+const baseUrl = 'http://localhost:8080/events-management';
+
 class EventApi{
     getAll = (token)=>{
-        const url="http://localhost:8080/events-management";
+        const url= baseUrl + "/";
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -10,12 +12,12 @@ class EventApi{
     };
 
     searchByCode = (params)=>{
-        const url='http://localhost:8080/events-management/find-event-by-code/'+params['event_code'];
+        const url= baseUrl + '/find-event-by-code/'+params['event_code'];
         return axios.get(url)
     }
 
     addNew = (params, token)=>{
-        const url='http://localhost:8080/events-management/add-event';
+        const url= baseUrl + '/add-event';
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -23,7 +25,7 @@ class EventApi{
     };
 
     fetchEventInfo = (params, token)=>{
-        const url='http://localhost:8080/events-management/find-event-by-id/'+ params.id;
+        const url= baseUrl + '/find-event-by-id/'+ params.id;
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -31,7 +33,7 @@ class EventApi{
     };
 
     updateEventInfo = (params, token)=>{
-        const url='http://localhost:8080/events-management/update-event/'+ params.id;
+        const url= baseUrl + '/update-event/'+ params.id;
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -39,7 +41,7 @@ class EventApi{
     }
 
     deleteEvent = (params, token) =>{
-        const url='http://localhost:8080/events-management/delete-event-by-id/'+ params.id;
+        const url= baseUrl + '/delete-event-by-id/'+ params.id;
         const config = {
             headers: {  'accessToken': token}
         };

@@ -1,8 +1,9 @@
 import axios from "axios";
 
+const baseUrl = 'http://localhost:8080/point-of-checkin';
 class PocApi{
     addNew = (params, token)=>{
-        const url = "http://localhost:8080/point-of-checkin/add-point";
+        const url = baseUrl + "/add-point";
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -10,7 +11,7 @@ class PocApi{
     }
 
     findAllBasedEventId = (params, token)=>{
-        const url = "http://localhost:8080/point-of-checkin/"+params.id;
+        const url = baseUrl + "/"+params.id;
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -18,7 +19,7 @@ class PocApi{
     }
 
     deletePoc = (params, token)=>{
-        const url = "http://localhost:8080/point-of-checkin/"+params.event_id + '/delete-point/'+params.point_id;
+        const url = baseUrl + "/"+params.event_id + '/delete-point/'+params.point_id;
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };
@@ -26,7 +27,7 @@ class PocApi{
     }
 
     deleteAllPoc = (params, token)=>{
-        const url = "http://localhost:8080/point-of-checkin/delete-all-poc/"+params.event_id;
+        const url = baseUrl + "/delete-all-poc/"+params.event_id;
         const config = {
             headers: {  'accessToken': token,'Content-Type': 'application/json' }
         };

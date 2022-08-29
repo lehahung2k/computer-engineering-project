@@ -48,13 +48,13 @@ export default function Home() {
               </>
             )}
           </div>
-<div><h3>Danh sách tổng hợp các sự kiện</h3> 
-<EventTable listEvents={listEvents} type='View'></EventTable>
-</div>
-<Divider />
+          <div><h3>Danh sách tổng hợp các sự kiện</h3>
+            <EventTable listEvents={listEvents} type='View'></EventTable>
+          </div>
+          <Divider />
           <div>
-  <h3>Số liệu thống kê các sự kiện</h3>
-  <br />
+            <h3>Số liệu thống kê các sự kiện</h3>
+            <br />
             <DashBoard></DashBoard>
           </div>
         </Grid>

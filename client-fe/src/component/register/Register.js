@@ -2,8 +2,8 @@ import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
-import axios from "axios";
 import "./index.css"
+import authApi from '../../api/AuthApi';
 
 function Register() {
     const initialValues = {
@@ -11,18 +11,23 @@ function Register() {
         passwd: "",
         full_name: "",
         active: 1,
-        role: 2
+        role: 2,
+        companyName: "",
+        phoneNumber: ""
     };
     const validationSchema = Yup.object().shape({
         username: Yup.string().min(3).max(15).required(),
         passwd: Yup.string().min(4).max(20).required(),
-        full_name: Yup.string().required()
+        full_name: Yup.string().required(),
+        companyName: Yup.string().required(),
+        phoneNumber: Yup.string().min(9).max(12).required()
+
     });
 
     const navigate = useNavigate();
 
     const onSubmit = (data) => {
-        axios.post("http://localhost:8080/auth", data).then((response) => {
+        authApi.registerApi(data).then((response) => {
             console.log(data);
             if (response.data.error) {
                 alert(response.data.error);
@@ -46,7 +51,7 @@ function Register() {
                         <Form className="login-form">
                             <div className="form-group">
                                 <Field
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     id="inputCreatePost"
                                     name="username" className="form-field"
                                     placeholder="Username"
@@ -56,7 +61,7 @@ function Register() {
 
                             <div className='form-group'>
                                 <Field
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     type="password"
                                     id="inputCreatePost"
                                     name="passwd" className="form-field"
@@ -67,12 +72,32 @@ function Register() {
 
                             <div className='form-group'>
                                 <Field
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     id="inputCreatePost"
                                     name="full_name" className="form-field"
                                     placeholder="Fullname"
                                 />
                                 <ErrorMessage name="full_name" component="span" className='errorMsg' />
+                            </div>
+
+                            <div className='form-group'>
+                                <Field
+                                    autoComplete="off"
+                                    id="inputCreatePost"
+                                    name="companyName" className="form-field"
+                                    placeholder="Your Company Name"
+                                />
+                                <ErrorMessage name="companyName" component="span" className='errorMsg' />
+                            </div>
+
+                            <div className='form-group'>
+                                <Field
+                                    autoComplete="off"
+                                    id="inputCreatePost"
+                                    name="phoneNumber" className="form-field"
+                                    placeholder="Your phone number"
+                                />
+                                <ErrorMessage name="phoneNumber" component="span" className='errorMsg' />
                             </div>
 
                             <button className="button" type="submit"> Register</button>
@@ -82,9 +107,9 @@ function Register() {
                         </Form>
                     </Formik>
                 </div>
-                <div class="center"></div>
-                <div class="center1"></div>
-                <div class="center2"></div>
+                <div className="center"></div>
+                <div className="center1"></div>
+                <div className="center2"></div>
             </div>
         </div>
     )
