@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { Users } = require("../models")
 const bcrypt = require('bcryptjs');
-const {sign} = require('jsonwebtoken');
-const {validateToken} = require('../middlewares/AuthMiddlewares');
+const { sign } = require('jsonwebtoken');
+const { validateToken } = require('../middlewares/AuthMiddlewares');
 
 router.post("/", async (req, res) => {
     const { username, passwd, full_name, active, role } = req.body;
@@ -27,22 +27,24 @@ router.post("/login", async (req, res) => {
         }
     });
 
-    if (!user) {
-        res.json({error: "User not found!"});
+    if (user === null || !user) {
+        res.json({ error: "User not found!" });
+    } else {
+        bcrypt.compare(passwd, user.passwd).then(async (match) => {
+            if (!match) {
+                res.json({ error: "Wrong username or password" });
+            } else {
+                const accessToken = sign(
+                    { username: user.username, user_id: user.user_id },
+                    "importantsecret"
+                );
+                res.json(accessToken);
+            }
+        });
     }
-    bcrypt.compare(passwd, user.passwd).then(async (match) => {
-        if (!match) {
-            res.json({error: "Wrong username or password"});
-        }
-        const accessToken = sign(
-            {username: user.username, user_id: user.user_id}, 
-            "importantsecret"
-        );
-        res.json(accessToken);
-    });
 })
 
-router.get("/auth", validateToken,(req, res) => {
+router.get("/auth", validateToken, (req, res) => {
     const role = req.user.role;
     res.json(req.user);
 });
