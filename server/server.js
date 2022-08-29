@@ -31,7 +31,7 @@ const transactionController = require("./routes/TransactionController");
 app.use("/transaction", transactionController);
 
 db.sequelize.sync().then(() => {
-    app.listen(port, () => {
+    app.listen(process.env.PORT, () => {
         console.log("Hello NodeJS");
     });
 });
