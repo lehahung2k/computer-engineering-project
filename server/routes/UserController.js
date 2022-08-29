@@ -6,17 +6,29 @@ const { sign } = require('jsonwebtoken');
 const { validateToken } = require('../middlewares/AuthMiddlewares');
 
 router.post("/", async (req, res) => {
-    const { username, passwd, full_name, active, role } = req.body;
-    bcrypt.hash(passwd, 6).then((hash) => {
-        Users.create({
-            username: username,
-            passwd: hash,
-            full_name: full_name,
-            active: active,
-            role: role,
-        });
-        res.json("SUCCESS");
+    const { username, passwd, full_name, active, role, companyName, phoneNumber } = req.body;
+    const user = await Users.findOne({
+        where: {
+            username: username
+        }
     });
+    if (user === null || !user) {
+        bcrypt.hash(passwd, 6).then((hash) => {
+            Users.create({
+                username: username,
+                passwd: hash,
+                full_name: full_name,
+                active: active,
+                role: role,
+                companyName: companyName,
+                phoneNumber: phoneNumber
+            });
+            res.json("SUCCESS");
+        });
+    } else {
+        res.json({error: "Error: Username is existed!"});
+    }
+
 })
 
 router.post("/login", async (req, res) => {

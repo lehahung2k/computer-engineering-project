@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import axios from "axios";
 import Img from "../login/Frame-1729.webp"
 import "./index.css"
+import authApi from '../../api/AuthApi';
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -12,7 +12,7 @@ function Login() {
 
   const login = () => {
     const data = { username: username, passwd: passwd };
-    axios.post("http://localhost:8080/auth/login", data)
+    authApi.loginApi(data)
       .then((response) => {
         if (response.data.error) {
           alert(response.data.error);
@@ -27,14 +27,13 @@ function Login() {
       <div className='left-login'>
         <h1 className='chart'>EVENT CHECK-IN MANAGEMENT</h1>
         <img src={Img} alt="Logo web" className="chart" />
-        <div class="center"></div>
+        <div className="center"></div>
       </div>
       <div className='right-login'>
         <div className="card-login">
           <h1>WELCOME</h1>
 
             <div className="form-group">
-              <label></label>
               < input className="form-field"
                 type="text" placeholder='Username'
                 onChange={
@@ -43,19 +42,18 @@ function Login() {
             </div>
 
             <div className="form-group">
-              <label></label>
               <input className="form-field"
                 type="password" placeholder='Password'
                 onChange={(event) => {
                   setPasswd(event.target.value);
                 }}/>
             </div>
-          <button className="button" onClick={login} >Login</button>
+          <button className="button" onClick={login}>Login</button>
           <div className='register'> 
             If you don't have account? {<Link to="/register">Register</Link>} here
           </div>
         </div>
-        <div class="center1"></div>
+        <div className="center1"></div>
       </div>
 
     </div>
