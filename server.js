@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const cors = require('cors');
 
 const app = express();
-const port = 8080;
+const port = 11032;
 
 const db = require("./models");
 
@@ -31,7 +31,7 @@ const transactionController = require("./routes/TransactionController");
 app.use("/transaction", transactionController);
 
 db.sequelize.sync().then(() => {
-    app.listen(process.env.PORT, () => {
+    app.listen(port, () => {
         console.log("Hello NodeJS");
     });
 });
