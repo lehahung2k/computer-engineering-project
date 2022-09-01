@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/computer-engineering-project/static/css/main.f3918cb0.css",
+    "main.js": "/computer-engineering-project/static/js/main.363667a6.js",
+    "static/media/logo-soict-hust.png": "/computer-engineering-project/static/media/logo-soict-hust.d6120447f76c851addcd.png",
+    "static/media/Frame-1729.webp": "/computer-engineering-project/static/media/Frame-1729.2ce1d07cbdd24ee2b2bc.webp",
+    "index.html": "/computer-engineering-project/index.html",
+    "main.f3918cb0.css.map": "/computer-engineering-project/static/css/main.f3918cb0.css.map",
+    "main.363667a6.js.map": "/computer-engineering-project/static/js/main.363667a6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f3918cb0.css",
+    "static/js/main.363667a6.js"
+  ]
+}
