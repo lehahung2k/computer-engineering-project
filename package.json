@@ -29,7 +29,8 @@
     "react-scripts": "5.0.1",
     "react-webcam": "^7.0.1",
     "web-vitals": "^2.1.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "gh-pages": "^2.1.1"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -56,8 +57,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^2.1.1"
   }
 }
