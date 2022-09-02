@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHome, faEye, faEdit, faSignOutAlt, faListCheck, faSearch } from '@fortawesome/free-solid-svg-icons'
 
 export default function SideBar(id) {
-  axios.get("http://localhost:8080/auth/auth").then((response) => {
+  axios.get("https://event-managment-soict2022.herokuapp.com/auth/auth").then((response) => {
     id = response.data.role
     console.log(response.data);
   })

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:8080/events-management';
+const baseUrl = 'https://event-managment-soict2022.herokuapp.com/events-management';
 
 class EventApi{
     getAll = (token)=>{

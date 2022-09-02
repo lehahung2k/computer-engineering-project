@@ -10,8 +10,8 @@ const db = require("./models");
 app.use(express.json());
 app.use(cors());
 
-app.get('/hello', (req, res) => {
-    res.send('Hello World!')
+app.get('/', (req, res) => {
+    res.send('Hello, this is server!')
 })
 
 //Routes:
@@ -31,7 +31,7 @@ const transactionController = require("./routes/TransactionController");
 app.use("/transaction", transactionController);
 
 db.sequelize.sync().then(() => {
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT || port, () => {
         console.log("Hello NodeJS");
     });
 });
