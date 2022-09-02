@@ -10,8 +10,8 @@ const db = require("./models");
 app.use(express.json());
 app.use(cors());
 
-app.get('/hello', (req, res) => {
-    res.send('Hello World!')
+app.get('/', (req, res) => {
+    res.send('Hello, this is server!')
 })
 
 //Routes:
