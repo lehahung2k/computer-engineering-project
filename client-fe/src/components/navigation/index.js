@@ -35,7 +35,7 @@ export default function SideBar(id) {
       {/* <Toolbar /> */}
       {/* <Divider /> */}
       <div>
-        <img src={Img} alt="Logo soict" />
+        <img src="/image/cropped_logo.png" alt="Logo iChekin" />
       </div>
       <Divider />
       {id['id'] !== "admin" ? <List id='navigation-list'>

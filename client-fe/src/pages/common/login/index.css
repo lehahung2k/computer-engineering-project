@@ -8,6 +8,21 @@
     align-items: center;
 }
 
+.left-login {
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.left-login h1 {
+    color: #000000;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
 .right-login {
     width: 50vw;
     height: 100vh;
@@ -37,6 +52,7 @@
 
 .chart {
     width: 80%;
+    z-index: 1;
 }
 
 
@@ -89,17 +105,12 @@
     letter-spacing: 3px;
     cursor: pointer;
     margin-top: 15px;
-    background: rgb(12,171,109);
+    background: #A2D9F9;
     color: rgb(255, 255, 255);
 }
 
 .register {
     margin-top: 10px;
-}
-
-.errorMsg {
-    color: red;
-    font-size: small;
 }
 
 @media (max-width: 950px) {
@@ -128,9 +139,8 @@
 
     }
 }
-
 .center {
-    background: rgb(12,171,109);
+    background: #A2D9F9;
     width: 300px;
     height: 300px;
     border-radius: 50%;
@@ -140,27 +150,14 @@
     top: -100px;
     z-index: 0;
 }
-
-.center1 {
-    background: rgb(12,171,109);
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    display: flex;
-    position: absolute;
-    left: 700px;
-    bottom: 100px;
-    z-index: 0;
-}
-
-.center2 {
-    background: rgb(12,171,109);
+.right-login .center1 {
+    background: #A2D9F9;
     width: 100px;
     height: 100px;
     border-radius: 50%;
     display: flex;
     position: absolute;
-    left: 1000px;
-    bottom: 200px;
     z-index: 0;
+    top: 100px;
+    right: 100px
 }

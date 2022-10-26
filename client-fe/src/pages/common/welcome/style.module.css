@@ -1,0 +1,58 @@
+.head {
+  background-image: url(../../../assets/Welcome\ background\ 02.png);
+  height: 300px;
+  background-repeat: no-repeat;
+  background-size: 100% 300px;
+  margin-top: 56px;
+}
+
+@media only screen and (min-width: 800px) {
+  .head{
+    background-image: url(../../../assets/Welcome\ background\ 02.png);
+  height: 400px;
+  background-repeat: no-repeat;
+  background-size: 100% 400px;
+  margin-top: 56px;
+  }
+}
+.head__text {
+  /* background-color: antiquewhite; */
+  height: 100%;
+  position: relative;
+}
+.head__text h3 {
+  margin: 0;
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 550;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.body{
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 50px;
+  margin: 10px;
+}
+
+.body__item{
+    position: relative;
+}
+
+.body__item__right{
+    /* background-color: aliceblue; */
+    height: 300px;
+    text-align: left;
+}
+
+.body__item__left{
+  /* background-color: aliceblue; */
+  height: 300px;
+  text-align: right;
+}
+
