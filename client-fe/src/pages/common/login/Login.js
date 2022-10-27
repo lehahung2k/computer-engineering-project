@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Img from "../login/Frame-1729.webp"
 import "./index.css"
-import authApi from '../../api/AuthApi';
+import authApi from '../../../api/AuthApi';
 import axios from "axios";
 import "./index.css";
 

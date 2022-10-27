@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from "yup";
 import "./index.css"
-import authApi from '../../api/AuthApi';
+import authApi from '../../../api/AuthApi';
 
 function Register() {
     const initialValues = {
