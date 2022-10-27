@@ -3,7 +3,9 @@ const mysql = require('mysql');
 const cors = require('cors');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const dotenv = require('dotenv');
 
+dotenv.config();
 const app = express();
 const port = 8080;
 
