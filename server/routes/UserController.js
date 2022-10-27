@@ -44,28 +44,17 @@ router.post("/login", async (req, res) => {
     } else {
         bcrypt.compare(passwd, user.passwd).then(async (match) => {
             if (!match) {
-                res.json({ error: "Wrong username or password" });
-            } else {
-                const accessToken = sign(
-                    { username: user.username, user_id: user.user_id },
-                    "importantsecret"
-                );
-                res.json(accessToken);
+                res.json({error: "Wrong username or password"});
             }
+            let secretKey = process.env.SECRET_KEY
+            let algorithm = process.env.ALGORITHM
+            const accessToken = sign(
+                {username: user.username}, 
+                secretKey, {algorithm: algorithm}
+            );
+            res.json({accessToken: accessToken, userRole: user.role});
         });
     }
-    bcrypt.compare(passwd, user.passwd).then(async (match) => {
-        if (!match) {
-            res.json({error: "Wrong username or password"});
-        }
-        let secretKey = process.env.SECRET_KEY
-        let algorithm = process.env.ALGORITHM
-        const accessToken = sign(
-            {username: user.username}, 
-            secretKey, {algorithm: algorithm}
-        );
-        res.json({accessToken: accessToken, userRole: user.role});
-    });
 })
 
 router.get("/auth", validateToken, (req, res) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://event-managment-soict2022.herokuapp.com/point-of-checkin';
+const baseUrl = 'http://localhost:8080/point-of-checkin';
 class PocApi{
     addNew = (params, token)=>{
         const url = baseUrl + "/add-point";
