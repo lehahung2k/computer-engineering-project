@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD:client-fe/src/component/login/Login.js
 import Img from "../login/Frame-1729.webp"
 import "./index.css"
 import authApi from '../../api/AuthApi';
-=======
 import axios from "axios";
-import Img from "./Frame-1729.webp";
 import "./index.css";
->>>>>>> 53ec439 (add welcome page, restructure client code and fix authorization):client-fe/src/pages/common/login/Login.js
 
 function Login() {
   const [username, setUsername] = useState("");

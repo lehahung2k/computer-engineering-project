@@ -26,13 +26,13 @@ function App() {
         </>
       )} */}
         <Route exact path='/' element={<Welcome/>}/>
-        
+
         <Route path='/admin' element={<PrivateRoute role={sessionStorage.getItem('role')} type={2}/>}>
-          <Route path='/admin' element={<Welcome/>}></Route>
+          <Route path='/admin/*' element={<Navigate to='/'/>}></Route>
         </Route>
 
         <Route path='/check-in' element={<PrivateRoute role={sessionStorage.getItem('role')} type={2}/>}>
-          <Route path='/check-in' element={<Welcome/>}></Route>
+          <Route path='/check-in/*' element={<Navigate to='/'/>}></Route>
         </Route>
 
         <Route path='/login' element={<Login/>}/>
