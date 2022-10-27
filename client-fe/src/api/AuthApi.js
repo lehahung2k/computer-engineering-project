@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://event-managment-soict2022.herokuapp.com/auth';
+const baseUrl = 'http://localhost:8080/auth';
 
 class AuthApi {
     loginApi = (data) => {
