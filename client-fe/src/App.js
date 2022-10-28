@@ -9,6 +9,7 @@ import {Routes, Route, Navigate} from 'react-router-dom';
 import Login from './pages/common/login/Login';
 import Register from './pages/common/register/Register';
 import PrivateRoute from './components/routing';
+import Checkin from './pages/poc/checkin';
 
 // import Footer from './components/Footer'
 function App() {
@@ -31,8 +32,12 @@ function App() {
           <Route path='/admin/*' element={<Navigate to='/'/>}></Route>
         </Route>
 
+        <Route path='/poc' element={<PrivateRoute role={sessionStorage.getItem('role')} type={2}/>}>
+          <Route path='/poc/*' element={<Navigate to='/'/>}></Route>
+        </Route>
+
         <Route path='/check-in' element={<PrivateRoute role={sessionStorage.getItem('role')} type={2}/>}>
-          <Route path='/check-in/*' element={<Navigate to='/'/>}></Route>
+          <Route path='/check-in' element={<Checkin/>}></Route>
         </Route>
 
         <Route path='/login' element={<Login/>}/>
