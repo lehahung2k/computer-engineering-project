@@ -1,0 +1,36 @@
+.body {
+  background-color: #f6f6f6;
+  height: 100vh;
+  width: 100%;
+}
+
+.main {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  height: 90vh;
+  height: auto;
+  width: 100%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.main__head {
+  /* display: grid;
+  grid-template-columns: auto auto; */
+  margin-top: 10px;
+}
+
+.main__head h3 {
+  text-align: left;
+  padding-left: 20px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+}
+
+.main__head__breadcrumb {
+  padding: 10px 10px 10px 20px;
+  justify-content: right;
+}

@@ -5,6 +5,7 @@ import checkinApi from "../../../api/CheckinAPI";
 import Webcam from "react-webcam";
 import moment from "moment";
 import WebCam from "./components/webcam";
+import Button from "@mui/material/Button";
 
 export default function Checkin() {
   const [capture, setCapture] = React.useState("hello");
@@ -135,7 +136,7 @@ export default function Checkin() {
                     ></textarea>
                     <br />
                   </form>
-                  <button onClick={handleSubmitForm}>Submit</button>
+                  <Button variant='contained' onClick={handleSubmitForm}>Submit</Button>
                 </div>
               </Grid>
             </Grid>
