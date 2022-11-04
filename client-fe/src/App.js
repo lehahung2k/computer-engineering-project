@@ -9,6 +9,10 @@ import {Routes, Route, Navigate} from 'react-router-dom';
 import Login from './pages/common/login/Login';
 import Register from './pages/common/register/Register';
 import PrivateRoute from './components/routing';
+import Checkin from './pages/poc/checkin';
+import PocManageEvent from './pages/poc/listEvents';
+import PocEventDetail from './pages/poc/eventDetail';
+import PocListGuest from './pages/poc/listGuests';
 
 // import Footer from './components/Footer'
 function App() {
@@ -31,8 +35,15 @@ function App() {
           <Route path='/admin/*' element={<Navigate to='/'/>}></Route>
         </Route>
 
+        <Route path='/poc' element={<PrivateRoute role={sessionStorage.getItem('role')} type={2}/>}>
+          <Route exact path='/poc/event' element={<PocManageEvent/>}></Route>
+          <Route exact path='/poc/event/detail' element={<PocEventDetail/>}></Route>
+          <Route exact path='/poc/event/detail/guests' element={<PocListGuest/>}></Route>
+          <Route path='/poc/*' element={<Navigate to='/'/>}></Route>
+        </Route>
+
         <Route path='/check-in' element={<PrivateRoute role={sessionStorage.getItem('role')} type={2}/>}>
-          <Route path='/check-in/*' element={<Navigate to='/'/>}></Route>
+          <Route path='/check-in' element={<Checkin/>}></Route>
         </Route>
 
         <Route path='/login' element={<Login/>}/>

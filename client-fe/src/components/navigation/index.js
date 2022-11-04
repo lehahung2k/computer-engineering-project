@@ -32,8 +32,7 @@ export default function SideBar(id) {
       variant="permanent"
       anchor="left"
     >
-      {/* <Toolbar /> */}
-      {/* <Divider /> */}
+      
       <div>
         <img src="/image/cropped_logo.png" alt="Logo iChekin" />
       </div>
@@ -104,7 +103,6 @@ export default function SideBar(id) {
         </List>
       }
 
-      {/* <Divider /> */}
     </Drawer>
   );
 }
