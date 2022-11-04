@@ -51,6 +51,7 @@ create table users(
     role int not null,
     companyName varchar(255) not null,
     phoneNumber varchar(15) not null,
+    email varchar(255) not null,
 
     primary key (user_id)
 );
