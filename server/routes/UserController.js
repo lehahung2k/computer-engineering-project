@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
             res.json("SUCCESS");
         });
     } else {
-        res.json({error: "Error: Username is existed!"});
+        res.json({ error: "Error: Username is existed!" });
     }
 
 })
@@ -44,15 +44,17 @@ router.post("/login", async (req, res) => {
     } else {
         bcrypt.compare(passwd, user.passwd).then(async (match) => {
             if (!match) {
-                res.json({error: "Wrong username or password"});
+                res.json({ error: "Wrong username or password" });
             }
-            let secretKey = process.env.SECRET_KEY
-            let algorithm = process.env.ALGORITHM
-            const accessToken = sign(
-                {username: user.username}, 
-                secretKey, {algorithm: algorithm}
-            );
-            res.json({accessToken: accessToken, userRole: user.role});
+            else {
+                let secretKey = process.env.SECRET_KEY
+                let algorithm = process.env.ALGORITHM
+                const accessToken = sign(
+                    { username: user.username },
+                    secretKey, { algorithm: algorithm }
+                );
+                res.json({ accessToken: accessToken, userRole: user.role });
+            }
         });
     }
 })
