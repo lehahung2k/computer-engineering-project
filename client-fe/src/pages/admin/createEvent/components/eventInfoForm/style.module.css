@@ -1,0 +1,28 @@
+.map {
+  /* background-color: antiquewhite; */
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.map__image {
+  display: block;
+  border-radius: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 500px;
+  height: 300px;
+}
+
+.map__upload_button {
+  /* background-color: aquamarine; */
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 5px;
+  gap: 10px;
+}

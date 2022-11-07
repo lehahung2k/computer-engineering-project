@@ -12,15 +12,176 @@ import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="#">
-    MUI
+  <Link underline="hover" key="1" color="inherit" href="/poc/event">
+    Danh sách sự kiện
   </Link>,
-  <Link underline="hover" key="2" color="inherit">
-    Core
+  <Link underline="hover" key="2" color="inherit" href="/poc/event/detail">
+    Chi tiết sự kiện
   </Link>,
   <Typography key="3" color="text.primary">
-    Breadcrumb
+    Khách check-in
   </Typography>,
+];
+
+function createData(name, id, time, note, image) {
+  return {
+    name,
+    id,
+    time,
+    note,
+    image,
+  };
+}
+
+const rows = [
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn B",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn C",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn D",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+  createData(
+    "Nguyễn Văn A",
+    "0123456",
+    "09:00 12/12/2022",
+    "Khách checkin không chụp ảnh",
+    ""
+  ),
+];
+
+const headCells = [
+  {
+    id: "name",
+    label: "Họ và tên",
+
+    sort: true,
+  },
+  {
+    id: "id",
+    label: "Mã định danh",
+    sort: false,
+  },
+  {
+    id: "time",
+    label: "Thời điểm check-in",
+    sort: true,
+  },
+  {
+    id: "note",
+    label: "Ghi chú",
+    sort: false,
+  },
+  {
+    id: "image",
+    label: "Hình ảnh check-in",
+    sort: false,
+  },
 ];
 
 export default function PocListGuest() {
@@ -59,7 +220,7 @@ export default function PocListGuest() {
               </div>
 
               <div>
-                <GuestsTable />
+                <GuestsTable rows={rows} headCells={headCells} />
               </div>
             </div>
           </Grid>
