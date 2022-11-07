@@ -14,138 +14,6 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 
-function createData(name, id, time, note, image) {
-  return {
-    name,
-    id,
-    time,
-    note,
-    image,
-  };
-}
-
-const rows = [
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-];
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -162,31 +30,8 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-const headCells = [
-  {
-    id: "name",
-    label: "Họ và tên",
-  },
-  {
-    id: "id",
-    label: "Mã định danh",
-  },
-  {
-    id: "time",
-    label: "Thời điểm check-in",
-  },
-  {
-    id: "note",
-    label: "Ghi chú",
-  },
-  {
-    id: "image",
-    label: "Hình ảnh check-in",
-  },
-];
-
 function EnhancedTableHead(props) {
-  const { order, orderBy, onRequestSort } = props;
+  const { order, orderBy, onRequestSort, headCells } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -202,18 +47,24 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{ backgroundColor: "#E6E6E6", fontWeight: "700" }}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
-            </TableSortLabel>
+            {headCell.sort ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              headCell.label
+            )}
           </TableCell>
         ))}
       </TableRow>
@@ -221,9 +72,9 @@ function EnhancedTableHead(props) {
   );
 }
 
-export default function GuestsTable() {
+export default function GuestsTable({ rows, headCells }) {
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [orderBy, setOrderBy] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const navigate = useNavigate();
@@ -248,6 +99,7 @@ export default function GuestsTable() {
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
+              headCells={headCells}
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
@@ -262,7 +114,7 @@ export default function GuestsTable() {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow hover tabIndex={-1} key={row.name}>
+                    <TableRow hover tabIndex={-1} key={index}>
                       <TableCell component="th" id={labelId} align="center">
                         {row.name}
                       </TableCell>
