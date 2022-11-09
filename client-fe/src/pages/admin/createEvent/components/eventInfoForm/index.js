@@ -20,6 +20,7 @@ import {
   newNoteEvent,
   newMapEvent,
 } from "../../../../../services/redux/actions/event/event.js";
+
 export default function EventInfoForm() {
   const [value, setValue] = React.useState(dayjs("2014-08-18T21:11:54"));
   const [name, setName] = React.useState("");

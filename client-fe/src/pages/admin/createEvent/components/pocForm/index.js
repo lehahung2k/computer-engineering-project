@@ -1,24 +1,55 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import IconButton from "@mui/material/IconButton";
-import Iconify from "../../../../../components/iconify";
-import Button from "@mui/material/Button";
-import style from "./style.module.css";
+import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import Iconify from "../../../../../components/iconify";
 
-export default function PocInfoForm() {
+const rowsAccount = [
+  { label: "NVA01" },
+  { label: "NVA02" },
+  { label: "NVB01" },
+  { label: "NVC01" },
+  { label: "NVD01" },
+  { label: "NVG01" },
+  { label: "NVG03" },
+  { label: "NVH01" },
+  { label: "NVY01" },
+  { label: "NVki01" },
+  { label: "NVA01" },
+  { label: "NVA02" },
+  { label: "NVB01" },
+  { label: "NVC01" },
+  { label: "NVD01" },
+  { label: "NVG01" },
+  { label: "NVG03" },
+  { label: "NVH01" },
+  { label: "NVY01" },
+  { label: "NVki01" },
+];
+
+const rowsCompany = [
+  { label: "Doanh nghiệp 01" },
+  { label: "Doanh nghiệp 02" },
+  { label: "Doanh nghiệp 03" },
+  { label: "Doanh nghiệp 04" },
+  { label: "Doanh nghiệp 06" },
+  { label: "Doanh nghiệp 05" },
+  { label: "Doanh nghiệp 07" },
+  { label: "Doanh nghiệp 08" },
+  { label: "Doanh nghiệp 09" },
+  { label: "Doanh nghiệp 10" },
+];
+
+export default function EventPocInfoForm() {
   const [open, setOpen] = React.useState(false);
   const [code, setCode] = React.useState("");
   const [name, setName] = React.useState("");
@@ -31,20 +62,16 @@ export default function PocInfoForm() {
     event.preventDefault();
   };
 
-  const handleOpenListAccount = () => {
-    setOpenListAccount(true);
-  };
-
-  const handleCloseListAccount = () => {
-    setOpenListAccount(false);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
+    console.log("Handle click open: open state: ", open);
+    console.log("Hanlde click open: Open list account", openListAccount);
   };
 
   const handleClose = () => {
     setOpen(false);
+    console.log("Handle close: open state: ", open);
+    console.log("Hanlde close: Open list account", openListAccount);
   };
 
   return (
@@ -64,11 +91,16 @@ export default function PocInfoForm() {
             >
               Thêm mới
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              fullWidth={true}
+              maxWidth={"md"}
+            >
               <DialogTitle>Thông tin POC</DialogTitle>
               <DialogContent>
                 <Grid container spacing={3}>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12}>
                     <TextField
                       required
                       id="eventName"
@@ -77,25 +109,35 @@ export default function PocInfoForm() {
                       fullWidth
                       autoComplete="event-name"
                       variant="standard"
-                      // helperText={
-                      //   name.length === 0 && checkName === 0
-                      //     ? "Tên không được để trống"
-                      //     : ""
-                      // }
                       onChange={(e) => setName(e.target.value)}
-                      // onClick={() => setCheckName(0)}
-                      // error={name.length === 0 && checkName === 0 ? true : false}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      value="Test name event"
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      id="pocName"
+                      name="pocName"
+                      label="Tên POC"
+                      fullWidth
+                      autoComplete="poc-name"
+                      variant="standard"
+                      onChange={(e) => setName(e.target.value)}
                       InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       required
-                      id="eventCode"
-                      name="eventCode"
-                      label="Mã sự kiện"
+                      id="pocCode"
+                      name="pocCode"
+                      label="Mã POC"
                       fullWidth
-                      autoComplete="event-code"
+                      autoComplete="poc-code"
                       variant="standard"
                       helperText="Chọn để tạo mã ngẫu nhiên"
                       value={code}
@@ -104,7 +146,7 @@ export default function PocInfoForm() {
                         startAdornment: (
                           <InputAdornment position="start">
                             <IconButton
-                              aria-label="toggle password visibility"
+                              aria-label="generator code"
                               onClick={handleClickGenerateCode}
                               onMouseDown={handleMouseDownGenerateCode}
                               edge="end"
@@ -120,72 +162,39 @@ export default function PocInfoForm() {
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      id="eventName"
-                      name="eventName"
-                      label="Tên sự kiện"
-                      fullWidth
-                      autoComplete="event-name"
-                      variant="standard"
-                      // helperText={
-                      //   name.length === 0 && checkName === 0
-                      //     ? "Tên không được để trống"
-                      //     : ""
-                      // }
-                      onChange={(e) => setName(e.target.value)}
-                      // onClick={() => setCheckName(0)}
-                      // error={name.length === 0 && checkName === 0 ? true : false}
-                      InputLabelProps={{ shrink: true }}
+                    <Autocomplete
+                      disablePortal
+                      noOptionsText={"Không tìm thấy doanh nghiệp"}
+                      id="combo-box-demo"
+                      options={rowsCompany}
+                      sx={{ width: 300 }}
+                      ListboxProps={{ style: { maxHeight: 150 } }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Doanh nghiệp phụ trách"
+                          variant="standard"
+                        />
+                      )}
                     />
                   </Grid>
+
                   <Grid item xs={12} sm={6}>
-                    {/* <TextField
-                      required
-                      id="account"
-                      name="account"
-                      label="Tài khoản phụ trách"
-                      fullWidth
-                      autoComplete="event-code"
-                      variant="standard"
-                      helperText="Chọn để tạo mã ngẫu nhiên"
-                      value={code}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton
-                              aria-label="toggle password visibility"
-                              onClick={handleClickGenerateCode}
-                              onMouseDown={handleMouseDownGenerateCode}
-                              edge="end"
-                              sx={{ marginRight: "0" }}
-                            >
-                              <Iconify
-                                icon={"carbon:operations-record"}
-                              ></Iconify>
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    /> */}
-                    <Typography variant="body">Tài khoản phụ trách</Typography>
-                    <Button variant="outlined" onClick={handleOpenListAccount}>
-                      Chọn tài khoản
-                    </Button>
-                    <Dialog
-                      open={openListAccount}
-                      onClose={handleCloseListAccount}
-                      fullWidth={true}
-                      maxWidth={"sm"}
-                    >
-                      <DialogTitle>Thông tin POC</DialogTitle>
-                      <DialogContent></DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleClose}>Subscribe</Button>
-                      </DialogActions>
-                    </Dialog>
+                    <Autocomplete
+                      disablePortal
+                      noOptionsText={"Không tìm thấy tài khoản"}
+                      id="combo-box-demo"
+                      options={rowsAccount}
+                      sx={{ width: 300 }}
+                      ListboxProps={{ style: { maxHeight: 150 } }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Tài khoản phụ trách"
+                          variant="standard"
+                        />
+                      )}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -202,8 +211,8 @@ export default function PocInfoForm() {
                 </Grid>
               </DialogContent>
               <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Subscribe</Button>
+                <Button onClick={handleClose}>Hủy bỏ</Button>
+                <Button onClick={handleClose}>Thêm mới</Button>
               </DialogActions>
             </Dialog>
           </Box>
