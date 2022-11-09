@@ -10,16 +10,24 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import EventInfoForm from "./components/eventInfoForm";
-import PocInfoForm from "./components/pocForm";
-const steps = ["Thêm thông tin sự kiện tạo mới", "Thêm thông tin POC sự kiện"];
+import EventPocInfoForm from "./components/pocForm";
+import EventCompanyForm from "./components/companyForm";
+
+const steps = [
+  "Thêm thông tin sự kiện tạo mới",
+  "Thêm doanh nghiệp tham gia",
+  "Thêm thông tin POC sự kiện",
+];
 
 function getStepContent(step) {
   switch (step) {
     case 0:
       return <EventInfoForm />;
     case 1:
-      return <PocInfoForm />;
+      return <EventCompanyForm />;
     case 2:
+      return <EventPocInfoForm />;
+    case 3:
       return <>Test is done</>;
     default:
       throw new Error("Unknown step");
