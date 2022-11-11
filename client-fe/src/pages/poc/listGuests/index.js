@@ -10,17 +10,12 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import BreadCrumbs from "../../../components/breadCrumbs";
 
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/poc/event">
-    Danh sách sự kiện
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/poc/event/detail">
-    Chi tiết sự kiện
-  </Link>,
-  <Typography key="3" color="text.primary">
-    Khách check-in
-  </Typography>,
+  { link: "/poc/event", label: "Danh sách sự kiện" },
+  { link: "/poc/event/detail", label: "Chi tiết sự kiện" },
+  { link: "#", label: "Khách check-in" },
 ];
 
 function createData(name, id, time, note, image) {
@@ -204,18 +199,11 @@ export default function PocListGuest() {
             openSidebar={openSidebar}
             handleOpenSidebar={setOpenSidebar}
           />
+          <BreadCrumbs breadcrumbs={breadcrumbs} />
           <Grid container spacing="0" id="container">
             <div className={style.main}>
               <div className={style.main__head}>
-                <div className={style.main__head__breadcrumb}>
-                  <Breadcrumbs
-                    separator={<NavigateNextIcon fontSize="small" />}
-                    aria-label="breadcrumb"
-                    sx={{ display: "block" }}
-                  >
-                    {breadcrumbs}
-                  </Breadcrumbs>
-                </div>
+                <div className={style.main__head__breadcrumb}></div>
                 <h3>Danh sách khách check-in</h3>
               </div>
 

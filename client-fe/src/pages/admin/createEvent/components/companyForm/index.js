@@ -13,8 +13,24 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import Iconify from "../../../../../components/iconify";
 import AddingListCompany from "../listCompany";
+import NormalTable from "../../../../../components/tables/normal";
+
+const headCells = [
+  {
+    id: "name",
+    label: "Công ty/Doanh nghiệp",
+    sort: true,
+  },
+  {
+    id: "address",
+    label: "Địa chỉ",
+    sort: false,
+  },
+];
+
 export default function EventCompanyForm() {
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [selectedCompany, setSelectedCompany] = React.useState([]);
 
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
@@ -28,10 +44,10 @@ export default function EventCompanyForm() {
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <Typography variant="h6" align="left">
-            Danh sách POC sự kiện
+            Danh sách công ty, doanh nghiệp
           </Typography>
         </Grid>
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <Box display="flex" justifyContent="flex-end">
             <Button
               variant="contained"
@@ -41,10 +57,14 @@ export default function EventCompanyForm() {
               Thêm mới
             </Button>
           </Box>
+        </Grid> */}
+        <Grid item xs={12}>
+          {/* <NormalTable rows={selectedCompany} headCells={headCells} /> */}
+          <AddingListCompany setSelectedItem={setSelectedCompany} />
         </Grid>
       </Grid>
 
-      <Dialog
+      {/* <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
         fullWidth={true}
@@ -52,13 +72,13 @@ export default function EventCompanyForm() {
       >
         <DialogTitle>Danh sách doanh nghiệp</DialogTitle>
         <DialogContent>
-          <AddingListCompany />
+          <AddingListCompany setSelectedItem={setSelectedCompany} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Hủy bỏ</Button>
           <Button onClick={handleCloseDialog}>Thêm mới</Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }

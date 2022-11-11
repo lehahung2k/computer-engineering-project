@@ -1,15 +1,19 @@
-import React, { useState } from "react";
-import style from "./style.module.css";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS } from "chart.js/auto";
 import Grid from "@mui/material/Grid";
-import SideBar from "../../../components/navigation";
+import Typography from "@mui/material/Typography";
+import React, { useState } from "react";
+import { Bar } from "react-chartjs-2";
 import Header from "../../../components/header";
+import SideBar from "../../../components/navigation";
+import StatisticCard from "../dashboard/statisticCard";
+import style from "./style.module.css";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
+import { Chart as ChartJS } from "chart.js/auto";
 import FestivalIcon from "@mui/icons-material/Festival";
 import BusinessIcon from "@mui/icons-material/Business";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PeopleIcon from "@mui/icons-material/People";
-import StatisticCard from "../dashboard/statisticCard";
 var fake_data = [
   {
     id: 1,
@@ -94,6 +98,11 @@ export default function AdminDashBoard() {
       },
     ],
   });
+  const navigate = useNavigate();
+
+  const handleClickAddNewEvent = () => {
+    navigate("/admin/create-event");
+  };
 
   return (
     <>
@@ -215,7 +224,26 @@ export default function AdminDashBoard() {
                 </Grid>
 
                 <Grid item xs>
-                  <div className={style.list__event}>hello</div>
+                  <div className={style.list__event}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={6}>
+                        <Typography variant="h6" align="left">
+                          Danh sách sự kiện
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Box display="flex" justifyContent="flex-end">
+                          <Button
+                            variant="contained"
+                            sx={{ textTransform: "none" }}
+                            onClick={() => handleClickAddNewEvent()}
+                          >
+                            Thêm mới
+                          </Button>
+                        </Box>
+                      </Grid>
+                    </Grid>
+                  </div>
                 </Grid>
               </Grid>
             </Grid>

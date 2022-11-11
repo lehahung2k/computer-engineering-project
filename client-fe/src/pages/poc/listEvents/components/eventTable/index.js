@@ -137,13 +137,20 @@ export default function EventTable({ rows }) {
                           variant="text"
                           color="inherit"
                           onClick={() => navigate("/poc/event/detail")}
+                          sx={{ whiteSpace: "normal" }}
                         >
                           {row.name}
                         </Button>
                       </TableCell>
                       <TableCell align="center">{row.start}</TableCell>
                       <TableCell align="center">{row.end}</TableCell>
-                      <TableCell align="center">{row.note}</TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ whiteSpace: "normal" }}
+                        width="30%"
+                      >
+                        {row.note}
+                      </TableCell>
                       <TableCell align="center">
                         <Button
                           style={{ textTransform: "none" }}
