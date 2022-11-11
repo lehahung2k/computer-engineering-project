@@ -12,6 +12,12 @@ import Box from "@mui/material/Box";
 import EventInfoForm from "./components/eventInfoForm";
 import EventPocInfoForm from "./components/pocForm";
 import EventCompanyForm from "./components/companyForm";
+import BreadCrumbs from "../../../components/breadCrumbs";
+
+const breadcrumbs = [
+  { link: "/admin", label: "Trang chủ" },
+  { link: "#", label: "Thêm mới sự kiện" },
+];
 
 const steps = [
   "Thêm thông tin sự kiện tạo mới",
@@ -37,7 +43,7 @@ function getStepContent(step) {
 export default function CreateEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
-
+  const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -62,6 +68,7 @@ export default function CreateEvent() {
             openSidebar={openSidebar}
             handleOpenSidebar={setOpenSidebar}
           />
+          <BreadCrumbs breadcrumbs={breadcrumbs} />
           <Grid container spacing="0" id="container">
             <div className={style.main}>
               <div className={style.main__form}>
@@ -75,12 +82,12 @@ export default function CreateEvent() {
                 {activeStep === steps.length ? (
                   <React.Fragment>
                     <Typography variant="h5" gutterBottom>
-                      Thank you for your order.
+                      Đang tạo mới sự kiện{" "}
                     </Typography>
                     <Typography variant="subtitle1">
-                      Your order number is #2001539. We have emailed your order
-                      confirmation, and will send you an update when your order
-                      has shipped.
+                      Hệ thống đang tạo mới, xin chờ trong giây lát. Khi tạo
+                      xong, xin mời xem lại thông tin sự kiện tại mục xem sự
+                      kiện.
                     </Typography>
                   </React.Fragment>
                 ) : (

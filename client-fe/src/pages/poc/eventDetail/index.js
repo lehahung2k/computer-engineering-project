@@ -7,6 +7,12 @@ import Header from "../../../components/header";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import BreadCrumbs from "../../../components/breadCrumbs";
+
+const breadcrumbs = [
+  { link: "/poc/event", label: "Danh sách sự kiện" },
+  { link: "#", label: "Chi tiết sự kiện" },
+];
 
 const eventInfo = {
   name: "JobFair",
@@ -46,6 +52,7 @@ export default function PocEventDetail() {
             openSidebar={openSidebar}
             handleOpenSidebar={setOpenSidebar}
           />
+          <BreadCrumbs breadcrumbs={breadcrumbs} />
           <Grid container spacing="0" id="container">
             <div className={style.main}>
               <div className={style.main__info}>

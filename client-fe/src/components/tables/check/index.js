@@ -45,12 +45,13 @@ function EnhancedTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const filteredHeadCells = headCells.filter((cell) => cell.id !== "id");
 
   return (
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
+          {/* <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -59,8 +60,9 @@ function EnhancedTableHead(props) {
               "aria-label": "select all desserts",
             }}
           />
+          {onSelectAllClick ? "Bỏ chọn tất cả" : "Chọn tất cả"} */}
         </TableCell>
-        {headCells.map((headCell) => (
+        {filteredHeadCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={"center"}
@@ -93,7 +95,11 @@ function EnhancedTableHead(props) {
   );
 }
 
-export default function CheckTable({ rows, headCells }) {
+export default function CheckTable({
+  rows,
+  headCells,
+  setSelectedItem = (f) => f,
+}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [page, setPage] = React.useState(0);
@@ -102,6 +108,7 @@ export default function CheckTable({ rows, headCells }) {
   const [showToolbar, setShowToolbar] = React.useState(false);
   const navigate = useNavigate();
 
+  const filteredHeadCells = headCells.filter((cell) => cell.id !== "id");
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -114,8 +121,9 @@ export default function CheckTable({ rows, headCells }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.name);
+      const newSelected = rows;
       setSelected(newSelected);
+      setSelectedItem(newSelected);
       setShowToolbar(true);
       return;
     }
@@ -123,12 +131,12 @@ export default function CheckTable({ rows, headCells }) {
     setShowToolbar(false);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, row) => {
+    const selectedIndex = selected.map((e) => e.id).indexOf(row.id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, row);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -141,9 +149,10 @@ export default function CheckTable({ rows, headCells }) {
     }
 
     setSelected(newSelected);
+    setSelectedItem(newSelected);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.map((e) => e.id).indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -152,24 +161,33 @@ export default function CheckTable({ rows, headCells }) {
   return (
     <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
       <Paper sx={{ width: "90%", mb: 2 }}>
-        <div style={{ display: showToolbar ? "block" : "none" }}>
-          <Toolbar
+        <div style={{ textAlign: "left" }}>
+          {/* <Toolbar
             sx={{
-              pl: { sm: 2 },
-              pr: { xs: 1, sm: 1 },
-
               color: (theme) => theme.palette.primary.main,
             }}
-          >
-            <Typography
+          > */}
+          {/* <Typography
               sx={{ flex: "1 1 100%" }}
               variant="body"
               id="tableTitle"
               component="div"
             >
               Đã chọn tất cả
-            </Typography>
-          </Toolbar>
+            </Typography> */}
+          <Checkbox
+            color="primary"
+            indeterminate={selected.length > 0 && selected.length < rows.length}
+            checked={rows.length > 0 && selected.length === rows.length}
+            onChange={handleSelectAllClick}
+            inputProps={{
+              "aria-label": "select all desserts",
+            }}
+          />
+          {rows.length > 0 && selected.length === rows.length
+            ? "Bỏ chọn tất cả"
+            : "Chọn tất cả"}
+          {/* </Toolbar> */}
         </div>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
@@ -190,14 +208,14 @@ export default function CheckTable({ rows, headCells }) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
 
                   return (
                     <TableRow
                       hover
                       tabIndex={-1}
                       key={index}
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       selected={isItemSelected}
@@ -211,7 +229,7 @@ export default function CheckTable({ rows, headCells }) {
                           }}
                         />
                       </TableCell>
-                      {headCells.map((headCell, index) => (
+                      {filteredHeadCells.map((headCell, index) => (
                         <TableCell align="center">{row[headCell.id]}</TableCell>
                       ))}
                     </TableRow>

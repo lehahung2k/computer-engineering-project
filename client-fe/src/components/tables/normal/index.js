@@ -14,7 +14,23 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
 
-function descendingComparator(a, b, orderBy) {
+function descendingComparator(a, b, orderBy, orderTime) {
+  if (orderTime) {
+    // console.log("Sorting time");
+    // console.log(orderBy);
+    // console.log(
+    //   Date.parse(b[orderBy]),
+    //   Date.parse(a[orderBy]),
+    //   Date.parse(b[orderBy]) < Date.parse(a[orderBy])
+    // );
+    if (Date.parse(b[orderBy]) < Date.parse(a[orderBy])) {
+      return -1;
+    }
+    if (Date.parse(b[orderBy]) > Date.parse(a[orderBy])) {
+      return 1;
+    }
+    return 0;
+  }
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -24,16 +40,17 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
-function getComparator(order, orderBy) {
+function getComparator(order, orderBy, orderTime) {
   return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    ? (a, b) => descendingComparator(a, b, orderBy, orderTime)
+    : (a, b) => -descendingComparator(a, b, orderBy, orderTime);
 }
 
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort, headCells } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+  const createSortHandler = (property, time) => (event) => {
+    onRequestSort(event, property, time);
+    console.log("OrderTime", time);
   };
 
   return (
@@ -51,7 +68,7 @@ function EnhancedTableHead(props) {
               <TableSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
+                onClick={createSortHandler(headCell.id, headCell.time)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
@@ -75,14 +92,16 @@ function EnhancedTableHead(props) {
 export default function NormalTable({ rows, headCells }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
+  const [orderTime, setOrderTime] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const navigate = useNavigate();
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === "asc";
+  const handleRequestSort = (event, property, time) => {
+    const isAsc = orderBy == property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+    setOrderTime(time);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -102,13 +121,14 @@ export default function NormalTable({ rows, headCells }) {
               headCells={headCells}
               order={order}
               orderBy={orderBy}
+              // orderTime={orderTime}
               onRequestSort={handleRequestSort}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.sort(getComparator(order, orderBy)).slice() */}
               {rows
-                .sort(getComparator(order, orderBy))
+                .sort(getComparator(order, orderBy, orderTime))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
@@ -116,7 +136,21 @@ export default function NormalTable({ rows, headCells }) {
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
                       {headCells.map((headCell, index) => (
-                        <TableCell align="center">{row[headCell.id]}</TableCell>
+                        <TableCell align="center" width={headCell.width}>
+                          {headCell.button ? (
+                            <Button
+                              style={{ textTransform: "none" }}
+                              variant="text"
+                              color="inherit"
+                              onClick={() => navigate(headCell.link)}
+                              sx={{ whiteSpace: "normal" }}
+                            >
+                              {row[headCell.id]}
+                            </Button>
+                          ) : (
+                            row[headCell.id]
+                          )}
+                        </TableCell>
                       ))}
                     </TableRow>
                   );

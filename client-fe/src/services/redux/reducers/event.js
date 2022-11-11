@@ -73,3 +73,5 @@ const eventReducer = (state = initialEvent, action) => {
       return state;
   }
 };
+
+export default eventReducer;

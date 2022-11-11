@@ -1,46 +1,46 @@
-export const newNameEvent = (name) => {
+export const newNameEventAction = (name) => {
   return {
     type: "NEW_NAME",
     payload: name,
   };
 };
 
-export const newCodeEvent = (code) => {
+export const newCodeEventAction = (code) => {
   return {
     type: "NEW_CODE",
     payload: code,
   };
 };
 
-export const newStartEvent = (start) => {
+export const newStartEventAction = (start) => {
   return {
     type: "NEW_START",
     payload: start,
   };
 };
 
-export const newEndEvent = (end) => {
+export const newEndEventAction = (end) => {
   return {
     type: "NEW_END",
     payload: end,
   };
 };
 
-export const newNoteEvent = (note) => {
+export const newNoteEventAction = (note) => {
   return {
     type: "NEW_NOTE",
     payload: note,
   };
 };
 
-export const newMapEvent = (map) => {
+export const newMapEventAction = (map) => {
   return {
     type: "NEW_MAP",
     payload: map,
   };
 };
 
-export const newEvent = (event) => {
+export const newEventAction = (event) => {
   return {
     type: "NEW_EVENT",
     payload: event,
