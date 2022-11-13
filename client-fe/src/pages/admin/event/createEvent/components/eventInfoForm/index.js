@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import IconButton from "@mui/material/IconButton";
-import Iconify from "../../../../../components/iconify";
+import Iconify from "../../../../../../components/iconify";
 import Button from "@mui/material/Button";
 import style from "./style.module.css";
 import {
@@ -19,7 +19,7 @@ import {
   newEndEvent,
   newNoteEvent,
   newMapEvent,
-} from "../../../../../services/redux/actions/event/event.js";
+} from "../../../../../../services/redux/actions/event/event.js";
 
 export default function EventInfoForm() {
   const [value, setValue] = React.useState(dayjs("2014-08-18T21:11:54"));

@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import Iconify from "../../../../../components/iconify";
+import Iconify from "../../../../../../components/iconify";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import {
   NewPocAction,
@@ -21,8 +21,8 @@ import {
   NewCodePocAction,
   NewNamePocAction,
   AddNewPocAction,
-} from "../../../../../services/redux/actions/poc/poc";
-import NormalTable from "../../../../../components/tables/normal";
+} from "../../../../../../services/redux/actions/poc/poc";
+import NormalTable from "../../../../../../components/tables/normal";
 
 const rowsAccount = [
   { label: "NVA01" },
