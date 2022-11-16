@@ -14,8 +14,9 @@ import PocManageEvent from "./pages/poc/listEvents";
 import PocEventDetail from "./pages/poc/eventDetail";
 import PocListGuest from "./pages/poc/listGuests";
 import AdminDashBoard from "./pages/admin/dashboard";
-import CreateEvent from "./pages/admin/createEvent";
-
+import CreateEvent from "./pages/admin/event/createEvent";
+import ListEvent from "./pages/admin/event/listEvent";
+import DetailEvent from "./pages/admin/event/eventDetail";
 // import Footer from './components/Footer'
 function App() {
   return (
@@ -44,6 +45,12 @@ function App() {
             exact
             path="/admin/create-event"
             element={<CreateEvent />}
+          ></Route>
+          <Route exact path="/admin/event" element={<ListEvent />}></Route>
+          <Route
+            exact
+            path="/admin/event/detail"
+            element={<DetailEvent />}
           ></Route>
           <Route path="/admin/*" element={<Navigate to="/" />}></Route>
         </Route>

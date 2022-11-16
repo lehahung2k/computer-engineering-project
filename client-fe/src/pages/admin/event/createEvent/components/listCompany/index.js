@@ -1,5 +1,5 @@
 import * as React from "react";
-import CheckTable from "../../../../../components/tables/check";
+import CheckTable from "../../../../../../components/tables/check";
 
 function createData(name, address, id) {
   return {

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
+import { styled } from "@mui/material/styles";
 
 function descendingComparator(a, b, orderBy, orderTime) {
   if (orderTime) {
@@ -45,6 +46,16 @@ function getComparator(order, orderBy, orderTime) {
     ? (a, b) => descendingComparator(a, b, orderBy, orderTime)
     : (a, b) => -descendingComparator(a, b, orderBy, orderTime);
 }
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    borderTopLeftRadius: "10px",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort, headCells } = props;
@@ -56,13 +67,18 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, index) => (
           <TableCell
             key={headCell.id}
             align={"center"}
             padding={"normal"}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ backgroundColor: "#E6E6E6", fontWeight: "700" }}
+            sx={{
+              fontWeight: "700",
+              backgroundColor: "#E5E5E5",
+              borderTopLeftRadius: index === 0 ? "5px" : "",
+              borderTopRightRadius: index === headCells.length - 1 ? "5px" : "",
+            }}
           >
             {headCell.sort ? (
               <TableSortLabel
@@ -97,6 +113,8 @@ export default function NormalTable({ rows, headCells }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const navigate = useNavigate();
 
+  const filteredHeadCells = headCells.filter((cell) => cell.id !== "id");
+
   const handleRequestSort = (event, property, time) => {
     const isAsc = orderBy == property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -118,7 +136,7 @@ export default function NormalTable({ rows, headCells }) {
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
             <EnhancedTableHead
-              headCells={headCells}
+              headCells={filteredHeadCells}
               order={order}
               orderBy={orderBy}
               // orderTime={orderTime}
@@ -135,18 +153,28 @@ export default function NormalTable({ rows, headCells }) {
 
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
-                      {headCells.map((headCell, index) => (
+                      {filteredHeadCells.map((headCell, index) => (
                         <TableCell align="center" width={headCell.width}>
-                          {headCell.button ? (
-                            <Button
-                              style={{ textTransform: "none" }}
-                              variant="text"
-                              color="inherit"
-                              onClick={() => navigate(headCell.link)}
-                              sx={{ whiteSpace: "normal" }}
-                            >
-                              {row[headCell.id]}
-                            </Button>
+                          {headCell.link ? (
+                            headCell.external ? (
+                              <a
+                                href={"https://" + headCell.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {row[headCell.id]}
+                              </a>
+                            ) : (
+                              <Button
+                                style={{ textTransform: "none" }}
+                                variant="text"
+                                color="inherit"
+                                onClick={() => navigate(headCell.link)}
+                                sx={{ whiteSpace: "normal" }}
+                              >
+                                {row[headCell.id]}
+                              </Button>
+                            )
                           ) : (
                             row[headCell.id]
                           )}

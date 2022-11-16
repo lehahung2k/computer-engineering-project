@@ -11,9 +11,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import Iconify from "../../../../../components/iconify";
+import Iconify from "../../../../../../components/iconify";
 import AddingListCompany from "../listCompany";
-import NormalTable from "../../../../../components/tables/normal";
+import NormalTable from "../../../../../../components/tables/normal";
 
 const headCells = [
   {

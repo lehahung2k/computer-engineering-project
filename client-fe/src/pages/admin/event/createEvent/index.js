@@ -1,8 +1,8 @@
 import * as React from "react";
 import Grid from "@mui/material/Grid";
 import style from "./style.module.css";
-import SideBar from "../../../components/navigation";
-import Header from "../../../components/header";
+import SideBar from "../../../../components/navigation";
+import Header from "../../../../components/header";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -12,10 +12,12 @@ import Box from "@mui/material/Box";
 import EventInfoForm from "./components/eventInfoForm";
 import EventPocInfoForm from "./components/pocForm";
 import EventCompanyForm from "./components/companyForm";
-import BreadCrumbs from "../../../components/breadCrumbs";
+import BreadCrumbs from "../../../../components/breadCrumbs";
+import { StepButton } from "@mui/material";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
+  { link: "/admin/event", label: "Sự kiện" },
   { link: "#", label: "Thêm mới sự kiện" },
 ];
 
@@ -44,12 +46,17 @@ export default function CreateEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
+
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+  };
+
+  const handleStep = (step) => {
+    setActiveStep(step);
   };
   return (
     <div className={style.body}>
@@ -72,9 +79,16 @@ export default function CreateEvent() {
           <Grid container spacing="0" id="container">
             <div className={style.main}>
               <div className={style.main__form}>
-                <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
-                  {steps.map((label) => (
+                <Stepper
+                  // nonLinear
+                  activeStep={activeStep}
+                  sx={{ pt: 3, pb: 5 }}
+                >
+                  {steps.map((label, index) => (
                     <Step key={label}>
+                      {/* <StepButton onClick={() => handleStep(index)}>
+                        {label}
+                      </StepButton> */}
                       <StepLabel>{label}</StepLabel>
                     </Step>
                   ))}
