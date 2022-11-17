@@ -9,13 +9,13 @@ const initialEvent = {
 
 const eventReducer = (state = initialEvent, action) => {
   switch (action.type) {
-    case "NEW_EVENT": {
+    case "EVENT/NEW_EVENT": {
       const newEvent = action.payload;
 
       return newEvent;
     }
 
-    case "NEW_NAME": {
+    case "EVENT/NEW_NAME": {
       const newName = action.payload;
 
       return {
@@ -24,7 +24,7 @@ const eventReducer = (state = initialEvent, action) => {
       };
     }
 
-    case "NEW_CODE": {
+    case "EVENT/NEW_CODE": {
       const newCode = action.payload;
 
       return {
@@ -33,7 +33,7 @@ const eventReducer = (state = initialEvent, action) => {
       };
     }
 
-    case "NEW_START": {
+    case "EVENT/NEW_START": {
       const newStart = action.payload;
 
       return {
@@ -42,7 +42,7 @@ const eventReducer = (state = initialEvent, action) => {
       };
     }
 
-    case "NEW_END": {
+    case "EVENT/NEW_END": {
       const newEnd = action.payload;
 
       return {
@@ -51,7 +51,7 @@ const eventReducer = (state = initialEvent, action) => {
       };
     }
 
-    case "NEW_NOTE": {
+    case "EVENT/NEW_NOTE": {
       const newNote = action.payload;
 
       return {
@@ -60,7 +60,7 @@ const eventReducer = (state = initialEvent, action) => {
       };
     }
 
-    case "NEW_MAP": {
+    case "EVENT/NEW_MAP": {
       const newMap = action.payload;
 
       return {

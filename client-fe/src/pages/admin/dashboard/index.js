@@ -14,6 +14,9 @@ import FestivalIcon from "@mui/icons-material/Festival";
 import BusinessIcon from "@mui/icons-material/Business";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PeopleIcon from "@mui/icons-material/People";
+import { ListEvent, ListEventHeadNormal } from "../../../assets/fakeData";
+import NormalTable from "../../../components/tables/normal";
+
 var fake_data = [
   {
     id: 1,
@@ -241,6 +244,14 @@ export default function AdminDashBoard() {
                             Thêm mới
                           </Button>
                         </Box>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <NormalTable
+                          rows={ListEvent}
+                          headCells={ListEventHeadNormal}
+                          numOfRowsPerPage={3}
+                        />
                       </Grid>
                     </Grid>
                   </div>

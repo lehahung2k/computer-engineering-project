@@ -105,12 +105,12 @@ function EnhancedTableHead(props) {
   );
 }
 
-export default function NormalTable({ rows, headCells }) {
+export default function NormalTable({ rows, headCells, numOfRowsPerPage = 8 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [orderTime, setOrderTime] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const [rowsPerPage, setRowsPerPage] = React.useState(numOfRowsPerPage);
   const navigate = useNavigate();
 
   const filteredHeadCells = headCells.filter((cell) => cell.id !== "id");
