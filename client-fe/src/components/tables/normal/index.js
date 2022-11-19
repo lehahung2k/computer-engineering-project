@@ -105,7 +105,12 @@ function EnhancedTableHead(props) {
   );
 }
 
-export default function NormalTable({ rows, headCells, numOfRowsPerPage = 8 }) {
+export default function NormalTable({
+  rows,
+  headCells,
+  numOfRowsPerPage = 8,
+  activeHandle = (f) => f,
+}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [orderTime, setOrderTime] = React.useState(false);
@@ -153,18 +158,23 @@ export default function NormalTable({ rows, headCells, numOfRowsPerPage = 8 }) {
 
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
-                      {filteredHeadCells.map((headCell, index) => (
-                        <TableCell align="center" width={headCell.width}>
-                          {headCell.link ? (
-                            headCell.external ? (
-                              <a
-                                href={"https://" + headCell.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                {row[headCell.id]}
-                              </a>
-                            ) : (
+                      {filteredHeadCells.map((headCell, index) => {
+                        if (headCell.link) {
+                          if (headCell.external) {
+                            return (
+                              <TableCell align="center" width={headCell.width}>
+                                <a
+                                  href={"https://" + headCell.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  {row[headCell.id]}
+                                </a>
+                              </TableCell>
+                            );
+                          }
+                          return (
+                            <TableCell align="center" width={headCell.width}>
                               <Button
                                 style={{ textTransform: "none" }}
                                 variant="text"
@@ -174,12 +184,61 @@ export default function NormalTable({ rows, headCells, numOfRowsPerPage = 8 }) {
                               >
                                 {row[headCell.id]}
                               </Button>
-                            )
-                          ) : (
-                            row[headCell.id]
-                          )}
-                        </TableCell>
-                      ))}
+                            </TableCell>
+                          );
+                        }
+
+                        if (headCell.active) {
+                          return (
+                            <TableCell align="center" width={headCell.width}>
+                              <Button
+                                style={{ textTransform: "none" }}
+                                variant="outlined"
+                                color={
+                                  row[headCell.id] === 0 ? "error" : "inherit"
+                                }
+                                onClick={() => activeHandle(headCell.userName)}
+                                sx={{ whiteSpace: "normal", fontSize: "10px" }}
+                              >
+                                {row[headCell.id] === 0
+                                  ? "Chưa xác minh"
+                                  : "Đã xác minh"}
+                              </Button>
+                            </TableCell>
+                          );
+                        }
+                        return (
+                          <TableCell align="center" width={headCell.width}>
+                            {row[headCell.id]}
+                          </TableCell>
+                        );
+
+                        // <TableCell align="center" width={headCell.width}>
+                        //   {headCell.link ? (
+                        //     headCell.external ? (
+                        //       <a
+                        //         href={"https://" + headCell.link}
+                        //         target="_blank"
+                        //         rel="noopener noreferrer"
+                        //       >
+                        //         {row[headCell.id]}
+                        //       </a>
+                        //     ) : (
+                        //       <Button
+                        //         style={{ textTransform: "none" }}
+                        //         variant="text"
+                        //         color="inherit"
+                        //         onClick={() => navigate(headCell.link)}
+                        //         sx={{ whiteSpace: "normal" }}
+                        //       >
+                        //         {row[headCell.id]}
+                        //       </Button>
+                        //     )
+                        //   ) : (
+                        //     row[headCell.id]
+                        //   )}
+                        // </TableCell>
+                      })}
                     </TableRow>
                   );
                 })}

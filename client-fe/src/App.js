@@ -21,6 +21,7 @@ import CreateNewCompany from "./pages/admin/company/create";
 import DetailInfoCompany from "./pages/admin/company/viewDetail";
 import ListCompany from "./pages/admin/company/viewList";
 import CustomInfoCompany from "./pages/admin/company/customizeInfo";
+import PocAccount from "./pages/admin/pocAccount";
 // import Footer from './components/Footer'
 function App() {
   return (
@@ -74,6 +75,12 @@ function App() {
             exact
             path="/admin/company/custom"
             element={<CustomInfoCompany />}
+          ></Route>
+
+          <Route
+            exact
+            path="/admin/poc-account"
+            element={<PocAccount />}
           ></Route>
           <Route path="/admin/*" element={<Navigate to="/" />}></Route>
         </Route>
