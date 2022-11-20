@@ -8,6 +8,7 @@ import {
   listCompany,
   listCompanyHeadNormal,
 } from "../../../../assets/fakeData";
+import { ListBtc } from "../../../../assets/fakeData/fakeBtc";
 import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
@@ -66,7 +67,7 @@ export default function ListCompany() {
 
                 <Grid item xs={12}>
                   <NormalTable
-                    rows={listCompany}
+                    rows={ListBtc}
                     headCells={listCompanyHeadNormal}
                   />
                 </Grid>

@@ -23,7 +23,7 @@ const breadcrumbs = [
 
 const steps = [
   "Thêm thông tin sự kiện tạo mới",
-  "Thêm doanh nghiệp tham gia",
+  // "Thêm doanh nghiệp tham gia",
   "Thêm thông tin POC sự kiện",
 ];
 
@@ -31,11 +31,11 @@ function getStepContent(step) {
   switch (step) {
     case 0:
       return <EventInfoForm />;
+    // case 1:
+    //   return <EventCompanyForm />;
     case 1:
-      return <EventCompanyForm />;
-    case 2:
       return <EventPocInfoForm />;
-    case 3:
+    case 2:
       return <>Test is done</>;
     default:
       throw new Error("Unknown step");

@@ -228,7 +228,7 @@ export default function EventPocInfoForm() {
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <Autocomplete
                 disablePortal
                 noOptionsText={"Không tìm thấy doanh nghiệp"}
@@ -244,7 +244,7 @@ export default function EventPocInfoForm() {
                   />
                 )}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12} sm={6}>
               <Autocomplete
@@ -252,7 +252,7 @@ export default function EventPocInfoForm() {
                 noOptionsText={"Không tìm thấy tài khoản"}
                 id="combo-box-demo"
                 options={rowsAccount}
-                sx={{ width: 300 }}
+                // sx={{ width: 300 }}
                 ListboxProps={{ style: { maxHeight: 150 } }}
                 onChange={handleChangeAccount}
                 renderInput={(params) => (
@@ -260,6 +260,8 @@ export default function EventPocInfoForm() {
                     {...params}
                     label="Tài khoản phụ trách"
                     variant="standard"
+                    required
+                    InputLabelProps={{ shrink: true }}
                   />
                 )}
               />

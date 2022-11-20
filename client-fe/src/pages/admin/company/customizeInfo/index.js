@@ -1,20 +1,17 @@
+import Backdrop from "@mui/material/Backdrop";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
 import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
-import SideBar from "../../../../components/navigation";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import IconButton from "@mui/material/IconButton";
 import Iconify from "../../../../components/iconify";
-import Button from "@mui/material/Button";
+import SideBar from "../../../../components/navigation";
+import { TenantCodeGenerator } from "../../../../services/hashFunction";
 import style from "./style.module.css";
 
 const breadcrumbs = [
@@ -35,7 +32,19 @@ const company = {
 export default function CustomInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [openBackdrop, setOpenBackdrop] = React.useState(false);
+  const [code, setCode] = React.useState("");
 
+  const handleClickGenerateCode = () => {
+    let today = new Date();
+    let time = today.getTime().toString();
+    const tenantCode = TenantCodeGenerator(time);
+    console.log(tenantCode);
+    setCode(tenantCode);
+  };
+
+  const handleMouseDownGenerateCode = (event) => {
+    event.preventDefault();
+  };
   const handleCreateNewCompany = () => {
     setOpenBackdrop(true);
     setTimeout(setOpenBackdrop, 3000, false);
@@ -196,6 +205,85 @@ export default function CustomInfoCompany() {
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     defaultValue={company.contactNumber}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant="body1" align="left">
+                    Tài khoản đăng nhập
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    id="username"
+                    name="usernam"
+                    label="Tên đăng nhập"
+                    fullWidth
+                    autoComplete="username"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    id="password"
+                    name="password"
+                    label="Mật khẩu"
+                    fullWidth
+                    autoComplete="password"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    id="tenantCode"
+                    name="tenantCode"
+                    label="Mã ban tổ chức"
+                    fullWidth
+                    autoComplete="tenant-code"
+                    variant="standard"
+                    helperText="Chọn để tạo mã ngẫu nhiên"
+                    value={code}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickGenerateCode}
+                            onMouseDown={handleMouseDownGenerateCode}
+                            edge="end"
+                            sx={{ marginRight: "0" }}
+                          >
+                            <Iconify
+                              icon={"carbon:operations-record"}
+                            ></Iconify>
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
