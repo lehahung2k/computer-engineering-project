@@ -1,26 +1,13 @@
-import * as React from "react";
 import Grid from "@mui/material/Grid";
-import style from "./style.module.css";
-import SideBar from "../../../../components/navigation";
-import Header from "../../../../components/header";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import NormalTable from "../../../../components/tables/normal";
 import BreadCrumbs from "../../../../components/breadCrumbs";
-import { StepButton } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import Header from "../../../../components/header";
+import SideBar from "../../../../components/navigation";
 import EventInfo from "./components/eventInfo";
-import ListPoc from "./components/listPOC";
 import ListCompany from "./components/listCompany";
+import ListPoc from "./components/listPOC";
+import style from "./style.module.css";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },

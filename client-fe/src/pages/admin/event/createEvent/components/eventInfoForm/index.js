@@ -20,7 +20,19 @@ import {
   newNoteEvent,
   newMapEvent,
 } from "../../../../../../services/redux/actions/event/event.js";
-
+import Autocomplete from "@mui/material/Autocomplete";
+const rowsCompany = [
+  { label: "Doanh nghiệp 01", tenantCode: "bka" },
+  { label: "Doanh nghiệp 02" },
+  { label: "Doanh nghiệp 03" },
+  { label: "Doanh nghiệp 04" },
+  { label: "Doanh nghiệp 06" },
+  { label: "Doanh nghiệp 05" },
+  { label: "Doanh nghiệp 07" },
+  { label: "Doanh nghiệp 08" },
+  { label: "Doanh nghiệp 09" },
+  { label: "Doanh nghiệp 10" },
+];
 export default function EventInfoForm() {
   const [value, setValue] = React.useState(dayjs("2014-08-18T21:11:54"));
   const [name, setName] = React.useState("");
@@ -78,7 +90,7 @@ export default function EventInfoForm() {
         Thông tin sự kiện
       </Typography>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <TextField
             required
             id="eventName"
@@ -98,6 +110,26 @@ export default function EventInfoForm() {
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
+        <Grid item xs={12} sm={6}>
+          <Autocomplete
+            disablePortal
+            noOptionsText={"Không tìm thấy doanh nghiệp"}
+            id="combo-box-demo"
+            options={rowsCompany}
+            // sx={{ width: 300 }}
+            ListboxProps={{ style: { maxHeight: 150 } }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Doanh nghiệp phụ trách"
+                variant="standard"
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+            )}
+          />
+        </Grid>
+
         <Grid item xs={12} sm={6}>
           <TextField
             required

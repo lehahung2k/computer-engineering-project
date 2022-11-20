@@ -17,6 +17,11 @@ import AdminDashBoard from "./pages/admin/dashboard";
 import CreateEvent from "./pages/admin/event/createEvent";
 import ListEvent from "./pages/admin/event/listEvent";
 import DetailEvent from "./pages/admin/event/eventDetail";
+import CreateNewCompany from "./pages/admin/company/create";
+import DetailInfoCompany from "./pages/admin/company/viewDetail";
+import ListCompany from "./pages/admin/company/viewList";
+import CustomInfoCompany from "./pages/admin/company/customizeInfo";
+import PocAccount from "./pages/admin/pocAccount";
 // import Footer from './components/Footer'
 function App() {
   return (
@@ -51,6 +56,31 @@ function App() {
             exact
             path="/admin/event/detail"
             element={<DetailEvent />}
+          ></Route>
+
+          <Route exact path="/admin/company" element={<ListCompany />}></Route>
+          <Route
+            exact
+            path="/admin/company/create"
+            element={<CreateNewCompany />}
+          ></Route>
+
+          <Route
+            exact
+            path="/admin/company/detail"
+            element={<DetailInfoCompany />}
+          ></Route>
+
+          <Route
+            exact
+            path="/admin/company/custom"
+            element={<CustomInfoCompany />}
+          ></Route>
+
+          <Route
+            exact
+            path="/admin/poc-account"
+            element={<PocAccount />}
           ></Route>
           <Route path="/admin/*" element={<Navigate to="/" />}></Route>
         </Route>

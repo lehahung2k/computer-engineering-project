@@ -8,13 +8,13 @@ const initialPoc = {
 
 const pocReducer = (state = initialPoc, action) => {
   switch (action.type) {
-    case "NEW_POC": {
+    case "POC/NEW_POC": {
       const newEvent = action.payload;
 
       return newEvent;
     }
 
-    case "NEW_NAME": {
+    case "POC/NEW_NAME": {
       const newName = action.payload;
 
       return {
@@ -23,7 +23,7 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
-    case "NEW_CODE": {
+    case "POC/NEW_CODE": {
       const newCode = action.payload;
 
       return {
@@ -32,7 +32,7 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
-    case "NEW_ACCOUNT": {
+    case "POC/NEW_ACCOUNT": {
       const newAccount = action.payload;
 
       return {
@@ -41,7 +41,7 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
-    case "NEW_EVENT_CODE": {
+    case "POC/NEW_EVENT_CODE": {
       const newEventCode = action.payload;
 
       return {
@@ -50,7 +50,7 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
-    case "NEW_NOTE": {
+    case "POC/NEW_NOTE": {
       const newNote = action.payload;
 
       return {
@@ -66,17 +66,17 @@ const pocReducer = (state = initialPoc, action) => {
 
 const listPocReducer = (state = [], action) => {
   switch (action.type) {
-    case "ADD_POC": {
+    case "POC/ADD_POC": {
       const newList = state.map((e) => e);
 
       return [...newList, action.payload];
     }
 
-    case "REMOVE_POC": {
+    case "POC/REMOVE_POC": {
       return state;
     }
 
-    case "UPDATE_POC": {
+    case "POC/UPDATE_POC": {
       return state;
     }
 

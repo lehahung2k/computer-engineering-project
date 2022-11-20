@@ -14,84 +14,19 @@ import FestivalIcon from "@mui/icons-material/Festival";
 import BusinessIcon from "@mui/icons-material/Business";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PeopleIcon from "@mui/icons-material/People";
-var fake_data = [
-  {
-    id: 1,
-    noEvent: 10,
-    month: "Tháng 1",
-  },
-
-  {
-    id: 2,
-    noEvent: 5,
-    month: "Tháng 2",
-  },
-
-  {
-    id: 3,
-    noEvent: 7,
-    month: "Tháng 3",
-  },
-
-  {
-    id: 4,
-    noEvent: 9,
-    month: "Tháng 4",
-  },
-
-  {
-    id: 5,
-    noEvent: 12,
-    month: "Tháng 5",
-  },
-
-  {
-    id: 6,
-    noEvent: 14,
-    month: "Tháng 6",
-  },
-
-  {
-    id: 7,
-    noEvent: 7,
-    month: "Tháng 7",
-  },
-  {
-    id: 8,
-    noEvent: 8,
-    month: "Tháng 7",
-  },
-  {
-    id: 9,
-    noEvent: 12,
-    month: "Tháng 7",
-  },
-  {
-    id: 10,
-    noEvent: 5,
-    month: "Tháng 7",
-  },
-  {
-    id: 11,
-    noEvent: 3,
-    month: "Tháng 7",
-  },
-  {
-    id: 12,
-    noEvent: 7,
-    month: "Tháng 7",
-  },
-];
+import { ListEvent, ListEventHeadNormal } from "../../../assets/fakeData";
+import NormalTable from "../../../components/tables/normal";
+import { FakeChart } from "../../../assets/fakeData/fakeChart";
 
 export default function AdminDashBoard() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
 
   const [fakeData, setFakeData] = useState({
-    labels: fake_data.map((data) => data.month),
+    labels: FakeChart.map((data) => data.month),
     datasets: [
       {
         label: "Số sự kiện diễn ra",
-        data: fake_data.map((data) => data.noEvent),
+        data: FakeChart.map((data) => data.noEvent),
         backgroundColor: ["rgba(75,192,192,1)"],
         borderColor: "black",
         borderWidth: 1,
@@ -241,6 +176,14 @@ export default function AdminDashBoard() {
                             Thêm mới
                           </Button>
                         </Box>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <NormalTable
+                          rows={ListEvent}
+                          headCells={ListEventHeadNormal}
+                          numOfRowsPerPage={3}
+                        />
                       </Grid>
                     </Grid>
                   </div>
