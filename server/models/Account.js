@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-    const Users = sequelize.define("Users", {
-        user_id: {
+    const Account = sequelize.define("Account", {
+        userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
@@ -9,34 +9,42 @@ module.exports = (sequelize, DataTypes) => {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
+            primaryKey: true
         },
         passwd: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        full_name: {
+        fullName: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        phoneNumber: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
         active: {
             type: DataTypes.INTEGER,
         },
         role: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
         },
+        tenantCode: { // Mã doanh nghiệp
+            type: DataTypes.STRING,
+            allowNull: false,
+        }, 
         companyName: {
             type: DataTypes.STRING,
-            allowNull: false
-        },
-        phoneNumber: {
-            type: DataTypes.STRING,
-            allowNull: false
         }
     }, 
     {
-        tableName: 'users',
+        tableName: 'account',
     });
 
-    return Users;
+    return Account;
 }

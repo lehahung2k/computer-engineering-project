@@ -48,8 +48,8 @@ app.use("/point-of-checkin", pointCheckin);
 const clientController = require("./routes/ClientController");
 app.use("/client", clientController);
 
-const userController = require("./routes/UserController");
-app.use("/auth", userController);
+const accountController = require("./routes/AccountController");
+app.use("/auth", accountController);
 
 const transactionController = require("./routes/TransactionController");
 app.use("/transaction", transactionController);
