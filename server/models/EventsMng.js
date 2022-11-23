@@ -1,43 +1,43 @@
 module.exports = (sequelize, DataTypes) => {
     const EventsMng = sequelize.define("EventsMng", {
-        event_id: {
+        eventId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        event_code: {
+        eventCode: {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true,
         },
-        event_name: {
+        eventName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        is_active: {
+        isActivate: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        event_description: {
+        eventDescription: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        start_date: {
+        startDate: {
             type: DataTypes.DATE,
         },
-        end_date: {
+        endDate: {
             type: DataTypes.DATE,
         },
-        start_time: {
+        startTime: {
             type: DataTypes.TIME,
         },
-        end_time: {
+        endTime: {
             type: DataTypes.TIME,
         },
     }, 
     {
-        tableName: 'events_mng',
+        tableName: 'eventsMng',
         createdAt: false,
         updatedAt: false,
     });

@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const { Users } = require("../models")
+const { Account } = require("../models")
 const bcrypt = require('bcryptjs');
 const { sign } = require('jsonwebtoken');
 const { validateToken } = require('../middlewares/AuthMiddlewares');
 
 router.post("/", async (req, res) => {
-    const { username, passwd, full_name, active, role, companyName, phoneNumber } = req.body;
-    const user = await Users.findOne({
+    const { username, passwd, fullName, active, role, companyName, phoneNumber } = req.body;
+    const user = await Account.findOne({
         where: {
             username: username
         }
     });
     if (user === null || !user) {
         bcrypt.hash(passwd, 6).then((hash) => {
-            Users.create({
+            Account.create({
                 username: username,
                 passwd: hash,
-                full_name: full_name,
+                full_name: fullName,
                 active: active,
                 role: role,
                 companyName: companyName,
@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     const { username, passwd } = req.body;
-    const user = await Users.findOne({
+    const user = await Account.findOne({
         where: {
             username: username
         }
