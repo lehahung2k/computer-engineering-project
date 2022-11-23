@@ -5,24 +5,30 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "devStart": "nodemon server.js"
+    "start": "nodemon src/server.js",
+    "devStart": "nodemon src/server.js"
   },
   "author": "HungLH",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.1",
+    "express": "^4.18.2",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
-    "nodemon": "^2.0.19",
     "sequelize": "^6.21.4",
     "sequelize-cli": "^6.4.1",
     "swagger-jsdoc": "^6.2.5",
     "swagger-ui-express": "^4.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "nodemon": "^2.0.20"
   }
 }
