@@ -21,23 +21,21 @@ module.exports = (sequelize, DataTypes) => {
         },
         eventDescription: {
             type: DataTypes.STRING,
-            allowNull: false,
-        },
-        startDate: {
-            type: DataTypes.DATE,
-        },
-        endDate: {
-            type: DataTypes.DATE,
         },
         startTime: {
             type: DataTypes.TIME,
+            allowNull: false
         },
         endTime: {
             type: DataTypes.TIME,
+            allowNull: false
         },
+        eventImg: {
+            type: DataTypes.BLOB
+        }
     }, 
     {
-        tableName: 'eventsMng',
+        tableName: 'EventsMng',
         createdAt: false,
         updatedAt: false,
     });

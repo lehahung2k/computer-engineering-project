@@ -1,33 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
-    const ClientInfo = sequelize.define("ClientInfo", {
-        client_id: {
+    const Guests = sequelize.define("Guests", {
+        guestId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        client_code: {
+        guestCode: {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true,
         },
-        client_description: {
+        guestDescription: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
-        client_img_f: {
+        frontImg: {
             type: DataTypes.BLOB,
-            allowNull: false,
         },
-        client_img_b: {
+        backImg: {
             type: DataTypes.BLOB,
-            allowNull: false,
         },
+        identityType: {
+            type: DataTypes.STRING
+        }
     }, 
     {
-        tableName: 'client_info',
+        tableName: 'Guests',
         createdAt: false,
         updatedAt: false,
     });
-    return ClientInfo;
+    return Guests;
 }

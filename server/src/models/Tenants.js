@@ -24,18 +24,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         contactName: {
             type: DataTypes.STRING,
-            allowNull: false
         },
         contactPhone: {
             type: DataTypes.STRING,
-            allowNull: false
         },
         contactEmail: {
             type: DataTypes.STRING,
-            allowNull: false
         }
     }, {
-        tableName: 'tenant',
+        tableName: 'Tenants',
         createdAt: false,
         updatedAt: false
     });
