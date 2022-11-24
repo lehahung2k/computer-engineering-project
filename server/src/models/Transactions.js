@@ -1,20 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
     const Transactions = sequelize.define("Transactions", {
-        tran_id: {
+        tranId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        event_id: {
-            type: DataTypes.INTEGER,
+        pointCode: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
-        client_id: {
-            type: DataTypes.INTEGER,
+        guestCode: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
-        create_time: {
+        createTime: {
             type: DataTypes.TIME,
         },
         note: {
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, 
     {
-        tableName: 'transactions',
+        tableName: 'Transactions',
         createdAt: false,
         updatedAt: false,
     });
