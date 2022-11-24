@@ -33,7 +33,7 @@ export default function Welcome() {
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
-                height="300"
+                sx={{ height: 300 }}
                 image={require("../../../assets/welcome_item_01.jpg")}
                 alt="Welcome"
               />
@@ -52,9 +52,9 @@ export default function Welcome() {
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
-                height="300"
                 image={require("../../../assets/welcome_item_02.jpg")}
                 alt="Welcome"
+                sx={{ height: 300 }}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
@@ -71,7 +71,7 @@ export default function Welcome() {
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
-                height="300"
+                sx={{ height: 300 }}
                 image={require("../../../assets/welcome_item_03.png")}
                 alt="Welcome"
               />
@@ -116,7 +116,7 @@ export default function Welcome() {
           </Grid>
 
           <Grid container item xs={8} alignItems="center" justify="center">
-          <Card sx={{ maxWidth: 345 }}>
+            <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
                 height="300"
@@ -144,10 +144,10 @@ export default function Welcome() {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                Tin cậy
+                  Tin cậy
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                Thống kê thông tin checkin, tiếp cận khách hàng hiệu quả
+                  Thống kê thông tin checkin, tiếp cận khách hàng hiệu quả
                 </Typography>
               </CardContent>
             </Card>

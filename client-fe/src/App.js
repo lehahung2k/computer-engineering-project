@@ -86,11 +86,49 @@ function App() {
         </Route>
 
         <Route
+          path="/event-admin"
+          element={
+            <PrivateRoute role={sessionStorage.getItem("role")} type={2} />
+          }
+        >
+          <Route exact path="/event-admin" element={<AdminDashBoard />}></Route>
+          <Route
+            exact
+            path="/event-admin/create-event"
+            element={<CreateEvent />}
+          ></Route>
+          <Route
+            exact
+            path="/event-admin/event"
+            element={<ListEvent />}
+          ></Route>
+          <Route
+            exact
+            path="/event-admin/event/detail"
+            element={<DetailEvent />}
+          ></Route>
+
+          <Route
+            exact
+            path="/event-admin/detail-info"
+            element={<DetailInfoCompany />}
+          ></Route>
+
+          <Route
+            exact
+            path="/event-admin/poc-account"
+            element={<PocAccount />}
+          ></Route>
+          <Route path="/event-admin/*" element={<Navigate to="/" />}></Route>
+        </Route>
+
+        <Route
           path="/poc"
           element={
             <PrivateRoute role={sessionStorage.getItem("role")} type={2} />
           }
         >
+          <Route exact path="/poc" element={<PocManageEvent />}></Route>
           <Route exact path="/poc/event" element={<PocManageEvent />}></Route>
           <Route
             exact

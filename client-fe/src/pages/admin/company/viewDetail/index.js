@@ -8,11 +8,17 @@ import SideBar from "../../../../components/navigation";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Doanh nghiệp" },
-  { link: "#", label: "Chi tiết doanh nghiệp" },
-];
+const breadcrumbs =
+  sessionStorage.getItem("role") === 0
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "/admin/company", label: "Ban tổ chức" },
+        { link: "#", label: "Chi tiết ban tổ chức" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "#", label: "Thông tin ban tổ chức" },
+      ];
 
 const company = {
   name: "Công ty TNHH A",
@@ -21,6 +27,9 @@ const company = {
   contactName: "Nguyễn Văn A",
   contactMail: "abc@mail.com",
   contactNumber: "0123456789",
+  username: "ctA_icheckin",
+  password: "icheckin_ctA",
+  tenantCode: "huvAck",
 };
 
 export default function DetailInfoCompany() {
@@ -52,7 +61,7 @@ export default function DetailInfoCompany() {
             <div className={style.main}>
               <div className={style.main__head}>
                 <Typography variant="h6" align="left">
-                  Thông tin doanh nghiệp
+                  Thông tin tổ chức
                 </Typography>
               </div>
 
@@ -90,35 +99,65 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
 
-                <Grid item xs={2} align="left">
+                <Grid item xs={4} align="left">
                   Nguyễn Văn A
+                </Grid>
+
+                <Grid item xs={2}>
+                  <Typography variant="body1" align="right">
+                    Tài khoản đăng nhập:
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={4} align="left">
+                  {company.username}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
                     Số điện thoại:
                   </Typography>
                 </Grid>
-                <Grid item xs={2} align="left">
+                <Grid item xs={4} align="left">
                   0123456789
                 </Grid>
+                <Grid item xs={2}>
+                  <Typography variant="body1" align="right">
+                    Mật khẩu:
+                  </Typography>
+                </Grid>
 
+                <Grid item xs={4} align="left">
+                  {company.password}
+                </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
                     Email:
                   </Typography>
                 </Grid>
-                <Grid item xs={2} align="left">
+                <Grid item xs={4} align="left">
                   abc@mail.com{" "}
                 </Grid>
-
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleCustomCompany()}
-                  >
-                    Sửa thông tin
-                  </Button>
+                <Grid item xs={2}>
+                  <Typography variant="body1" align="right">
+                    Tenant code:
+                  </Typography>
                 </Grid>
+
+                <Grid item xs={4} align="left">
+                  {company.tenantCode}
+                </Grid>
+                {sessionStorage.getItem("role") === 0 ? (
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleCustomCompany()}
+                    >
+                      Sửa thông tin
+                    </Button>
+                  </Grid>
+                ) : (
+                  <></>
+                )}
               </Grid>
             </div>
           </Grid>

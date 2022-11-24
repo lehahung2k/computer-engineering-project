@@ -16,8 +16,8 @@ import style from "./style.module.css";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Doanh nghiệp" },
-  { link: "#", label: "Thêm doanh nghiệp" },
+  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "#", label: "Thêm ban tổ chức" },
 ];
 
 export default function CreateNewCompany() {
@@ -63,7 +63,7 @@ export default function CreateNewCompany() {
             <div className={style.main}>
               <div className={style.main__head}>
                 <Typography variant="h6" align="left">
-                  Thông tin doanh nghiệp
+                  Thông tin tổ chức
                 </Typography>
               </div>
 
@@ -73,7 +73,7 @@ export default function CreateNewCompany() {
                     required
                     id="companyName"
                     name="companyName"
-                    label="Tên doanh nghiệp"
+                    label="Tên tổ chức"
                     fullWidth
                     autoComplete="company-name"
                     variant="standard"

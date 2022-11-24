@@ -39,7 +39,7 @@ function Login() {
             return navigate("/admin");
           }
           case "1": {
-            return navigate("/");
+            return navigate("/event-admin");
           }
           case "2": {
             return navigate("/poc");

@@ -9,11 +9,18 @@ import ListCompany from "./components/listCompany";
 import ListPoc from "./components/listPOC";
 import style from "./style.module.css";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/event", label: "Sự kiện" },
-  { link: "#", label: "Chi tiết sự kiện" },
-];
+const breadcrumbs =
+  sessionStorage.getItem("role") === 0
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "/admin/event", label: "Sự kiện" },
+        { link: "#", label: "Chi tiết sự kiện" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "/event-admin/event", label: "Sự kiện" },
+        { link: "#", label: "Chi tiết sự kiện" },
+      ];
 
 function getStepContent(step, setStep) {
   switch (step) {

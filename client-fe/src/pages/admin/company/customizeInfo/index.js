@@ -16,8 +16,8 @@ import style from "./style.module.css";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Doanh nghiệp" },
-  { link: "#", label: "Sửa đổi thông tin doanh nghiệp" },
+  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "#", label: "Sửa đổi thông tin ban tổ chức" },
 ];
 
 const company = {
@@ -71,7 +71,7 @@ export default function CustomInfoCompany() {
             <div className={style.main}>
               <div className={style.main__head}>
                 <Typography variant="h6" align="left">
-                  Thông tin doanh nghiệp
+                  Thông tin tổ chức
                 </Typography>
               </div>
 
@@ -81,7 +81,7 @@ export default function CustomInfoCompany() {
                     required
                     id="companyName"
                     name="companyName"
-                    label="Tên doanh nghiệp"
+                    label="Tên tổ chức"
                     fullWidth
                     autoComplete="company-name"
                     variant="standard"

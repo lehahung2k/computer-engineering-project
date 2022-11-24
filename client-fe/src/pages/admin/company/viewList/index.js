@@ -8,7 +8,10 @@ import {
   listCompany,
   listCompanyHeadNormal,
 } from "../../../../assets/fakeData";
-import { ListBtc } from "../../../../assets/fakeData/fakeBtc";
+import {
+  ListBtc,
+  listBtcHeadNormal,
+} from "../../../../assets/fakeData/fakeBtc";
 import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
@@ -17,7 +20,7 @@ import style from "./style.module.css";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "#", label: "Doanh nghiệp" },
+  { link: "#", label: "Ban tổ chức" },
 ];
 
 export default function ListCompany() {
@@ -50,7 +53,7 @@ export default function ListCompany() {
               <Grid container spacing={3}>
                 <Grid item xs={4}>
                   <Typography variant="h6" align="left">
-                    Danh sách doanh nghiệp
+                    Danh sách ban tổ chức
                   </Typography>
                 </Grid>
                 <Grid item xs={8}>
@@ -66,10 +69,7 @@ export default function ListCompany() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <NormalTable
-                    rows={ListBtc}
-                    headCells={listCompanyHeadNormal}
-                  />
+                  <NormalTable rows={ListBtc} headCells={listBtcHeadNormal} />
                 </Grid>
               </Grid>{" "}
             </div>

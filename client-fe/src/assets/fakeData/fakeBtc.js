@@ -127,10 +127,10 @@ export const ListBtc = [
   ),
 ];
 
-export const listCompanyHeadNormal = [
+export const listBtcHeadNormal = [
   {
     id: "name",
-    label: "Công ty/ Doanh nghiệp",
+    label: "Tên tổ chức",
     sort: true,
     width: "20%",
     link: "/admin/company/detail",

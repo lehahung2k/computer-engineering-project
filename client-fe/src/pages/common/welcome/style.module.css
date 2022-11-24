@@ -3,33 +3,33 @@
   height: 300px;
   background-repeat: no-repeat;
   background-size: 100% 300px;
-  margin-top: 56px;
+  /* margin-top: 56px; */
   margin-bottom: 20px;
 }
 
-.body__row{
+.body__row {
   display: none;
 }
 
-.body__col{
+.body__col {
   display: block;
 }
 
 @media only screen and (min-width: 800px) {
-  .head{
+  .head {
     background-image: url(../../../assets/Welcome\ background\ 02.png);
-  height: 400px;
-  background-repeat: no-repeat;
-  background-size: 100% 400px;
-  margin-top: 56px;
-  margin-bottom: 20px;
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: 100% 400px;
+    /* margin-top: 56px; */
+    margin-bottom: 20px;
   }
 
-  .body__row{
+  .body__row {
     display: block;
   }
 
-  .body__col{
+  .body__col {
     display: none;
   }
 }
@@ -50,4 +50,3 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-

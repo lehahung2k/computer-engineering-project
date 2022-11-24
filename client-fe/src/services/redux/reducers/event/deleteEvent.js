@@ -1,30 +1,28 @@
 const initialState = {
   loading: false,
   success: false,
-  data: [],
   message: "",
 };
 
-export const fetchListEvent = (state = initialState, action) => {
+export const deleteEventReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "EVENT/FETCH_LIST_EVENT": {
+    case "EVENT/DELETE_NEW_EVENT": {
       return {
         ...state,
         loading: true,
       };
     }
 
-    case "EVENT/FETCH_LIST_EVENT_SUCCESS": {
-      const listEvent = action.payload;
+    case "EVENT/DELETE_NEW_EVENT_SUCCESS": {
       return {
         ...state,
         loading: false,
         success: true,
-        data: listEvent,
+        message: "success",
       };
     }
 
-    case "EVENT/FETCH_LIST_EVENT_FAIL": {
+    case "EVENT/DELETE_NEW_EVENT_FAIL": {
       return {
         ...state,
         loading: false,

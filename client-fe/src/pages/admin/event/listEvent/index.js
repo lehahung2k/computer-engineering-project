@@ -15,10 +15,16 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import { StepButton } from "@mui/material";
 import EventFilter from "./components/filterEvent";
 import SearchEvent from "./components/searchEvent";
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "#", label: "Sự kiện" },
-];
+const breadcrumbs =
+  sessionStorage.getItem("role") === 0
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "#", label: "Sự kiện" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "#", label: "Sự kiện" },
+      ];
 
 function createData(name, start, end, note, checkin) {
   return {
@@ -184,7 +190,9 @@ export default function ListEvent() {
   const navigate = useNavigate();
 
   const handleClickAddNewEvent = () => {
-    navigate("/admin/create-event");
+    sessionStorage.getItem("role") === 0
+      ? navigate("/admin/create-event")
+      : navigate("/event-admin/create-event");
   };
 
   return (
