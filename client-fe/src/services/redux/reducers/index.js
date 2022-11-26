@@ -10,10 +10,7 @@ const rootReducer = combineReducers({
   /**
    * Event reducers
    */
-  eventInfo: eventReducer,
-  eventCreate: createEventReducer,
-  eventUpdate: updateEventReducer,
-  eventDelete: deleteEventReducer,
+  eventState: eventReducer,
 
   /**
    * POC reducers

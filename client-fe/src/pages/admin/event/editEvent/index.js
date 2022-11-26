@@ -16,24 +16,26 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import { StepButton } from "@mui/material";
 import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const breadcrumbs =
   sessionStorage.getItem("role") === 0
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/event", label: "Sự kiện" },
-        { link: "#", label: "Thêm mới sự kiện" },
+        { link: "#", label: "Sửa thông tin sự kiện" },
       ]
     : [
         { link: "/event-admin", label: "Trang chủ" },
         { link: "/event-admin/event", label: "Sự kiện" },
-        { link: "#", label: "Thêm mới sự kiện" },
+        { link: "#", label: "Sửa thông tin sự kiện" },
       ];
 
 const steps = [
-  "Thêm thông tin sự kiện tạo mới",
+  "Thông tin sự kiện",
   // "Thêm doanh nghiệp tham gia",
-  "Thêm thông tin POC sự kiện",
+  "Thông tin POC sự kiện",
 ];
 
 function getStepContent(step) {
@@ -51,17 +53,19 @@ function getStepContent(step) {
   }
 }
 
-export default function CreateEvent() {
+export default function EditEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
 
-  const newEventInfo = useSelector((state) => state.eventInfo);
+  const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
+  const listEvents = useSelector((state) => state.eventState.listEvents);
 
+  const eventInfo = listEvents.find((event) => event.id === pinnedEventId);
   const dispatch = useDispatch();
 
-  const handleCreateNewEvent = () => {
-    dispatch(createNewEvent(newEventInfo));
+  const handleUpdateEvent = () => {
+    dispatch();
   };
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -74,7 +78,17 @@ export default function CreateEvent() {
   const handleStep = (step) => {
     setActiveStep(step);
   };
-
+  if (!pinnedEventId)
+    return (
+      <>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </>
+    );
   return (
     <div className={style.body}>
       <Grid container spacing={0}>
@@ -136,12 +150,12 @@ export default function CreateEvent() {
                         onClick={
                           activeStep === steps.length - 1
                             ? handleNext
-                            : handleCreateNewEvent
+                            : handleUpdateEvent
                         }
                         sx={{ mt: 3, ml: 1 }}
                       >
                         {activeStep === steps.length - 1
-                          ? "Thêm mới sự kiện"
+                          ? "Cập nhật sự kiện"
                           : "Tiếp theo"}
                       </Button>
                     </Box>

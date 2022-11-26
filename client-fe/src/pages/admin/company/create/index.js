@@ -11,7 +11,7 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import Iconify from "../../../../components/iconify";
 import SideBar from "../../../../components/navigation";
-import { TenantCodeGenerator } from "../../../../services/hashFunction";
+import { tenantCodeGenerator } from "../../../../services/hashFunction";
 import style from "./style.module.css";
 
 const breadcrumbs = [
@@ -29,7 +29,7 @@ export default function CreateNewCompany() {
   const handleClickGenerateCode = () => {
     let today = new Date();
     let time = today.getTime().toString();
-    const tenantCode = TenantCodeGenerator(time);
+    const tenantCode = tenantCodeGenerator(time);
     console.log(tenantCode);
     setCode(tenantCode);
   };

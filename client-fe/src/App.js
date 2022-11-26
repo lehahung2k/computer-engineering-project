@@ -22,6 +22,7 @@ import DetailInfoCompany from "./pages/admin/company/viewDetail";
 import ListCompany from "./pages/admin/company/viewList";
 import CustomInfoCompany from "./pages/admin/company/customizeInfo";
 import PocAccount from "./pages/admin/pocAccount";
+import EditEvent from "./pages/admin/event/editEvent";
 // import Footer from './components/Footer'
 function App() {
   return (
@@ -57,7 +58,7 @@ function App() {
             path="/admin/event/detail"
             element={<DetailEvent />}
           ></Route>
-
+          <Route exact path="/admin/event/edit" element={<EditEvent />}></Route>
           <Route exact path="/admin/company" element={<ListCompany />}></Route>
           <Route
             exact
@@ -106,6 +107,12 @@ function App() {
             exact
             path="/event-admin/event/detail"
             element={<DetailEvent />}
+          ></Route>
+
+          <Route
+            exact
+            path="/event-admin/event/edit"
+            element={<EditEvent />}
           ></Route>
 
           <Route

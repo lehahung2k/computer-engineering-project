@@ -15,8 +15,17 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import { StepButton } from "@mui/material";
 import EventFilter from "./components/filterEvent";
 import SearchEvent from "./components/searchEvent";
+import {
+  listFakeEvents,
+  headCellsListFakeEvents,
+} from "../../../../assets/fakeData/fakeEvent";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  pinEventId,
+  newEventAction,
+} from "../../../../services/redux/actions/event/event";
 const breadcrumbs =
-  sessionStorage.getItem("role") === 0
+  sessionStorage.getItem("role") === "0"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "#", label: "Sự kiện" },
@@ -26,173 +35,27 @@ const breadcrumbs =
         { link: "#", label: "Sự kiện" },
       ];
 
-function createData(name, start, end, note, checkin) {
-  return {
-    name,
-    start,
-    end,
-    note,
-    checkin,
-  };
-}
-
-const rows = [
-  createData(
-    "JobFair",
-    "2022-12-12T09:30:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "Inovation Day",
-    "2022-12-12T08:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội đổi mới sáng tạo 2022",
-    "Xem"
-  ),
-  createData(
-    "Đây là tên sự kiện dài để kiểm thử chức năng hiển thị",
-    "2022-12-12T07:30:00",
-    "2022-12-12T09:00:00",
-    "Đây là note dài để kiểm thử chức năng hiển thị. Nếu note được xuống dòng tức chức năng đã ổn định. Đây là note dài để kiểm thử chức năng hiển thị. Nếu note được xuống dòng tức chức năng đã ổn định",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-21T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-01T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-];
-
-const headCells = [
-  {
-    id: "name",
-    label: "Tên sự kiện",
-    sort: true,
-    width: "25%",
-    button: true,
-    link: "/admin/event/detail",
-    time: false,
-  },
-  {
-    id: "start",
-    label: "Thời gian bắt đầu",
-    sort: true,
-    width: "15%",
-    button: false,
-    link: "#",
-    time: true,
-  },
-  {
-    id: "end",
-    label: "Thời gian kết thúc",
-    sort: false,
-    width: "15%",
-    button: false,
-    link: "#",
-    time: false,
-  },
-  {
-    id: "note",
-    label: "Ghi chú",
-    sort: true,
-    with: "35%",
-    button: false,
-    link: "#",
-    time: false,
-  },
-  {
-    id: "checkin",
-    label: "Thông tin check-in",
-    sort: false,
-    width: "10%",
-    button: true,
-    link: "/admin/event/detail",
-    time: false,
-  },
-];
-
 export default function ListEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const listEvents = useSelector((state) => state.eventState.listEvents);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleClickAddNewEvent = () => {
     sessionStorage.getItem("role") === 0
       ? navigate("/admin/create-event")
       : navigate("/event-admin/create-event");
+  };
+
+  const handleClickButtonField = (fieldName, row) => {
+    if (fieldName === "name") {
+      dispatch(pinEventId(row["id"]));
+      const eventInfo = listEvents.find((event) => event.id === row["id"]);
+      dispatch(newEventAction(eventInfo));
+      navigate("/admin/event/detail");
+    }
+    if (fieldName === "checkin") console.log("checkin");
   };
 
   return (
@@ -224,7 +87,7 @@ export default function ListEvent() {
                   </Grid>
                   <Grid item xs={8}>
                     <Box display="flex" justifyContent="flex-end">
-                      <SearchEvent mả />
+                      <SearchEvent />
                       <EventFilter />
                       <Button
                         variant="contained"
@@ -236,7 +99,12 @@ export default function ListEvent() {
                     </Box>
                   </Grid>
                   <Grid item xs={12}>
-                    <NormalTable key={rows} rows={rows} headCells={headCells} />
+                    <NormalTable
+                      key={listEvents}
+                      rows={listEvents}
+                      headCells={headCellsListFakeEvents}
+                      handleClickButtonField={handleClickButtonField}
+                    />
                   </Grid>
                 </Grid>
               </div>

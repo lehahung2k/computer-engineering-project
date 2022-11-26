@@ -23,6 +23,7 @@ import {
 import style from "./style.module.css";
 import Autocomplete from "@mui/material/Autocomplete";
 import { eventCodeGenerator } from "../../../../../../services/hashFunction";
+
 const rowsCompany = [
   { label: "Doanh nghiệp 01", tenantCode: "bka" },
   { label: "Doanh nghiệp 02" },
@@ -35,6 +36,7 @@ const rowsCompany = [
   { label: "Doanh nghiệp 09" },
   { label: "Doanh nghiệp 10" },
 ];
+
 export default function EventInfoForm() {
   const [value, setValue] = React.useState(dayjs("2014-08-18T21:11:54"));
   const [name, setName] = React.useState("");
@@ -46,15 +48,12 @@ export default function EventInfoForm() {
   if (sessionStorage.getItem("role") === "0") {
     tenantName = "This is test";
   }
-  const startTime = useSelector((state) => state.eventState.event.start);
-  const endTime = useSelector((state) => state.eventState.event.end);
-  const eventImage = useSelector((state) => state.eventState.event.map);
-  const eventCode = useSelector((state) => state.eventState.event.code);
-  const eventName = useSelector((state) => state.eventState.event.name);
+
+  const eventInfo = useSelector((state) => state.eventState.event);
   const handleClickGenerateCode = () => {
     const today = new Date();
     const time = today.getTime().toString();
-    const newCode = eventCodeGenerator([tenantName, eventName, time]);
+    const newCode = eventCodeGenerator([tenantName, eventInfo.name, time]);
     dispatch(newCodeEventAction(newCode));
   };
 
@@ -113,6 +112,7 @@ export default function EventInfoForm() {
             //     ? "Tên không được để trống"
             //     : ""
             // }
+            defaultValue={eventInfo.name}
             onChange={(e) => dispatch(newNameEventAction(e.target.value))}
             // onClick={() => setCheckName(0)}
             // error={name.length === 0 && checkName === 0 ? true : false}
@@ -131,6 +131,7 @@ export default function EventInfoForm() {
               variant="standard"
               value={tenantName}
               InputLabelProps={{ shrink: true }}
+              defaultValue={eventInfo.tenant}
             />
           ) : (
             <Autocomplete
@@ -163,7 +164,7 @@ export default function EventInfoForm() {
             autoComplete="event-code"
             variant="standard"
             helperText="Chọn để tạo mã ngẫu nhiên"
-            value={eventCode}
+            value={eventInfo.code}
             // onChange={(e) => dispatch(newCodeEventAction(e.target.value))}
             InputLabelProps={{ shrink: true }}
             InputProps={{
@@ -188,7 +189,7 @@ export default function EventInfoForm() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Thời gian bắt đầu"
-              value={startTime}
+              value={eventInfo.start}
               onChange={(newValue) => dispatch(newStartEventAction(newValue))}
               renderInput={(params) => (
                 <TextField
@@ -204,7 +205,7 @@ export default function EventInfoForm() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Thời gian kết thúc"
-              value={endTime}
+              value={eventInfo.end}
               onChange={(newValue) => dispatch(newEndEventAction(newValue))}
               renderInput={(params) => (
                 <TextField
@@ -227,6 +228,7 @@ export default function EventInfoForm() {
             variant="standard"
             InputLabelProps={{ shrink: true }}
             onChange={(e) => dispatch(newNoteEventAction(e.target.value))}
+            defaultValue={eventInfo.note}
           />
         </Grid>
 
@@ -251,13 +253,13 @@ export default function EventInfoForm() {
               Bỏ ảnh
             </Button>
           </div>
-          {eventImage === "" ? (
+          {eventInfo.map === "" ? (
             <></>
           ) : (
             <img
               className={style.map__image}
               alt="Map preview"
-              src={eventImage}
+              src={eventInfo.map}
             />
           )}
         </div>
