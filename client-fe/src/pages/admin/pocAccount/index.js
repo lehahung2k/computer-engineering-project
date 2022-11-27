@@ -14,10 +14,16 @@ import SideBar from "../../../components/navigation";
 import NormalTable from "../../../components/tables/normal";
 import style from "./style.module.css";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "#", label: "Doanh nghiệp" },
-];
+const breadcrumbs =
+  sessionStorage.getItem("role") === 0
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "#", label: "Tài khoản POC" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "#", label: "Tài khoản POC" },
+      ];
 
 export default function PocAccount() {
   const [openSidebar, setOpenSidebar] = React.useState(true);

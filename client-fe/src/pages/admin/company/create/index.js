@@ -11,13 +11,27 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import Iconify from "../../../../components/iconify";
 import SideBar from "../../../../components/navigation";
-import { TenantCodeGenerator } from "../../../../services/hashFunction";
+import { tenantCodeGenerator } from "../../../../services/hashFunction";
 import style from "./style.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  newTenantAction,
+  newContactNumberTenantAction,
+  newContactMailTenantAction,
+  newContactNameTenantAction,
+  newWebsiteTenantAction,
+  newAddressTenantAction,
+  newNameTenantAction,
+  newPasswordTenantAction,
+  newUsernameTenantAction,
+  newTenantCodeAction,
+} from "../../../../services/redux/actions/tenant/tenant";
 
+import { createNewTenant } from "../../../../services/redux/actions/tenant/createTenant";
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Doanh nghiệp" },
-  { link: "#", label: "Thêm doanh nghiệp" },
+  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "#", label: "Thêm ban tổ chức" },
 ];
 
 export default function CreateNewCompany() {
@@ -25,13 +39,15 @@ export default function CreateNewCompany() {
   const [openBackdrop, setOpenBackdrop] = React.useState(false);
 
   const [code, setCode] = React.useState("");
+  const tenantInfo = useSelector((state) => state.tenantState.tenant);
+  const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
     let today = new Date();
     let time = today.getTime().toString();
-    const tenantCode = TenantCodeGenerator(time);
+    const tenantCode = tenantCodeGenerator([tenantInfo.name, time]);
     console.log(tenantCode);
-    setCode(tenantCode);
+    dispatch(newTenantCodeAction(tenantCode));
   };
 
   const handleMouseDownGenerateCode = (event) => {
@@ -63,7 +79,7 @@ export default function CreateNewCompany() {
             <div className={style.main}>
               <div className={style.main__head}>
                 <Typography variant="h6" align="left">
-                  Thông tin doanh nghiệp
+                  Thông tin tổ chức
                 </Typography>
               </div>
 
@@ -73,7 +89,7 @@ export default function CreateNewCompany() {
                     required
                     id="companyName"
                     name="companyName"
-                    label="Tên doanh nghiệp"
+                    label="Tên tổ chức"
                     fullWidth
                     autoComplete="company-name"
                     variant="standard"
@@ -86,6 +102,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newNameTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -105,6 +124,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newWebsiteTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
                 <Grid item xs={8}>
@@ -125,6 +147,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newAddressTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -150,6 +175,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newContactNameTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
 
@@ -171,6 +199,7 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) => newContactMailTenantAction(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -191,6 +220,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      newContactNumberTenantAction(e.target.value)
+                    }
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -217,6 +249,7 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) => newUsernameTenantAction(e.target.value)}
                   />
                 </Grid>
 
@@ -238,6 +271,7 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) => newPasswordTenantAction(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -250,7 +284,7 @@ export default function CreateNewCompany() {
                     autoComplete="tenant-code"
                     variant="standard"
                     helperText="Chọn để tạo mã ngẫu nhiên"
-                    value={code}
+                    value={tenantInfo.tenantCode}
                     InputLabelProps={{ shrink: true }}
                     InputProps={{
                       startAdornment: (

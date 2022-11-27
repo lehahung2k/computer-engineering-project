@@ -1,26 +1,29 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import IconButton from "@mui/material/IconButton";
-import Iconify from "../../../../../../components/iconify";
 import Button from "@mui/material/Button";
-import style from "./style.module.css";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
+import * as React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Iconify from "../../../../../../components/iconify";
 import {
-  newEvent,
-  newNameEvent,
-  newCodeEvent,
-  newStartEvent,
-  newEndEvent,
-  newNoteEvent,
-  newMapEvent,
-} from "../../../../../../services/redux/actions/event/event.js";
+  newCodeEventAction,
+  newEventAction,
+  newNameEventAction,
+  newNoteEventAction,
+  newStartEventAction,
+  newEndEventAction,
+  newMapEventAction,
+  newTenantEventAction,
+} from "../../../../../../services/redux/actions/event/event";
+import style from "./style.module.css";
 import Autocomplete from "@mui/material/Autocomplete";
+import { eventCodeGenerator } from "../../../../../../services/hashFunction";
 const rowsCompany = [
   { label: "Doanh nghiệp 01", tenantCode: "bka" },
   { label: "Doanh nghiệp 02" },
@@ -38,14 +41,27 @@ export default function EventInfoForm() {
   const [name, setName] = React.useState("");
   const [checkName, setCheckName] = React.useState(1);
   const [code, setCode] = React.useState("");
-  const [startTime, setStartTime] = React.useState("");
-  const [endTime, setEndTime] = React.useState("");
-  const imgFile = React.useRef("");
-  const baseImage = React.useRef("");
-  const [mapImage, setMapImage] = React.useState("");
 
+  const dispatch = useDispatch();
+  let tenantName = "";
+  // if (sessionStorage.getItem("role") === "0") {
+  //   tenantName = "This is test";
+  // }
+  const listTenant = useSelector((state) => state.tenantState.listTenant);
+  const listSelectTenant = listTenant.map((tenant) => ({
+    label: tenant.name,
+    id: tenant.id,
+  }));
+  const startTime = useSelector((state) => state.eventState.event.start);
+  const endTime = useSelector((state) => state.eventState.event.end);
+  const eventImage = useSelector((state) => state.eventState.event.map);
+  const eventCode = useSelector((state) => state.eventState.event.code);
+  const eventName = useSelector((state) => state.eventState.event.name);
   const handleClickGenerateCode = () => {
-    setCode("test");
+    const today = new Date();
+    const time = today.getTime().toString();
+    const newCode = eventCodeGenerator([tenantName, eventName, time]);
+    dispatch(newCodeEventAction(newCode));
   };
 
   const handleMouseDownGenerateCode = (event) => {
@@ -70,19 +86,21 @@ export default function EventInfoForm() {
   const handleUploadImage = async (e) => {
     if (e.target.files.length > 0) {
       let mapImageFile = e.target.files[0];
-      let src = URL.createObjectURL(mapImageFile);
-      setMapImage(src);
-      baseImage.current = await convertBase64(imgFile.current);
-      console.log(baseImage);
+      const base64EventImage = await convertBase64(mapImageFile);
+      dispatch(newMapEventAction(base64EventImage));
     }
   };
 
   const handleRemoveMapImage = () => {
-    setMapImage("");
+    dispatch(newMapEventAction(""));
   };
 
   const handleChange = (newValue) => {
     setValue(newValue);
+  };
+
+  const handleChangeTenantEvent = (value) => {
+    dispatch(newTenantEventAction({ name: value.label, id: value.id }));
   };
   return (
     <React.Fragment>
@@ -104,30 +122,46 @@ export default function EventInfoForm() {
             //     ? "Tên không được để trống"
             //     : ""
             // }
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => dispatch(newNameEventAction(e.target.value))}
             // onClick={() => setCheckName(0)}
             // error={name.length === 0 && checkName === 0 ? true : false}
             InputLabelProps={{ shrink: true }}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Autocomplete
-            disablePortal
-            noOptionsText={"Không tìm thấy doanh nghiệp"}
-            id="combo-box-demo"
-            options={rowsCompany}
-            // sx={{ width: 300 }}
-            ListboxProps={{ style: { maxHeight: 150 } }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Doanh nghiệp phụ trách"
-                variant="standard"
-                InputLabelProps={{ shrink: true }}
-                required
-              />
-            )}
-          />
+          {tenantName ? (
+            <TextField
+              required
+              id="tenantName"
+              name="tenantName"
+              label="Ban tổ chức"
+              fullWidth
+              autoComplete="tenant-name"
+              variant="standard"
+              value={tenantName}
+              InputLabelProps={{ shrink: true }}
+            />
+          ) : (
+            <Autocomplete
+              disablePortal
+              noOptionsText={"Không tìm thấy tổ chức"}
+              id="combo-box-demo"
+              options={listSelectTenant}
+              // sx={{ width: 300 }}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              ListboxProps={{ style: { maxHeight: 150 } }}
+              onChange={(event, value) => handleChangeTenantEvent(value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Ban tổ chức"
+                  variant="standard"
+                  InputLabelProps={{ shrink: true }}
+                  required
+                />
+              )}
+            />
+          )}
         </Grid>
 
         <Grid item xs={12} sm={6}>
@@ -140,7 +174,8 @@ export default function EventInfoForm() {
             autoComplete="event-code"
             variant="standard"
             helperText="Chọn để tạo mã ngẫu nhiên"
-            value={code}
+            value={eventCode}
+            // onChange={(e) => dispatch(newCodeEventAction(e.target.value))}
             InputLabelProps={{ shrink: true }}
             InputProps={{
               startAdornment: (
@@ -164,8 +199,8 @@ export default function EventInfoForm() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Thời gian bắt đầu"
-              value={value}
-              onChange={handleChange}
+              value={startTime}
+              onChange={(newValue) => dispatch(newStartEventAction(newValue))}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -180,8 +215,8 @@ export default function EventInfoForm() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Thời gian kết thúc"
-              value={value}
-              onChange={handleChange}
+              value={endTime}
+              onChange={(newValue) => dispatch(newEndEventAction(newValue))}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -202,6 +237,7 @@ export default function EventInfoForm() {
             multiline
             variant="standard"
             InputLabelProps={{ shrink: true }}
+            onChange={(e) => dispatch(newNoteEventAction(e.target.value))}
           />
         </Grid>
 
@@ -226,13 +262,13 @@ export default function EventInfoForm() {
               Bỏ ảnh
             </Button>
           </div>
-          {mapImage === "" ? (
+          {eventImage === "" ? (
             <></>
           ) : (
             <img
               className={style.map__image}
               alt="Map preview"
-              src={mapImage}
+              src={eventImage}
             />
           )}
         </div>

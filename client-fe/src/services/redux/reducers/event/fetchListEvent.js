@@ -2,6 +2,7 @@ const initialState = {
   loading: false,
   success: false,
   data: [],
+  message: "",
 };
 
 export const fetchListEvent = (state = initialState, action) => {

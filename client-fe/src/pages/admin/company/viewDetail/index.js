@@ -7,12 +7,19 @@ import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Doanh nghiệp" },
-  { link: "#", label: "Chi tiết doanh nghiệp" },
-];
+const breadcrumbs =
+  sessionStorage.getItem("role") === "0"
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "/admin/company", label: "Ban tổ chức" },
+        { link: "#", label: "Chi tiết ban tổ chức" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "#", label: "Thông tin ban tổ chức" },
+      ];
 
 const company = {
   name: "Công ty TNHH A",
@@ -21,10 +28,14 @@ const company = {
   contactName: "Nguyễn Văn A",
   contactMail: "abc@mail.com",
   contactNumber: "0123456789",
+  username: "ctA_icheckin",
+  password: "icheckin_ctA",
+  tenantCode: "huvAck",
 };
 
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const navigate = useNavigate();
 
   const handleCustomCompany = () => {
@@ -52,7 +63,7 @@ export default function DetailInfoCompany() {
             <div className={style.main}>
               <div className={style.main__head}>
                 <Typography variant="h6" align="left">
-                  Thông tin doanh nghiệp
+                  Thông tin tổ chức
                 </Typography>
               </div>
 
@@ -64,7 +75,7 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={10} align="left">
-                  Công ty TNHH A
+                  {tenantInfo.name}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -72,7 +83,13 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={10} align="left">
-                  www.Acompany.vn
+                  <a
+                    href={"https://" + tenantInfo.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {tenantInfo.website}
+                  </a>
                 </Grid>
 
                 <Grid item xs={2}>
@@ -81,7 +98,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={10} align="left">
-                  123, Ngụy Như Kon Tum, Thanh Xuân, Hà Nội
+                  {tenantInfo.address}
                 </Grid>
 
                 <Grid item xs={2}>
@@ -90,35 +107,65 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
 
-                <Grid item xs={2} align="left">
-                  Nguyễn Văn A
+                <Grid item xs={4} align="left">
+                  {tenantInfo.contactName}
+                </Grid>
+
+                <Grid item xs={2}>
+                  <Typography variant="body1" align="right">
+                    Tài khoản đăng nhập:
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={4} align="left">
+                  {tenantInfo.username}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
                     Số điện thoại:
                   </Typography>
                 </Grid>
-                <Grid item xs={2} align="left">
-                  0123456789
+                <Grid item xs={4} align="left">
+                  {tenantInfo.contactNumber}
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography variant="body1" align="right">
+                    Mật khẩu:
+                  </Typography>
                 </Grid>
 
+                <Grid item xs={4} align="left">
+                  {tenantInfo.password}
+                </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
                     Email:
                   </Typography>
                 </Grid>
-                <Grid item xs={2} align="left">
-                  abc@mail.com{" "}
+                <Grid item xs={4} align="left">
+                  {tenantInfo.contactMail}
+                </Grid>
+                <Grid item xs={2}>
+                  <Typography variant="body1" align="right">
+                    Tenant code:
+                  </Typography>
                 </Grid>
 
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleCustomCompany()}
-                  >
-                    Sửa thông tin
-                  </Button>
+                <Grid item xs={4} align="left">
+                  {tenantInfo.tenantCode}
                 </Grid>
+                {sessionStorage.getItem("role") === "0" ? (
+                  <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleCustomCompany()}
+                    >
+                      Sửa thông tin
+                    </Button>
+                  </Grid>
+                ) : (
+                  <></>
+                )}
               </Grid>
             </div>
           </Grid>

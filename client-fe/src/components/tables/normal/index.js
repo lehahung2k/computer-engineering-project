@@ -110,6 +110,7 @@ export default function NormalTable({
   headCells,
   numOfRowsPerPage = 8,
   activeHandle = (f) => f,
+  handleClickButtonField = (f) => f,
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -179,7 +180,9 @@ export default function NormalTable({
                                 style={{ textTransform: "none" }}
                                 variant="text"
                                 color="inherit"
-                                onClick={() => navigate(headCell.link)}
+                                onClick={() =>
+                                  handleClickButtonField(headCell.id, row)
+                                }
                                 sx={{ whiteSpace: "normal" }}
                               >
                                 {row[headCell.id]}

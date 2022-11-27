@@ -1,4 +1,8 @@
-import { faCalendarDay, faHome } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarDay,
+  faHome,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -7,6 +11,10 @@ import React from "react";
 import style from "./style.module.css";
 
 export default function PocSidebar() {
+  const logout = () => {
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("role");
+  };
   return (
     <>
       <List className={style.navigationList}>
@@ -22,13 +30,21 @@ export default function PocSidebar() {
           </a>
         </ListItem>
         <ListItem>
-          <a href="/poc/checkin" className={style.listBtn}>
+          <a href="/check-in" className={style.listBtn}>
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faCalendarDay}
                 className={style.iconPage}
               />
               Check-in
+            </ListItemButton>
+          </a>
+        </ListItem>
+        <ListItem>
+          <a href="/" className={style.logout}>
+            <ListItemButton onClick={logout}>
+              <FontAwesomeIcon icon={faSignOutAlt} className="iconPage" />
+              Đăng xuất
             </ListItemButton>
           </a>
         </ListItem>

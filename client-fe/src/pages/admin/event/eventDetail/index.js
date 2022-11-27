@@ -8,32 +8,44 @@ import EventInfo from "./components/eventInfo";
 import ListCompany from "./components/listCompany";
 import ListPoc from "./components/listPOC";
 import style from "./style.module.css";
+import { useSelector, useDispatch } from "react-redux";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/event", label: "Sự kiện" },
-  { link: "#", label: "Chi tiết sự kiện" },
-];
-
-function getStepContent(step, setStep) {
-  switch (step) {
-    case 0:
-      return <EventInfo setActiveStep={setStep} />;
-    case 1:
-      return <ListPoc setActiveStep={setStep} />;
-    case 2:
-      return <ListCompany setActiveStep={setStep} />;
-
-    default:
-      throw new Error("Unknown step");
-  }
-}
+const breadcrumbs =
+  sessionStorage.getItem("role") === "0"
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "/admin/event", label: "Sự kiện" },
+        { link: "#", label: "Chi tiết sự kiện" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "/event-admin/event", label: "Sự kiện" },
+        { link: "#", label: "Chi tiết sự kiện" },
+      ];
 
 export default function DetailEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
-  const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
+  const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
+  const listEvents = useSelector((state) => state.eventState.listEvents);
 
+  const eventInfo = useSelector((state) => state.eventState.event);
+  console.log("Xem chi tiết sự kiện", eventInfo);
+  function getStepContent(step, setStep) {
+    switch (step) {
+      case 0:
+        return <EventInfo setActiveStep={setStep} event={eventInfo} />;
+      case 1:
+        return <ListPoc setActiveStep={setStep} />;
+      case 2:
+        return <ListCompany setActiveStep={setStep} />;
+
+      default:
+        throw new Error("Unknown step");
+    }
+  }
+
+  const navigate = useNavigate();
   return (
     <div className={style.body}>
       <Grid container spacing={0}>

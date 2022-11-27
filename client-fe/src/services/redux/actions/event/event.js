@@ -46,3 +46,17 @@ export const newEventAction = (event) => {
     payload: event,
   };
 };
+
+export const pinEventId = (id) => {
+  return {
+    type: "EVENT/PIN_EVENT",
+    payload: id,
+  };
+};
+
+export const newTenantEventAction = (tenant) => {
+  return {
+    type: "EVENT/NEW_TENANT",
+    payload: tenant,
+  };
+};

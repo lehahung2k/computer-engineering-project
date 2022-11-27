@@ -14,12 +14,21 @@ import EventPocInfoForm from "./components/pocForm";
 import EventCompanyForm from "./components/companyForm";
 import BreadCrumbs from "../../../../components/breadCrumbs";
 import { StepButton } from "@mui/material";
+import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/event", label: "Sự kiện" },
-  { link: "#", label: "Thêm mới sự kiện" },
-];
+const breadcrumbs =
+  sessionStorage.getItem("role") === 0
+    ? [
+        { link: "/admin", label: "Trang chủ" },
+        { link: "/admin/event", label: "Sự kiện" },
+        { link: "#", label: "Thêm mới sự kiện" },
+      ]
+    : [
+        { link: "/event-admin", label: "Trang chủ" },
+        { link: "/event-admin/event", label: "Sự kiện" },
+        { link: "#", label: "Thêm mới sự kiện" },
+      ];
 
 const steps = [
   "Thêm thông tin sự kiện tạo mới",
@@ -47,6 +56,13 @@ export default function CreateEvent() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
 
+  const newEventInfo = useSelector((state) => state.eventState.event);
+
+  const dispatch = useDispatch();
+
+  const handleCreateNewEvent = () => {
+    dispatch(createNewEvent(newEventInfo));
+  };
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -58,6 +74,7 @@ export default function CreateEvent() {
   const handleStep = (step) => {
     setActiveStep(step);
   };
+
   return (
     <div className={style.body}>
       <Grid container spacing={0}>
@@ -116,7 +133,11 @@ export default function CreateEvent() {
 
                       <Button
                         variant="contained"
-                        onClick={handleNext}
+                        onClick={
+                          activeStep === steps.length - 1
+                            ? handleCreateNewEvent
+                            : handleNext
+                        }
                         sx={{ mt: 3, ml: 1 }}
                       >
                         {activeStep === steps.length - 1

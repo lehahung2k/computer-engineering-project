@@ -11,13 +11,26 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import Iconify from "../../../../components/iconify";
 import SideBar from "../../../../components/navigation";
-import { TenantCodeGenerator } from "../../../../services/hashFunction";
+import { tenantCodeGenerator } from "../../../../services/hashFunction";
 import style from "./style.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  newTenantAction,
+  newContactNumberTenantAction,
+  newContactMailTenantAction,
+  newContactNameTenantAction,
+  newWebsiteTenantAction,
+  newAddressTenantAction,
+  newNameTenantAction,
+  newPasswordTenantAction,
+  newUsernameTenantAction,
+  newTenantCodeAction,
+} from "../../../../services/redux/actions/tenant/tenant";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Doanh nghiệp" },
-  { link: "#", label: "Sửa đổi thông tin doanh nghiệp" },
+  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "#", label: "Sửa đổi thông tin ban tổ chức" },
 ];
 
 const company = {
@@ -33,13 +46,15 @@ export default function CustomInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [openBackdrop, setOpenBackdrop] = React.useState(false);
   const [code, setCode] = React.useState("");
+  const tenantInfo = useSelector((state) => state.tenantState.tenant);
+  const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
     let today = new Date();
     let time = today.getTime().toString();
-    const tenantCode = TenantCodeGenerator(time);
+    const tenantCode = tenantCodeGenerator([tenantInfo.name, time]);
     console.log(tenantCode);
-    setCode(tenantCode);
+    dispatch(newTenantCodeAction(tenantCode));
   };
 
   const handleMouseDownGenerateCode = (event) => {
@@ -71,7 +86,7 @@ export default function CustomInfoCompany() {
             <div className={style.main}>
               <div className={style.main__head}>
                 <Typography variant="h6" align="left">
-                  Thông tin doanh nghiệp
+                  Thông tin tổ chức
                 </Typography>
               </div>
 
@@ -81,7 +96,7 @@ export default function CustomInfoCompany() {
                     required
                     id="companyName"
                     name="companyName"
-                    label="Tên doanh nghiệp"
+                    label="Tên tổ chức"
                     fullWidth
                     autoComplete="company-name"
                     variant="standard"
@@ -94,7 +109,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={company.name}
+                    defaultValue={tenantInfo.name}
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -114,7 +129,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={company.website}
+                    defaultValue={tenantInfo.website}
                   />
                 </Grid>
                 <Grid item xs={8}>
@@ -135,7 +150,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={company.address}
+                    defaultValue={tenantInfo.address}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -161,7 +176,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={company.contactName}
+                    defaultValue={tenantInfo.contactName}
                   />
                 </Grid>
 
@@ -183,7 +198,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={company.contactMail}
+                    defaultValue={tenantInfo.contactMail}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -204,7 +219,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={company.contactNumber}
+                    defaultValue={tenantInfo.contactNumber}
                   />
                 </Grid>
 
@@ -232,6 +247,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    defaultValue={tenantInfo.username}
                   />
                 </Grid>
 
@@ -253,6 +269,7 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    defaultValue={tenantInfo.password}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -265,7 +282,7 @@ export default function CustomInfoCompany() {
                     autoComplete="tenant-code"
                     variant="standard"
                     helperText="Chọn để tạo mã ngẫu nhiên"
-                    value={code}
+                    value={tenantInfo.tenantCode}
                     InputLabelProps={{ shrink: true }}
                     InputProps={{
                       startAdornment: (

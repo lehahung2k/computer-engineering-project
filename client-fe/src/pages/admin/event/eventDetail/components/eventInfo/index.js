@@ -8,10 +8,11 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import style from "./style.module.css";
+import { useNavigate } from "react-router-dom";
 
-export default function EventInfo({ setActiveStep = (f) => f }) {
-  const mapImage = "/image/map_example.jpg";
+export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -29,6 +30,11 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
     setActiveStep(2);
   };
 
+  const handleEditEvent = () => {
+    sessionStorage.getItem("role") === "0"
+      ? navigate("/admin/event/edit")
+      : navigate("/event-admin/event/edit");
+  };
   return (
     <div>
       <Typography variant="h6" align="left" sx={{ marginBottom: "10px" }}>
@@ -43,7 +49,7 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          Ngày hội việc làm jobfair 2022
+          {event.name}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -53,7 +59,7 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          Ngày hội việc làm jobfair 2022
+          {event.code}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -63,7 +69,7 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          Ngày hội việc làm jobfair 2022
+          {event.start}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -73,7 +79,7 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          Ngày hội việc làm jobfair 2022
+          {event.end}{" "}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -83,9 +89,7 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={8} align="left">
-          Đây là một ghi chú thử nghiệm với nội dung dài để kiểm tra chức năng
-          hiển thị. Nội dung cần được hiển thị xuống dòng hợp lý và căn chỉnh về
-          giữa, tạo sự hài hòa trong khung hình.
+          {event.note}
         </Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={2}>
@@ -96,13 +100,13 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
 
         <Grid item xs={10}>
           <div className={style.map}>
-            {mapImage === "" ? (
+            {event.map === "" ? (
               <></>
             ) : (
               <img
                 className={style.map__image}
                 alt="Map preview"
-                src={mapImage}
+                src={event.map}
               />
             )}
           </div>
@@ -115,9 +119,9 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={10} align="left">
-          <Button variant="outlined" onClick={() => handleShowListCompany()}>
+          {/* <Button variant="outlined" onClick={() => handleShowListCompany()}>
             Danh sách doanh nghiệp
-          </Button>
+          </Button> */}
           &nbsp;
           <Button variant="outlined" onClick={() => handleShowListPoc()}>
             Danh sách POC
@@ -138,7 +142,9 @@ export default function EventInfo({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={6} align="right">
-          <Button variant="contained">Sửa sự kiện</Button>
+          <Button variant="contained" onClick={() => handleEditEvent()}>
+            Sửa sự kiện
+          </Button>
         </Grid>
         <Grid item xs={6} align="left">
           <Button variant="outlined" onClick={handleClickOpen} color="error">

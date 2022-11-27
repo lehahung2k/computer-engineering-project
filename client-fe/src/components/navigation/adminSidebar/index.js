@@ -3,6 +3,7 @@ import {
   faCalendarDay,
   faHome,
   faUsersRectangle,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import List from "@mui/material/List";
@@ -12,13 +13,22 @@ import React from "react";
 import style from "./style.module.css";
 
 export default function AdminSidebar() {
+  const logout = () => {
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("role");
+  };
   return (
     <>
       <List className={style.navigationList}>
         {/* {sessionStorage.getItem("accessToken") && (
           <> */}
         <ListItem>
-          <a href="/admin" className={style.listBtn}>
+          <a
+            href={
+              sessionStorage.getItem("role") === "0" ? "/admin" : "/event-admin"
+            }
+            className={style.listBtn}
+          >
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faHome}
@@ -29,7 +39,14 @@ export default function AdminSidebar() {
           </a>
         </ListItem>
         <ListItem>
-          <a href="/admin/event" className={style.listBtn}>
+          <a
+            href={
+              sessionStorage.getItem("role") === "0"
+                ? "/admin/event"
+                : "/event-admin/event"
+            }
+            className={style.listBtn}
+          >
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faCalendarDay}
@@ -40,7 +57,14 @@ export default function AdminSidebar() {
           </a>
         </ListItem>
         <ListItem>
-          <a href="/admin/company" className={style.listBtn}>
+          <a
+            href={
+              sessionStorage.getItem("role") === "0"
+                ? "/admin/company"
+                : "/event-admin/detail-info"
+            }
+            className={style.listBtn}
+          >
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faBuildingUser}
@@ -52,7 +76,14 @@ export default function AdminSidebar() {
         </ListItem>
 
         <ListItem>
-          <a href="/admin/poc-account" className={style.listBtn}>
+          <a
+            href={
+              sessionStorage.getItem("role") === "0"
+                ? "/admin/poc-account"
+                : "/event-admin/poc-account"
+            }
+            className={style.listBtn}
+          >
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faUsersRectangle}
@@ -62,11 +93,14 @@ export default function AdminSidebar() {
             </ListItemButton>
           </a>
         </ListItem>
-        {/* <ListItem>
-              <a href="/" className="logout">
-                <ListItemButton onClick={logout}><FontAwesomeIcon icon={faSignOutAlt} className="iconPage"/>Đăng xuất</ListItemButton>
-              </a>
-            </ListItem> */}
+        <ListItem>
+          <a href="/" className={style.logout}>
+            <ListItemButton onClick={logout}>
+              <FontAwesomeIcon icon={faSignOutAlt} className="iconPage" />
+              Đăng xuất
+            </ListItemButton>
+          </a>
+        </ListItem>
         {/* </>
         )} */}
       </List>
