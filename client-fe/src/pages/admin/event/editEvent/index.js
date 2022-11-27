@@ -149,8 +149,8 @@ export default function EditEvent() {
                         variant="contained"
                         onClick={
                           activeStep === steps.length - 1
-                            ? handleNext
-                            : handleUpdateEvent
+                            ? handleUpdateEvent
+                            : handleNext
                         }
                         sx={{ mt: 3, ml: 1 }}
                       >

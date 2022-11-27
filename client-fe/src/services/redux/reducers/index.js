@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { pocReducer, listPocReducer } from "./poc";
 import eventReducer from "./event";
-import companyReducer from "./company";
+import tenantReducer from "./tenant";
 import { updateEventReducer } from "./event/updateEvent";
 import { createEventReducer } from "./event/createEvent";
 import { deleteEventReducer } from "./event/deleteEvent";
@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
   /**
    * Company (who organize event) reducers
    */
-  company: companyReducer,
+  tenantState: tenantReducer,
 });
 
 export default rootReducer;

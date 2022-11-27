@@ -6,7 +6,7 @@ create table EventsMng(
     eventDescription text,
     startTime datetime not null,
     endTime datetime not null,
-    eventImg blob,
+    eventImg longblob,
     
     primary key (eventId, eventCode)
 );

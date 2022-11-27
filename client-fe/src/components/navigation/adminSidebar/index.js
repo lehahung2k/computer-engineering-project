@@ -25,7 +25,7 @@ export default function AdminSidebar() {
         <ListItem>
           <a
             href={
-              sessionStorage.getItem("role") === 0 ? "/admin" : "/event-admin"
+              sessionStorage.getItem("role") === "0" ? "/admin" : "/event-admin"
             }
             className={style.listBtn}
           >
@@ -41,7 +41,7 @@ export default function AdminSidebar() {
         <ListItem>
           <a
             href={
-              sessionStorage.getItem("role") === 0
+              sessionStorage.getItem("role") === "0"
                 ? "/admin/event"
                 : "/event-admin/event"
             }
@@ -59,7 +59,7 @@ export default function AdminSidebar() {
         <ListItem>
           <a
             href={
-              sessionStorage.getItem("role") === 0
+              sessionStorage.getItem("role") === "0"
                 ? "/admin/company"
                 : "/event-admin/detail-info"
             }
@@ -78,7 +78,7 @@ export default function AdminSidebar() {
         <ListItem>
           <a
             href={
-              sessionStorage.getItem("role") === 0
+              sessionStorage.getItem("role") === "0"
                 ? "/admin/poc-account"
                 : "/event-admin/poc-account"
             }

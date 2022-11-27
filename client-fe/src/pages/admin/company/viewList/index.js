@@ -17,7 +17,11 @@ import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
 import NormalTable from "../../../../components/tables/normal";
 import style from "./style.module.css";
-
+import { useSelector, useDispatch } from "react-redux";
+import {
+  pinTenantId,
+  newTenantAction,
+} from "../../../../services/redux/actions/tenant/tenant";
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
   { link: "#", label: "Ban tổ chức" },
@@ -25,10 +29,24 @@ const breadcrumbs = [
 
 export default function ListCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const listTenant = useSelector((state) => state.tenantState.listTenant);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickAddNewCompany = () => {
     navigate("/admin/company/create");
+  };
+
+  const handleClickButtonField = (field, row) => {
+    if (field === "name") {
+      dispatch(pinTenantId(row.id));
+      const pinnedTenantInfo = listTenant.find(
+        (tenant) => tenant.id === row.id
+      );
+      dispatch(newTenantAction(pinnedTenantInfo));
+      navigate("/admin/company/detail");
+    }
   };
   return (
     <div className={style.body}>
@@ -69,7 +87,11 @@ export default function ListCompany() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <NormalTable rows={ListBtc} headCells={listBtcHeadNormal} />
+                  <NormalTable
+                    rows={listTenant}
+                    headCells={listBtcHeadNormal}
+                    handleClickButtonField={handleClickButtonField}
+                  />
                 </Grid>
               </Grid>{" "}
             </div>

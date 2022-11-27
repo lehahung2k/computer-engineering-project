@@ -7,9 +7,10 @@ import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === 0
+  sessionStorage.getItem("role") === "0"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/company", label: "Ban tổ chức" },
@@ -34,6 +35,7 @@ const company = {
 
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const navigate = useNavigate();
 
   const handleCustomCompany = () => {
@@ -73,7 +75,7 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={10} align="left">
-                  Công ty TNHH A
+                  {tenantInfo.name}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -81,7 +83,13 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={10} align="left">
-                  www.Acompany.vn
+                  <a
+                    href={"https://" + tenantInfo.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {tenantInfo.website}
+                  </a>
                 </Grid>
 
                 <Grid item xs={2}>
@@ -90,7 +98,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={10} align="left">
-                  123, Ngụy Như Kon Tum, Thanh Xuân, Hà Nội
+                  {tenantInfo.address}
                 </Grid>
 
                 <Grid item xs={2}>
@@ -100,7 +108,7 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={4} align="left">
-                  Nguyễn Văn A
+                  {tenantInfo.contactName}
                 </Grid>
 
                 <Grid item xs={2}>
@@ -110,7 +118,7 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={4} align="left">
-                  {company.username}
+                  {tenantInfo.username}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -118,7 +126,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={4} align="left">
-                  0123456789
+                  {tenantInfo.contactNumber}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -127,7 +135,7 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={4} align="left">
-                  {company.password}
+                  {tenantInfo.password}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -135,7 +143,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={4} align="left">
-                  abc@mail.com{" "}
+                  {tenantInfo.contactMail}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -144,9 +152,9 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={4} align="left">
-                  {company.tenantCode}
+                  {tenantInfo.tenantCode}
                 </Grid>
-                {sessionStorage.getItem("role") === 0 ? (
+                {sessionStorage.getItem("role") === "0" ? (
                   <Grid item xs={12}>
                     <Button
                       variant="contained"

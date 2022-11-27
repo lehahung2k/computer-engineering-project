@@ -56,7 +56,7 @@ export default function CreateEvent() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
 
-  const newEventInfo = useSelector((state) => state.eventInfo);
+  const newEventInfo = useSelector((state) => state.eventState.event);
 
   const dispatch = useDispatch();
 
@@ -135,8 +135,8 @@ export default function CreateEvent() {
                         variant="contained"
                         onClick={
                           activeStep === steps.length - 1
-                            ? handleNext
-                            : handleCreateNewEvent
+                            ? handleCreateNewEvent
+                            : handleNext
                         }
                         sx={{ mt: 3, ml: 1 }}
                       >

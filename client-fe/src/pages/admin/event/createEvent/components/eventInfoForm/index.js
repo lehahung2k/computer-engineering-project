@@ -19,6 +19,7 @@ import {
   newStartEventAction,
   newEndEventAction,
   newMapEventAction,
+  newTenantEventAction,
 } from "../../../../../../services/redux/actions/event/event";
 import style from "./style.module.css";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -43,9 +44,14 @@ export default function EventInfoForm() {
 
   const dispatch = useDispatch();
   let tenantName = "";
-  if (sessionStorage.getItem("role") === "0") {
-    tenantName = "This is test";
-  }
+  // if (sessionStorage.getItem("role") === "0") {
+  //   tenantName = "This is test";
+  // }
+  const listTenant = useSelector((state) => state.tenantState.listTenant);
+  const listSelectTenant = listTenant.map((tenant) => ({
+    label: tenant.name,
+    id: tenant.id,
+  }));
   const startTime = useSelector((state) => state.eventState.event.start);
   const endTime = useSelector((state) => state.eventState.event.end);
   const eventImage = useSelector((state) => state.eventState.event.map);
@@ -93,6 +99,9 @@ export default function EventInfoForm() {
     setValue(newValue);
   };
 
+  const handleChangeTenantEvent = (value) => {
+    dispatch(newTenantEventAction({ name: value.label, id: value.id }));
+  };
   return (
     <React.Fragment>
       <Typography variant="h6" align="left">
@@ -137,9 +146,11 @@ export default function EventInfoForm() {
               disablePortal
               noOptionsText={"Không tìm thấy tổ chức"}
               id="combo-box-demo"
-              options={rowsCompany}
+              options={listSelectTenant}
               // sx={{ width: 300 }}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               ListboxProps={{ style: { maxHeight: 150 } }}
+              onChange={(event, value) => handleChangeTenantEvent(value)}
               renderInput={(params) => (
                 <TextField
                   {...params}

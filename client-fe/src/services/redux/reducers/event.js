@@ -9,6 +9,7 @@ const initialState = {
     end: dayjs(),
     note: "",
     map: "",
+    tenant: null,
   },
   pinnedEventId: null,
   loading: false,
@@ -89,6 +90,15 @@ const eventReducer = (state = initialState, action) => {
       };
     }
 
+    case "EVENT/NEW_TENANT": {
+      const newTenant = action.payload;
+      const newEvent = { ...state.event, tenant: newTenant };
+
+      return {
+        ...state,
+        event: newEvent,
+      };
+    }
     /**
      * Posting create new event
      */

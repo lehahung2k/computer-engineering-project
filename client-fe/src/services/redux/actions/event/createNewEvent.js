@@ -2,8 +2,17 @@ import eventApi from "../../../../api/eventAPI";
 
 export const createNewEvent = (event) => async (dispatch) => {
   dispatch({ type: "EVENT/CREATE_NEW_EVENT" });
-
-  const response = eventApi.addNew(event);
+  const params = {
+    eventCode: event.code,
+    eventName: event.name,
+    isActivate: 1,
+    eventDescription: event.note,
+    startTime: event.start,
+    endTime: event.end,
+    eventImg: event.map,
+  };
+  console.log(params);
+  const response = eventApi.addNew(params);
 
   response
     .then((res) => {

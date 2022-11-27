@@ -119,9 +119,9 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={10} align="left">
-          <Button variant="outlined" onClick={() => handleShowListCompany()}>
+          {/* <Button variant="outlined" onClick={() => handleShowListCompany()}>
             Danh sách doanh nghiệp
-          </Button>
+          </Button> */}
           &nbsp;
           <Button variant="outlined" onClick={() => handleShowListPoc()}>
             Danh sách POC
