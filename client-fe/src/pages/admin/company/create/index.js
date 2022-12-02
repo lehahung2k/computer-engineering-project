@@ -25,9 +25,16 @@ import {
   newPasswordTenantAction,
   newUsernameTenantAction,
   newTenantCodeAction,
+  resetApiState,
 } from "../../../../services/redux/actions/tenant/tenant";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useNavigate } from "react-router-dom";
 import { createNewTenant } from "../../../../services/redux/actions/tenant/createTenant";
+
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
   { link: "/admin/company", label: "Ban tổ chức" },
@@ -40,12 +47,17 @@ export default function CreateNewCompany() {
 
   const [code, setCode] = React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
+  const loading = useSelector((state) => state.tenantState.loading);
+  const success = useSelector((state) => state.tenantState.success);
+  const failure = useSelector((state) => state.tenantState.failure);
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
     let today = new Date();
     let time = today.getTime().toString();
-    const tenantCode = tenantCodeGenerator([tenantInfo.name, time]);
+    const tenantCode = tenantCodeGenerator([tenantInfo.tenantName, time]);
     console.log(tenantCode);
     dispatch(newTenantCodeAction(tenantCode));
   };
@@ -54,8 +66,20 @@ export default function CreateNewCompany() {
     event.preventDefault();
   };
   const handleCreateNewCompany = () => {
-    setOpenBackdrop(true);
-    setTimeout(setOpenBackdrop, 3000, false);
+    if (
+      tenantInfo.tenantName === "" ||
+      tenantInfo.tenantAddress === "" ||
+      tenantInfo.website === "" ||
+      tenantInfo.contactName === "" ||
+      tenantInfo.contactEmail === "" ||
+      tenantInfo.contactPhone === "" ||
+      tenantInfo.username === "" ||
+      tenantInfo.password === "" ||
+      tenantInfo.tenantCode === ""
+    ) {
+      return alert("Không để trống");
+    }
+    dispatch(createNewTenant(tenantInfo));
   };
   return (
     <div className={style.body}>
@@ -153,6 +177,37 @@ export default function CreateNewCompany() {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                  <TextField
+                    required
+                    id="tenantCode"
+                    name="tenantCode"
+                    label="Mã ban tổ chức"
+                    fullWidth
+                    autoComplete="tenant-code"
+                    variant="standard"
+                    helperText="Chọn để tạo mã ngẫu nhiên"
+                    value={tenantInfo.tenantCode}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickGenerateCode}
+                            onMouseDown={handleMouseDownGenerateCode}
+                            edge="end"
+                            sx={{ marginRight: "0" }}
+                          >
+                            <Iconify
+                              icon={"carbon:operations-record"}
+                            ></Iconify>
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
                   <Typography variant="body1" align="left">
                     Thông tin liên hệ
                   </Typography>
@@ -199,7 +254,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    onChange={(e) => newContactMailTenantAction(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(newContactMailTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -221,7 +278,7 @@ export default function CreateNewCompany() {
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
-                      newContactNumberTenantAction(e.target.value)
+                      dispatch(newContactNumberTenantAction(e.target.value))
                     }
                   />
                 </Grid>
@@ -249,7 +306,9 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    onChange={(e) => newUsernameTenantAction(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(newUsernameTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
 
@@ -271,40 +330,12 @@ export default function CreateNewCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    onChange={(e) => newPasswordTenantAction(e.target.value)}
+                    onChange={(e) =>
+                      dispatch(newPasswordTenantAction(e.target.value))
+                    }
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    id="tenantCode"
-                    name="tenantCode"
-                    label="Mã ban tổ chức"
-                    fullWidth
-                    autoComplete="tenant-code"
-                    variant="standard"
-                    helperText="Chọn để tạo mã ngẫu nhiên"
-                    value={tenantInfo.tenantCode}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickGenerateCode}
-                            onMouseDown={handleMouseDownGenerateCode}
-                            edge="end"
-                            sx={{ marginRight: "0" }}
-                          >
-                            <Iconify
-                              icon={"carbon:operations-record"}
-                            ></Iconify>
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
+
                 <Grid item xs={12}>
                   <Button
                     variant="contained"
@@ -320,10 +351,52 @@ export default function CreateNewCompany() {
       </Grid>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={openBackdrop}
+        open={loading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      <Dialog
+        open={failure}
+        onClose={() => dispatch(resetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới tenant không thành công, xin hãy thử lại
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => dispatch(resetApiState())} autoFocus>
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={success}
+        onClose={() => dispatch(resetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới tenant thành công
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(resetApiState());
+              navigate("/admin/tenant/detail");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

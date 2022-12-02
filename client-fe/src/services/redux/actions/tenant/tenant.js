@@ -28,7 +28,7 @@ export const newContactNameTenantAction = (contactName) => {
 
 export const newContactMailTenantAction = (contactMail) => {
   return {
-    type: "COMPANY/NEW_CONTACT_MAIL",
+    type: "TENANT/NEW_CONTACT_MAIL",
     payload: contactMail,
   };
 };
@@ -72,5 +72,11 @@ export const pinTenantId = (id) => {
   return {
     type: "TENANT/PIN_TENANT",
     payload: id,
+  };
+};
+
+export const resetApiState = () => {
+  return {
+    type: "TENANT/RESET_API_STATE",
   };
 };

@@ -26,6 +26,7 @@ import {
   newUsernameTenantAction,
   newTenantCodeAction,
 } from "../../../../services/redux/actions/tenant/tenant";
+import { updateTenant } from "../../../../services/redux/actions/tenant/updateTenant";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
@@ -47,6 +48,9 @@ export default function CustomInfoCompany() {
   const [openBackdrop, setOpenBackdrop] = React.useState(false);
   const [code, setCode] = React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
+  const pinnedTenantId = useSelector(
+    (state) => state.tenantState.pinnedTenantId
+  );
   const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
@@ -60,9 +64,10 @@ export default function CustomInfoCompany() {
   const handleMouseDownGenerateCode = (event) => {
     event.preventDefault();
   };
-  const handleCreateNewCompany = () => {
-    setOpenBackdrop(true);
-    setTimeout(setOpenBackdrop, 3000, false);
+  const handleEditTenantInfo = () => {
+    // setOpenBackdrop(true);
+    // setTimeout(setOpenBackdrop, 3000, false);
+    dispatch(updateTenant(tenantInfo, pinnedTenantId));
   };
   return (
     <div className={style.body}>
@@ -109,7 +114,10 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.name}
+                    onChange={(e) =>
+                      dispatch(newNameTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.tenantName}
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -129,6 +137,9 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newWebsiteTenantAction(e.target.value))
+                    }
                     defaultValue={tenantInfo.website}
                   />
                 </Grid>
@@ -150,126 +161,10 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.address}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1" align="left">
-                    Thông tin liên hệ
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    id="contactName"
-                    name="contactName"
-                    label="Người đại diện liên hệ"
-                    fullWidth
-                    autoComplete="contact-name"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.contactName}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    required
-                    id="contactMail"
-                    name="contactMail"
-                    label="Email liên hệ"
-                    fullWidth
-                    autoComplete="contact-mail"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.contactMail}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    required
-                    id="contactNumber"
-                    name="contactNumber"
-                    label="Số điện thoại liên hệ"
-                    fullWidth
-                    autoComplete="contact-number"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.contactNumber}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="body1" align="left">
-                    Tài khoản đăng nhập
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    required
-                    id="username"
-                    name="usernam"
-                    label="Tên đăng nhập"
-                    fullWidth
-                    autoComplete="username"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.username}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    required
-                    id="password"
-                    name="password"
-                    label="Mật khẩu"
-                    fullWidth
-                    autoComplete="password"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.password}
+                    onChange={(e) =>
+                      dispatch(newAddressTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.tenantAddress}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -304,9 +199,143 @@ export default function CustomInfoCompany() {
                   />
                 </Grid>
                 <Grid item xs={12}>
+                  <Typography variant="body1" align="left">
+                    Thông tin liên hệ
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    id="contactName"
+                    name="contactName"
+                    label="Người đại diện liên hệ"
+                    fullWidth
+                    autoComplete="contact-name"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newContactNameTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.contactName}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    id="contactMail"
+                    name="contactMail"
+                    label="Email liên hệ"
+                    fullWidth
+                    autoComplete="contact-mail"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newContactMailTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.contactEmail}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    id="contactNumber"
+                    name="contactNumber"
+                    label="Số điện thoại liên hệ"
+                    fullWidth
+                    autoComplete="contact-number"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newContactNumberTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.contactPhone}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="body1" align="left">
+                    Tài khoản đăng nhập
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    id="username"
+                    name="usernam"
+                    label="Tên đăng nhập"
+                    fullWidth
+                    autoComplete="username"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newUsernameTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.username}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    id="password"
+                    name="password"
+                    label="Mật khẩu"
+                    fullWidth
+                    autoComplete="password"
+                    variant="standard"
+                    // helperText={
+                    //   name.length === 0 && checkName === 0
+                    //     ? "Tên không được để trống"
+                    //     : ""
+                    // }
+                    // onChange={(e) => setName(e.target.value)}
+                    // onClick={() => setCheckName(0)}
+                    // error={name.length === 0 && checkName === 0 ? true : false}
+                    InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newPasswordTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.password}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
                   <Button
                     variant="contained"
-                    onClick={() => handleCreateNewCompany()}
+                    onClick={() => handleEditTenantInfo()}
                   >
                     Sửa thông tin
                   </Button>

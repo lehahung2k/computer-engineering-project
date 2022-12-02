@@ -21,7 +21,17 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   pinTenantId,
   newTenantAction,
+  resetApiState,
 } from "../../../../services/redux/actions/tenant/tenant";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
+
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
   { link: "#", label: "Ban tổ chức" },
@@ -30,23 +40,44 @@ const breadcrumbs = [
 export default function ListCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
-
+  const listCustomizedTenant = listTenant.map((tenant) => ({
+    ...tenant,
+    contact:
+      tenant.contactName +
+      " - " +
+      tenant.contactPhone +
+      " - " +
+      tenant.contactEmail,
+  }));
+  const loading = useSelector((state) => state.tenantState.loading);
+  const success = useSelector((state) => state.tenantState.success);
+  const failure = useSelector((state) => state.tenantState.failure);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    dispatch(fetchListTenant());
+  }, []);
+
   const handleClickAddNewCompany = () => {
+    dispatch(resetApiState());
     navigate("/admin/company/create");
   };
 
   const handleClickButtonField = (field, row) => {
-    if (field === "name") {
-      dispatch(pinTenantId(row.id));
+    if (field === "tenantName") {
+      dispatch(pinTenantId(row.tenantId));
       const pinnedTenantInfo = listTenant.find(
-        (tenant) => tenant.id === row.id
+        (tenant) => tenant.tenantId === row.tenantId
       );
       dispatch(newTenantAction(pinnedTenantInfo));
-      navigate("/admin/company/detail");
+      navigate("/admin/tenant/detail");
     }
+  };
+
+  const handleClose = () => {
+    navigate("/admin");
+    dispatch(resetApiState);
   };
   return (
     <div className={style.body}>
@@ -88,7 +119,7 @@ export default function ListCompany() {
 
                 <Grid item xs={12}>
                   <NormalTable
-                    rows={listTenant}
+                    rows={listCustomizedTenant}
                     headCells={listBtcHeadNormal}
                     handleClickButtonField={handleClickButtonField}
                   />
@@ -98,6 +129,31 @@ export default function ListCompany() {
           </Grid>
         </Grid>
       </Grid>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      <Dialog
+        open={failure}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tải danh sách không thành công, xin hãy thử lại
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

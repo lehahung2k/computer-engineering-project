@@ -1,55 +1,61 @@
 module.exports = (sequelize, DataTypes) => {
-  const Tenants = sequelize.define(
-    "Tenants",
+  const Accounts = sequelize.define(
+    "Accounts",
     {
-      tenantId: {
+      userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      tenantCode: {
+      username: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
         primaryKey: true,
       },
-      tenantName: {
+      passwd: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      tenantAddress: {
+      fullName: {
+        type: DataTypes.STRING,
+      },
+      phoneNumber: {
+        type: DataTypes.STRING,
+      },
+      email: {
+        type: DataTypes.STRING,
+      },
+      active: {
+        type: DataTypes.INTEGER,
+      },
+      role: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      website: {
+      tenantCode: {
+        // Mã doanh nghiệp
         type: DataTypes.STRING,
+        allowNull: false,
       },
-      contactName: {
-        type: DataTypes.STRING,
-      },
-      contactPhone: {
-        type: DataTypes.STRING,
-      },
-      contactEmail: {
+      companyName: {
         type: DataTypes.STRING,
       },
     },
     {
-      tableName: "Tenants",
+      tableName: "Accounts",
       createdAt: false,
       updatedAt: false,
     },
     {
       associate: function (db) {
-        Tenants.hasMany(db.EventsMng, {
-          foreignKey: "tenantCode",
-        });
-        Tenants.hasMany(db.Accounts, {
-          foreignKey: "tenantCode",
+        Accounts.belongsTo(db.Tenants);
+        Accounts.hasMany(db.PointCheckins, {
+          foreignKey: "username",
         });
       },
     }
   );
-  return Tenants;
+
+  return Accounts;
 };

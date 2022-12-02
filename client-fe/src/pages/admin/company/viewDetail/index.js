@@ -75,7 +75,7 @@ export default function DetailInfoCompany() {
                 </Grid>
 
                 <Grid item xs={10} align="left">
-                  {tenantInfo.name}
+                  {tenantInfo.tenantName}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -98,7 +98,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={10} align="left">
-                  {tenantInfo.address}
+                  {tenantInfo.tenantAddress}
                 </Grid>
 
                 <Grid item xs={2}>
@@ -126,7 +126,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={4} align="left">
-                  {tenantInfo.contactNumber}
+                  {tenantInfo.contactPhone}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">
@@ -143,7 +143,7 @@ export default function DetailInfoCompany() {
                   </Typography>
                 </Grid>
                 <Grid item xs={4} align="left">
-                  {tenantInfo.contactMail}
+                  {tenantInfo.contactEmail}
                 </Grid>
                 <Grid item xs={2}>
                   <Typography variant="body1" align="right">

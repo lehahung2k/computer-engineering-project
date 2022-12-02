@@ -20,12 +20,12 @@ const AuthorizeSidebar = () => {
   }
 };
 export default function SideBar(id) {
-  axios
-    .get("https://event-managment-soict2022.herokuapp.com/auth/auth")
-    .then((response) => {
-      id = response.data.role;
-      console.log(response.data);
-    });
+  // axios
+  //   .get("https://event-managment-soict2022.herokuapp.com/auth/auth")
+  //   .then((response) => {
+  //     id = response.data.role;
+  //     console.log(response.data);
+  //   });
   const logout = () => {
     sessionStorage.removeItem("accessToken");
   };

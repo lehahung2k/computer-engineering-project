@@ -68,7 +68,7 @@ function App() {
 
           <Route
             exact
-            path="/admin/company/detail"
+            path="/admin/tenant/detail"
             element={<DetailInfoCompany />}
           ></Route>
 

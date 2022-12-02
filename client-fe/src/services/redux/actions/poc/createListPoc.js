@@ -3,7 +3,7 @@ import pocApi from "../../../../api/PocApi";
 export const createNewListPoc = (listPoc) => async (dispatch) => {
   dispatch({ type: "POC/CREATE_NEW_LIST_POC" });
 
-  const response = pocApi.addNew();
+  const response = pocApi.addNewList(listPoc);
 
   response
     .then((res) => {

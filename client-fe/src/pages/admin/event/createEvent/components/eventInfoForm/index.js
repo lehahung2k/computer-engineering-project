@@ -49,9 +49,11 @@ export default function EventInfoForm() {
   // }
   const listTenant = useSelector((state) => state.tenantState.listTenant);
   const listSelectTenant = listTenant.map((tenant) => ({
-    label: tenant.name,
+    label: tenant.companyName,
     id: tenant.id,
+    tenantCode: tenant.tenantCode,
   }));
+
   const startTime = useSelector((state) => state.eventState.event.start);
   const endTime = useSelector((state) => state.eventState.event.end);
   const eventImage = useSelector((state) => state.eventState.event.map);
@@ -100,7 +102,13 @@ export default function EventInfoForm() {
   };
 
   const handleChangeTenantEvent = (value) => {
-    dispatch(newTenantEventAction({ name: value.label, id: value.id }));
+    dispatch(
+      newTenantEventAction({
+        name: value.label,
+        id: value.id,
+        tenantCode: value.tenantCode,
+      })
+    );
   };
   return (
     <React.Fragment>
@@ -148,7 +156,7 @@ export default function EventInfoForm() {
               id="combo-box-demo"
               options={listSelectTenant}
               // sx={{ width: 300 }}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+              // isOptionEqualToValue={(option, value) => option.id === value.id}
               ListboxProps={{ style: { maxHeight: 150 } }}
               onChange={(event, value) => handleChangeTenantEvent(value)}
               renderInput={(params) => (
