@@ -3,20 +3,21 @@ create table EventsMng(
     eventCode varchar(255) not null unique,
     eventName varchar(255) not null,
     tenantCode varchar(255) not null,
-    isActivate int not null,
+    -- isActivate int not null,
     eventDescription text,
     startTime datetime not null,
     endTime datetime not null,
     eventImg longblob,
     
     primary key (eventId, eventCode)
+    foreign key (tenantCode) references Tenants(tenantCode)
 );
 
 create table Tenants(
     tenantId int not null AUTO_INCREMENT,
     tenantCode varchar(255) not null unique,
-    companyName varchar(255) not null,
-    tenantAddress varchar(255),
+    tenantName varchar(255) not null,
+    tenantAddress varchar(255) not null,
     website varchar(255),
     contactName varchar(255),
     contactPhone varchar(255),
@@ -32,7 +33,7 @@ create table Accounts(
     fullName varchar(255) not null,
     phoneNumber varchar(255) not null,
     email varchar(255) not null,
-    active int,
+    active int not null,
     role varchar(255) not null,
     tenantCode varchar(255) not null,
     companyName varchar(255),
@@ -71,7 +72,7 @@ create table PointOfCheckin (
     eventCode varchar(255) not null,
     username varchar(255) not null,
     
-    primary key (pointId),
+    primary key (pointId, pointCode),
     foreign key (eventCode) references EventsMng(eventCode),
     foreign key (username) references Accounts(username)
 );

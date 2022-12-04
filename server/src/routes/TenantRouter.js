@@ -11,8 +11,9 @@ router.get("/", async (req, res) => {
 
 router.post("/add-tenant", async (req, res) => {
   const post = req.body;
-  const newTenant = await Tenants.create(post);
-  res.json(newTenant.toJSON());
+  // const newTenant = await Tenants.create(post);
+  // res.json(newTenant.toJSON());
+  res.json(post);
 });
 
 router.put("/update-tenant", async (req, res) => {

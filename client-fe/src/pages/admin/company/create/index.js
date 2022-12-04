@@ -47,9 +47,16 @@ export default function CreateNewCompany() {
 
   const [code, setCode] = React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
-  const loading = useSelector((state) => state.tenantState.loading);
-  const success = useSelector((state) => state.tenantState.success);
-  const failure = useSelector((state) => state.tenantState.failure);
+  const loadingTenant = useSelector((state) => state.tenantState.loading);
+  const loadingAccount = useSelector((state) => state.accountState.loading);
+
+  const loading = loadingTenant || loadingAccount;
+
+  const successTenant = useSelector((state) => state.tenantState.success);
+  const failureTenant = useSelector((state) => state.tenantState.failure);
+
+  const successAccount = useSelector((state) => state.accountState.success);
+  const failureAccount = useSelector((state) => state.accountState.failure);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -66,19 +73,19 @@ export default function CreateNewCompany() {
     event.preventDefault();
   };
   const handleCreateNewCompany = () => {
-    if (
-      tenantInfo.tenantName === "" ||
-      tenantInfo.tenantAddress === "" ||
-      tenantInfo.website === "" ||
-      tenantInfo.contactName === "" ||
-      tenantInfo.contactEmail === "" ||
-      tenantInfo.contactPhone === "" ||
-      tenantInfo.username === "" ||
-      tenantInfo.password === "" ||
-      tenantInfo.tenantCode === ""
-    ) {
-      return alert("Không để trống");
-    }
+    // if (
+    //   tenantInfo.tenantName === "" ||
+    //   tenantInfo.tenantAddress === "" ||
+    //   tenantInfo.website === "" ||
+    //   tenantInfo.contactName === "" ||
+    //   tenantInfo.contactEmail === "" ||
+    //   tenantInfo.contactPhone === "" ||
+    //   tenantInfo.username === "" ||
+    //   tenantInfo.password === "" ||
+    //   tenantInfo.tenantCode === ""
+    // ) {
+    //   return alert("Không để trống");
+    // }
     dispatch(createNewTenant(tenantInfo));
   };
   return (
@@ -357,7 +364,7 @@ export default function CreateNewCompany() {
       </Backdrop>
 
       <Dialog
-        open={failure}
+        open={failureTenant}
         onClose={() => dispatch(resetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -375,14 +382,39 @@ export default function CreateNewCompany() {
       </Dialog>
 
       <Dialog
-        open={success}
+        open={successTenant && failureAccount === true}
         onClose={() => dispatch(resetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công
+            Tạo mới tenant thành công nhưng chưa thể tạo tài khoản đăng nhập,
+            xin hãy thêm tài khoản đăng nhập sau.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(resetApiState());
+              navigate("/admin/tenant/detail");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={successTenant && successAccount === true}
+        onClose={() => dispatch(resetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới tenant thành công.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

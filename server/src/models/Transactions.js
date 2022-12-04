@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       pointCode: {
         type: DataTypes.STRING,
         allowNull: false,
+        references: {
+          model: "PointOfCheckins",
+          key: "pointCode",
+        },
       },
       guestCode: {
         type: DataTypes.STRING,
@@ -30,7 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       associate: function (db) {
-        Transactions.belongsTo(db.PointOfCheckins);
+        Transactions.belongsTo(db.PointOfCheckins, {
+          foreignKey: "pointCode",
+          targetKey: "pointCode",
+        });
       },
     }
   );

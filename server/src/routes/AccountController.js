@@ -17,29 +17,30 @@ router.post("/", async (req, res) => {
     tenantCode,
     email,
   } = req.body;
-  const user = await Account.findOne({
-    where: {
-      username: username,
-    },
-  });
-  if (user === null || !user) {
-    bcrypt.hash(passwd, 6).then((hash) => {
-      Account.create({
-        username: username,
-        passwd: hash,
-        fullName: fullName,
-        active: active,
-        role: role,
-        companyName: companyName,
-        phoneNumber: phoneNumber,
-        tenantCode: tenantCode,
-        email: email,
-      });
-      res.json("SUCCESS");
-    });
-  } else {
-    res.json({ error: "Error: Username is existed!" });
-  }
+  // const user = await Account.findOne({
+  //   where: {
+  //     username: username,
+  //   },
+  // });
+  // if (user === null || !user) {
+  //   bcrypt.hash(passwd, 6).then((hash) => {
+  //     Account.create({
+  //       username: username,
+  //       passwd: hash,
+  //       fullName: fullName,
+  //       active: active,
+  //       role: role,
+  //       companyName: companyName,
+  //       phoneNumber: phoneNumber,
+  //       tenantCode: tenantCode,
+  //       email: email,
+  //     });
+  //     res.json("SUCCESS");
+  //   });
+  // } else {
+  //   res.json({ error: "Error: Username is existed!" });
+  // }
+  res.json(req.body);
 });
 
 router.post("/login", async (req, res) => {

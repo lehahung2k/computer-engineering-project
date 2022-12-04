@@ -44,9 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       associate: function (db) {
         Tenants.hasMany(db.EventsMng, {
           foreignKey: "tenantCode",
+          sourceKey: "tenantCode",
         });
         Tenants.hasMany(db.Accounts, {
           foreignKey: "tenantCode",
+          sourceKey: "tenantCode",
         });
       },
     }

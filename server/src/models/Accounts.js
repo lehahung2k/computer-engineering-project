@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         primaryKey: true,
       },
       passwd: {
@@ -28,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       active: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       role: {
         type: DataTypes.STRING,
@@ -37,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         // Mã doanh nghiệp
         type: DataTypes.STRING,
         allowNull: false,
+        references: {
+          model: "Tenants",
+          key: "tenantCode",
+        },
       },
       companyName: {
         type: DataTypes.STRING,
@@ -49,9 +55,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       associate: function (db) {
-        Accounts.belongsTo(db.Tenants);
+        Accounts.belongsTo(db.Tenants, {
+          foreignKey: "tenantCode",
+          targetKey: "tenantCode",
+        });
         Accounts.hasMany(db.PointCheckins, {
           foreignKey: "username",
+          sourceKey: "username",
         });
       },
     }

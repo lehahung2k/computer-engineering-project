@@ -3,6 +3,7 @@ import { pocReducer, listPocReducer } from "./poc";
 import eventReducer from "./event";
 import tenantReducer from "./tenant";
 import pocAccountReducer from "./pocAccount";
+import accountReducer from "./account";
 import { updateEventReducer } from "./event/updateEvent";
 import { createEventReducer } from "./event/createEvent";
 import { deleteEventReducer } from "./event/deleteEvent";
@@ -24,9 +25,9 @@ const rootReducer = combineReducers({
   tenantState: tenantReducer,
 
   /**
-   * Poc account
+   * Account
    */
-  pocAccountState: pocAccountReducer,
+  accountState: accountReducer,
 });
 
 export default rootReducer;

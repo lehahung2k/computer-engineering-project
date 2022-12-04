@@ -24,6 +24,7 @@ import {
 } from "../../../../../../services/redux/actions/poc/poc";
 import NormalTable from "../../../../../../components/tables/normal";
 import { pocCodeGenerator } from "../../../../../../services/hashFunction";
+import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
 
 const rowsAccount = [
   { label: "NVA01" },
@@ -90,12 +91,17 @@ export default function EventPocInfoForm() {
   const newPoc = useSelector((state) => state.pocState.poc);
   const eventInfo = useSelector((state) => state.eventState.event);
   const listPocAccount = useSelector(
-    (state) => state.pocAccountState.listPocAccount
+    (state) => state.accountState.listPocAccount
   );
+
+  // const listPocAccount = listAccount.filter(
+  //   (account) => account.role === "poc"
+  // );
 
   const listPocAccountSelect = listPocAccount.map((account) => ({
     label: account.username,
   }));
+
   const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
@@ -135,6 +141,7 @@ export default function EventPocInfoForm() {
 
     const newAccountAction = NewAccountAction(value ? value.label : "");
     dispatch(newAccountAction);
+    dispatch(selectAccountForPocAction(value ? value.label : ""));
   };
 
   const handleChangeCompany = () => {};

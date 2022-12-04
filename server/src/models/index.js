@@ -34,19 +34,23 @@ fs.readdirSync(__dirname)
     db[model.name] = model;
   });
 
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db);
-//   }
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+/**
+ * Association between tables
+ */
+// db["Tenants"].hasMany(db["EventsMng"], {
+//   foreignKey: "tenantCode",
+//   sourceKey: "tenantCode",
 // });
-db["Tenants"].hasMany(db["EventsMng"], {
-  foreignKey: "tenantCode",
-  sourceKey: "tenantCode",
-});
-db["EventsMng"].belongsTo(db["Tenants"], {
-  foreignKey: "tenantCode",
-  targetKey: "tenantCode",
-});
+// db["EventsMng"].belongsTo(db["Tenants"], {
+//   foreignKey: "tenantCode",
+//   targetKey: "tenantCode",
+// });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
