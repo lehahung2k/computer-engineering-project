@@ -75,13 +75,27 @@ router.get("/auth", validateToken, (req, res) => {
 
 router.post("/tenant-account", async (req, res) => {
   const { tenantCode } = req.body;
-  const account = await Accounts.findOne({
+  const account = await Accounts.findAll({
     where: {
       tenantCode: tenantCode,
       role: "tenant",
     },
   });
   res.json({ username: account.username });
+});
+
+router.post("/poc-account", async (req, res) => {
+  const { tenantCode } = req.body;
+  const account = await Accounts.findAll({
+    where: {
+      tenantCode: tenantCode,
+      role: "poc",
+    },
+  });
+  const listUsername = account.map((account) => ({
+    username: account.username,
+  }));
+  res.json(listUsername);
 });
 
 module.exports = router;

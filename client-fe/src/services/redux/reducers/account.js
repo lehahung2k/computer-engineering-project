@@ -65,24 +65,24 @@ const accountReducer = (state = initialState, action) => {
     /**
      * Fetching list account
      */
-    case "ACCOUNT/FETCH_LIST_ACCOUNT": {
+    case "ACCOUNT/FETCH_LIST_POC_ACCOUNT": {
       return {
         ...state,
         loading: true,
       };
     }
 
-    case "ACCOUNT/FETCH_LIST_ACCOUNT_SUCCESS": {
+    case "ACCOUNT/FETCH_LIST_POC_ACCOUNT_SUCCESS": {
       const listAccount = action.payload;
       return {
         ...state,
         loading: false,
         success: true,
-        listAccount: listAccount,
+        listPocAccount: listAccount,
       };
     }
 
-    case "ACCOUNT/FETCH_LIST_ACCOUNT_FAIL": {
+    case "ACCOUNT/FETCH_LIST_POC_ACCOUNT_FAIL": {
       return {
         ...state,
         loading: false,

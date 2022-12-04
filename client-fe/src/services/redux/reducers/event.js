@@ -14,6 +14,7 @@ const initialState = {
   pinnedEventId: null,
   loading: false,
   success: false,
+  failure: false,
   message: "",
 };
 
@@ -123,7 +124,7 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
       };
     }
@@ -220,6 +221,19 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         pinnedEventId: action.payload,
+      };
+    }
+
+    /**
+     * Reset api status
+     */
+    case "EVENT/RESET_API_STATE": {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        message: "",
+        failure: false,
       };
     }
     default:

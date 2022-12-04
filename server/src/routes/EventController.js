@@ -31,9 +31,9 @@ router.post(
   "/add-event",
   // validateToken,
   async (req, res) => {
-    const post = req.body;
-    await EventsMng.create(post);
-    res.json(post);
+    // const post = req.body;
+    // await EventsMng.create(post);
+    res.json(req.body);
   }
 );
 

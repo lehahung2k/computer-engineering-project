@@ -2,7 +2,6 @@ import { combineReducers } from "redux";
 import { pocReducer, listPocReducer } from "./poc";
 import eventReducer from "./event";
 import tenantReducer from "./tenant";
-import pocAccountReducer from "./pocAccount";
 import accountReducer from "./account";
 import { updateEventReducer } from "./event/updateEvent";
 import { createEventReducer } from "./event/createEvent";

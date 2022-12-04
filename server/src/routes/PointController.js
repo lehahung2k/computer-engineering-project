@@ -17,7 +17,7 @@ router.post(
   // validateToken,
   async (req, res) => {
     const post = req.body;
-    await PointCheckin.bulkCreate(post);
+    // await PointCheckin.bulkCreate(post);
     res.json(post);
   }
 );

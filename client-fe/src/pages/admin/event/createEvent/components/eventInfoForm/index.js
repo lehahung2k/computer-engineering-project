@@ -24,32 +24,22 @@ import {
 import style from "./style.module.css";
 import Autocomplete from "@mui/material/Autocomplete";
 import { eventCodeGenerator } from "../../../../../../services/hashFunction";
-const rowsCompany = [
-  { label: "Doanh nghiệp 01", tenantCode: "bka" },
-  { label: "Doanh nghiệp 02" },
-  { label: "Doanh nghiệp 03" },
-  { label: "Doanh nghiệp 04" },
-  { label: "Doanh nghiệp 06" },
-  { label: "Doanh nghiệp 05" },
-  { label: "Doanh nghiệp 07" },
-  { label: "Doanh nghiệp 08" },
-  { label: "Doanh nghiệp 09" },
-  { label: "Doanh nghiệp 10" },
-];
-export default function EventInfoForm() {
-  const [value, setValue] = React.useState(dayjs("2014-08-18T21:11:54"));
-  const [name, setName] = React.useState("");
-  const [checkName, setCheckName] = React.useState(1);
-  const [code, setCode] = React.useState("");
+import { fetchListTenant } from "../../../../../../services/redux/actions/tenant/fetchListTenant";
 
+export default function EventInfoForm() {
   const dispatch = useDispatch();
   let tenantName = "";
   // if (sessionStorage.getItem("role") === "0") {
   //   tenantName = "This is test";
   // }
+
+  React.useEffect(() => {
+    dispatch(fetchListTenant());
+  }, []);
+
   const listTenant = useSelector((state) => state.tenantState.listTenant);
   const listSelectTenant = listTenant.map((tenant) => ({
-    label: tenant.companyName,
+    label: tenant.tenantName,
     id: tenant.id,
     tenantCode: tenant.tenantCode,
   }));
@@ -95,10 +85,6 @@ export default function EventInfoForm() {
 
   const handleRemoveMapImage = () => {
     dispatch(newMapEventAction(""));
-  };
-
-  const handleChange = (newValue) => {
-    setValue(newValue);
   };
 
   const handleChangeTenantEvent = (value) => {

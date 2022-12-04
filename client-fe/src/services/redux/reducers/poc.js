@@ -1,14 +1,15 @@
 const initialPoc = {
   listPoc: [],
   poc: {
-    name: "",
-    code: "",
-    account: "",
-    note: "",
+    pointName: "",
+    pointCode: "",
+    username: "",
+    pointNote: "",
     eventCode: "",
   },
   loading: false,
   success: false,
+  failure: false,
   message: "",
 };
 
@@ -28,7 +29,7 @@ const pocReducer = (state = initialPoc, action) => {
 
     case "POC/NEW_NAME": {
       const newName = action.payload;
-      const newPoc = { ...state.poc, name: newName };
+      const newPoc = { ...state.poc, pointName: newName };
       return {
         ...state,
         poc: newPoc,
@@ -37,7 +38,7 @@ const pocReducer = (state = initialPoc, action) => {
 
     case "POC/NEW_CODE": {
       const newCode = action.payload;
-      const newPoc = { ...state.poc, code: newCode };
+      const newPoc = { ...state.poc, pointCode: newCode };
 
       return {
         ...state,
@@ -47,7 +48,7 @@ const pocReducer = (state = initialPoc, action) => {
 
     case "POC/NEW_ACCOUNT": {
       const newAccount = action.payload;
-      const newPoc = { ...state.poc, account: newAccount };
+      const newPoc = { ...state.poc, username: newAccount };
 
       return {
         ...state,
@@ -67,7 +68,7 @@ const pocReducer = (state = initialPoc, action) => {
 
     case "POC/NEW_NOTE": {
       const newNote = action.payload;
-      const newPoc = { ...state.poc, note: newNote };
+      const newPoc = { ...state.poc, pointNote: newNote };
 
       return {
         ...state,
@@ -123,7 +124,7 @@ const pocReducer = (state = initialPoc, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
       };
     }

@@ -18,6 +18,12 @@ import { createNewEvent } from "../../../../services/redux/actions/event/createN
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { resetApiStateEvent } from "../../../../services/redux/actions/event/event";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import { useNavigate } from "react-router-dom";
 
 const breadcrumbs =
   sessionStorage.getItem("role") === 0
@@ -64,7 +70,14 @@ export default function CreateEvent() {
 
   const loading = loadingCreateEvent || loadingCreateListPoc;
 
+  const successEvent = useSelector((state) => state.eventState.success);
+  const successPoc = useSelector((state) => state.pocState.success);
+
+  const failureEvent = useSelector((state) => state.eventState.failure);
+  const failurePoc = useSelector((state) => state.pocState.failure);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleCreateNewEvent = () => {
     dispatch(createNewEvent(newEventInfo, newListPoc));
@@ -164,6 +177,79 @@ export default function CreateEvent() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      <Dialog
+        open={failureEvent}
+        onClose={() => dispatch(resetApiStateEvent())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới tenant không thành công, xin hãy thử lại
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(resetApiStateEvent());
+              navigate("/admin/event");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={successEvent && failurePoc === true}
+        onClose={() => dispatch(resetApiStateEvent())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới sự kiện thành công nhưng chưa thể tạo danh sách Poc, xin hãy
+            thêm danh sách Poc sau.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(resetApiStateEvent());
+              navigate("/admin/event");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={successEvent && successPoc === true}
+        onClose={() => dispatch(resetApiStateEvent())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới tenant thành công.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(resetApiStateEvent());
+              navigate("/admin/event/detail");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

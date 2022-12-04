@@ -60,3 +60,9 @@ export const newTenantEventAction = (tenant) => {
     payload: tenant,
   };
 };
+
+export const resetApiStateEvent = () => {
+  return {
+    type: "EVENT/RESET_API_STATE",
+  };
+};

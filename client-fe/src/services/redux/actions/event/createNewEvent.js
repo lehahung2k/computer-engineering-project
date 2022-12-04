@@ -10,7 +10,7 @@ export const createNewEvent = (event, listPoc) => async (dispatch) => {
     startTime: event.start,
     endTime: event.end,
     eventImg: event.map,
-    // tenantCode: event.tenant.tenantCode,
+    tenantCode: event.tenant.tenantCode,
   };
   console.log(params);
   const response = eventApi.addNew(params);
