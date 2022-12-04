@@ -60,7 +60,7 @@ export default function AdminSidebar() {
           <a
             href={
               sessionStorage.getItem("role") === "0"
-                ? "/admin/company"
+                ? "/admin/tenant"
                 : "/event-admin/detail-info"
             }
             className={style.listBtn}

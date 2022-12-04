@@ -11,18 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       eventCode: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         primaryKey: true,
       },
       eventName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      isActivate: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      eventDescription: {
+      tenantCode: {
         type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+          model: "Tenants",
+          key: "tenantCode",
+        },
+      },
+      // isActivate: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      // },
+      eventDescription: {
+        type: DataTypes.TEXT,
       },
       startTime: {
         type: DataTypes.DATE,
@@ -40,6 +49,18 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "EventsMng",
       createdAt: false,
       updatedAt: false,
+    },
+    {
+      associate: function (db) {
+        EventsMng.belongsTo(db.Tenants, {
+          foreignKey: "tenantCode",
+          targetKey: "tenantCode",
+        });
+        EventsMng.hasMany(db.PointOfCheckins, {
+          foreignKey: "eventCode",
+          sourceKey: "eventCode",
+        });
+      },
     }
   );
 

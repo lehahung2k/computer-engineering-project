@@ -27,3 +27,8 @@ export function tenantCodeGenerator(input) {
   const originalCode = codeGenerator(input);
   return originalCode.substring(0, 4);
 }
+
+export function pocCodeGenerator(input) {
+  const originalCode = codeGenerator(input);
+  return originalCode.substring(0, 4);
+}

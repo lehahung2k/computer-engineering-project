@@ -1,27 +1,27 @@
 const createBtc = (
   id,
-  name,
+  tenantName,
   website,
-  address,
+  tenantAddress,
   contactName,
-  contactMail,
-  contactNumber,
+  contactEmail,
+  contactPhone,
   username,
   password,
   tenantCode
 ) => {
   return {
     id,
-    name,
+    tenantName,
     website,
-    address,
+    tenantAddress,
     contactName,
-    contactMail,
-    contactNumber,
+    contactEmail,
+    contactPhone,
     username,
     password,
     tenantCode,
-    contact: contactName + "-" + contactMail + "-" + contactNumber,
+    contact: contactName + "-" + contactEmail + "-" + contactPhone,
   };
 };
 
@@ -31,9 +31,9 @@ export const ListBtc = [
     "Trung tâm Công nghệ Thông tin VietinBank",
     "www.vietinbank.vn",
     "Số 187 Nguyễn Lương Bằng, Đống Đa, Hà Nội",
-    "Nguyễn Văn A",
-    "abc@mail.com",
-    "0123456789",
+    "Đinh Ðăng Minh",
+    "dinhangminh899@mail.com",
+    "085 043 6712",
     "vietinbank",
     "vietinbank",
     "LQA0"
@@ -43,9 +43,9 @@ export const ListBtc = [
     "Trung tâm nghiên cứu và phát triển ĐTDĐ Samsung Việt Nam",
     "www.facebook.com/SamsungVietnamRnD",
     "Tòa nhà PVI, Số 1 Phạm Văn Bạch, Yên Hòa, Cầu Giấy, Hà Nội",
-    "Nguyễn Văn A",
-    "abc@mail.com",
-    "0123456789",
+    "Nghiêm Hồng Thủy",
+    "nghiemhongthuy535@mail.com",
+    "092 076 1385",
     "samsung",
     "samsung",
     "OwaT"
@@ -165,11 +165,11 @@ export const ListBtc = [
 
 export const listBtcHeadNormal = [
   {
-    id: "name",
+    id: "tenantName",
     label: "Tên tổ chức",
     sort: true,
     width: "20%",
-    link: "/admin/company/detail",
+    link: "/admin/tenant/detail",
   },
   {
     id: "website",
@@ -179,7 +179,7 @@ export const listBtcHeadNormal = [
     external: true,
   },
   {
-    id: "address",
+    id: "tenantAddress",
     label: "Địa chỉ",
     width: "25%",
   },

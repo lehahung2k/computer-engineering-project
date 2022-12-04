@@ -120,7 +120,7 @@ export const listCompanyHeadNormal = [
     label: "Công ty/ Doanh nghiệp",
     sort: true,
     width: "20%",
-    link: "/admin/company/detail",
+    link: "/admin/tenant/detail",
   },
   {
     id: "website",
@@ -303,7 +303,7 @@ export const ListEventHeadNormal = [
 ];
 
 function createPocAccount(
-  userName,
+  username,
   password,
   name,
   tenantCode,
@@ -313,7 +313,7 @@ function createPocAccount(
   role
 ) {
   return {
-    userName,
+    username,
     password,
     name,
     tenantCode,
@@ -410,7 +410,7 @@ export const ListPocAccountHeadNormal = [
     width: "20%",
   },
   {
-    id: "userName",
+    id: "username",
     label: "Tên đăng nhập",
     sort: true,
     width: "20%",

@@ -23,6 +23,8 @@ import {
   AddNewPocAction,
 } from "../../../../../../services/redux/actions/poc/poc";
 import NormalTable from "../../../../../../components/tables/normal";
+import { pocCodeGenerator } from "../../../../../../services/hashFunction";
+import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
 
 const rowsAccount = [
   { label: "NVA01" },
@@ -85,8 +87,20 @@ export default function EventPocInfoForm() {
   const [name, setName] = React.useState("");
   const [openListAccount, setOpenListAccount] = React.useState(false);
 
-  const listNewPoc = useSelector((state) => state.listPoc);
-  const newPoc = useSelector((state) => state.poc);
+  const listNewPoc = useSelector((state) => state.pocState.listPoc);
+  const newPoc = useSelector((state) => state.pocState.poc);
+  const eventInfo = useSelector((state) => state.eventState.event);
+  const listPocAccount = useSelector(
+    (state) => state.accountState.listPocAccount
+  );
+
+  // const listPocAccount = listAccount.filter(
+  //   (account) => account.role === "poc"
+  // );
+
+  const listPocAccountSelect = listPocAccount.map((account) => ({
+    label: account.username,
+  }));
 
   const dispatch = useDispatch();
 
@@ -127,6 +141,7 @@ export default function EventPocInfoForm() {
 
     const newAccountAction = NewAccountAction(value ? value.label : "");
     dispatch(newAccountAction);
+    dispatch(selectAccountForPocAction(value ? value.label : ""));
   };
 
   const handleChangeCompany = () => {};
@@ -134,6 +149,13 @@ export default function EventPocInfoForm() {
   const handleChangeNote = (e) => {
     const newNotePocAction = NewNotePocAction(e.target.value);
     dispatch(newNotePocAction);
+  };
+
+  const handleChangePocCode = () => {
+    const today = new Date();
+    const time = today.getTime().toString();
+    const pocCode = pocCodeGenerator([newPoc.name, eventInfo.name, time]);
+    dispatch(NewCodePocAction(pocCode));
   };
 
   return (
@@ -178,12 +200,11 @@ export default function EventPocInfoForm() {
                 fullWidth
                 autoComplete="event-name"
                 variant="standard"
-                onChange={(e) => setName(e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   readOnly: true,
                 }}
-                value="Test name event"
+                value={eventInfo.name}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -209,14 +230,14 @@ export default function EventPocInfoForm() {
                 autoComplete="poc-code"
                 variant="standard"
                 helperText="Chọn để tạo mã ngẫu nhiên"
-                value={code}
+                value={newPoc.code}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <IconButton
                         aria-label="generator code"
-                        onClick={handleClickGenerateCode}
+                        onClick={() => handleChangePocCode()}
                         onMouseDown={handleMouseDownGenerateCode}
                         edge="end"
                         sx={{ marginRight: "0" }}
@@ -251,7 +272,7 @@ export default function EventPocInfoForm() {
                 disablePortal
                 noOptionsText={"Không tìm thấy tài khoản"}
                 id="combo-box-demo"
-                options={rowsAccount}
+                options={listPocAccountSelect}
                 // sx={{ width: 300 }}
                 ListboxProps={{ style: { maxHeight: 150 } }}
                 onChange={handleChangeAccount}

@@ -4,7 +4,6 @@ import Img from "../login/Frame-1729.webp";
 import "./index.css";
 import authApi from "../../../api/AuthApi";
 import axios from "axios";
-import "./index.css";
 import { FakeAccount } from "../../../assets/fakeData/fakeAccount";
 
 function Login() {
@@ -60,13 +59,13 @@ function Login() {
       </div>
       <div className="right-login">
         <div className="card-login">
-          <h1>WELCOME</h1>
+          <h1>Đăng nhập</h1>
 
           <div className="form-group">
             <input
               className="form-field"
               type="text"
-              placeholder="Username"
+              placeholder="Tên đăng nhập"
               onChange={(event) => {
                 setUsername(event.target.value);
               }}
@@ -77,18 +76,18 @@ function Login() {
             <input
               className="form-field"
               type="password"
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onChange={(event) => {
                 setPasswd(event.target.value);
               }}
             />
           </div>
           <button className="button" onClick={login}>
-            Login
+            <div>Đăng nhập</div>
           </button>
           <div className="register">
-            If you don't have account? {<Link to="/register">Register</Link>}{" "}
-            here
+            Nếu chưa có tài khoản, hãy {<Link to="/register">Đăng ký</Link>} tại
+            đây
           </div>
         </div>
         <div className="center1"></div>

@@ -1,30 +1,45 @@
 module.exports = (sequelize, DataTypes) => {
-    const Transactions = sequelize.define("Transactions", {
-        tranId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        pointCode: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        guestCode: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        createTime: {
-            type: DataTypes.TIME,
-        },
-        note: {
-            type: DataTypes.STRING,
-        }
-    }, 
+  const Transactions = sequelize.define(
+    "Transactions",
     {
-        tableName: 'Transactions',
-        createdAt: false,
-        updatedAt: false,
-    });
-    return Transactions;
-}
+      tranId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      pointCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+          model: "PointOfCheckins",
+          key: "pointCode",
+        },
+      },
+      guestCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      createTime: {
+        type: DataTypes.DATE,
+      },
+      note: {
+        type: DataTypes.TEXT,
+      },
+    },
+    {
+      tableName: "Transactions",
+      createdAt: false,
+      updatedAt: false,
+    },
+    {
+      associate: function (db) {
+        Transactions.belongsTo(db.PointOfCheckins, {
+          foreignKey: "pointCode",
+          targetKey: "pointCode",
+        });
+      },
+    }
+  );
+  return Transactions;
+};

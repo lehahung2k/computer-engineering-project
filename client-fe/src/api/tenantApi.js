@@ -16,7 +16,15 @@ class TenantApi {
     const config = {
       headers: { accessToken: token, "Content-Type": "application/json" },
     };
-    return axios.post(url, config);
+    return axios.post(url, params, config);
+  };
+
+  updateTenant = (params, token) => {
+    const url = baseUrl + "/update-tenant";
+    const config = {
+      headers: { accessToken: token, "Content-Type": "application/json" },
+    };
+    return axios.put(url, params, config);
   };
 }
 

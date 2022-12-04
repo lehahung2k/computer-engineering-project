@@ -26,10 +26,11 @@ import {
   newUsernameTenantAction,
   newTenantCodeAction,
 } from "../../../../services/redux/actions/tenant/tenant";
+import { updateTenant } from "../../../../services/redux/actions/tenant/updateTenant";
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "/admin/tenant", label: "Ban tổ chức" },
   { link: "#", label: "Sửa đổi thông tin ban tổ chức" },
 ];
 
@@ -47,6 +48,9 @@ export default function CustomInfoCompany() {
   const [openBackdrop, setOpenBackdrop] = React.useState(false);
   const [code, setCode] = React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
+  const pinnedTenantId = useSelector(
+    (state) => state.tenantState.pinnedTenantId
+  );
   const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
@@ -60,9 +64,10 @@ export default function CustomInfoCompany() {
   const handleMouseDownGenerateCode = (event) => {
     event.preventDefault();
   };
-  const handleCreateNewCompany = () => {
-    setOpenBackdrop(true);
-    setTimeout(setOpenBackdrop, 3000, false);
+  const handleEditTenantInfo = () => {
+    // setOpenBackdrop(true);
+    // setTimeout(setOpenBackdrop, 3000, false);
+    dispatch(updateTenant(tenantInfo, pinnedTenantId));
   };
   return (
     <div className={style.body}>
@@ -109,7 +114,10 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.name}
+                    onChange={(e) =>
+                      dispatch(newNameTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.tenantName}
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -129,6 +137,9 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newWebsiteTenantAction(e.target.value))
+                    }
                     defaultValue={tenantInfo.website}
                   />
                 </Grid>
@@ -150,7 +161,41 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.address}
+                    onChange={(e) =>
+                      dispatch(newAddressTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.tenantAddress}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    id="tenantCode"
+                    name="tenantCode"
+                    label="Mã ban tổ chức"
+                    fullWidth
+                    autoComplete="tenant-code"
+                    variant="standard"
+                    helperText="Chọn để tạo mã ngẫu nhiên"
+                    value={tenantInfo.tenantCode}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            // onClick={handleClickGenerateCode}
+                            onMouseDown={handleMouseDownGenerateCode}
+                            edge="end"
+                            sx={{ marginRight: "0" }}
+                          >
+                            <Iconify
+                              icon={"carbon:operations-record"}
+                            ></Iconify>
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -176,6 +221,9 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newContactNameTenantAction(e.target.value))
+                    }
                     defaultValue={tenantInfo.contactName}
                   />
                 </Grid>
@@ -198,7 +246,10 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.contactMail}
+                    onChange={(e) =>
+                      dispatch(newContactMailTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.contactEmail}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -219,17 +270,14 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
-                    defaultValue={tenantInfo.contactNumber}
+                    onChange={(e) =>
+                      dispatch(newContactNumberTenantAction(e.target.value))
+                    }
+                    defaultValue={tenantInfo.contactPhone}
                   />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <Typography variant="body1" align="left">
-                    Tài khoản đăng nhập
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <TextField
                     required
                     id="username"
@@ -247,6 +295,9 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newUsernameTenantAction(e.target.value))
+                    }
                     defaultValue={tenantInfo.username}
                   />
                 </Grid>
@@ -269,47 +320,23 @@ export default function CustomInfoCompany() {
                     // onClick={() => setCheckName(0)}
                     // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
+                    onChange={(e) =>
+                      dispatch(newPasswordTenantAction(e.target.value))
+                    }
                     defaultValue={tenantInfo.password}
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    id="tenantCode"
-                    name="tenantCode"
-                    label="Mã ban tổ chức"
-                    fullWidth
-                    autoComplete="tenant-code"
-                    variant="standard"
-                    helperText="Chọn để tạo mã ngẫu nhiên"
-                    value={tenantInfo.tenantCode}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickGenerateCode}
-                            onMouseDown={handleMouseDownGenerateCode}
-                            edge="end"
-                            sx={{ marginRight: "0" }}
-                          >
-                            <Iconify
-                              icon={"carbon:operations-record"}
-                            ></Iconify>
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
+                </Grid> */}
+
+                <Grid item xs={6} align="right">
                   <Button
                     variant="contained"
-                    onClick={() => handleCreateNewCompany()}
+                    onClick={() => handleEditTenantInfo()}
                   >
                     Sửa thông tin
                   </Button>
+                </Grid>
+                <Grid item xs={6} align="left">
+                  <Button variant="contained">Đổi tài khoản đăng nhập</Button>
                 </Grid>
               </Grid>
             </div>

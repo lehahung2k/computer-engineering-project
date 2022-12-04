@@ -171,7 +171,7 @@ const eventReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         success: true,
-        data: listEvent,
+        listEvents: listEvent,
       };
     }
 

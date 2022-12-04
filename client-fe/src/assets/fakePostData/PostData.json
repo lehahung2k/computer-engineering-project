@@ -1,0 +1,43 @@
+{
+    "tenant": {
+        "tenantCode": "V0u0",
+        "companyName": "Trường Đại học Bách khoa Hà Nội",
+        "tenantAddress": "Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội",
+        "website": "www.hust.edu.vn",
+        "contactName": "",
+        "contactPhone": "",
+        "contactEmail": ""
+    },
+    "listPoc": [
+        {
+            "pointCode": "5B97",
+            "pointName": "Gian hàng MISA",
+            "eventCode": "tfNWk",
+            "username": "bachkhoa"
+        },
+        {
+            "pointCode": "hr6b",
+            "pointName": "Gian hàng Viettel",
+            "eventCode": "tfNWk",
+            "username": "bachkhoa"
+        },
+        {
+            "pointCode": "8sJo",
+            "pointName": "Gian hàng Mobifone",
+            "eventCode": "tfNWk",
+            "username": "bachkhoa"
+        },
+        {
+            "pointCode": "mxS4",
+            "pointName": "Gian hàng SamSung",
+            "eventCode": "tfNWk",
+            "username": "bachkhoa"
+        },
+        {
+            "pointCode": "t0yG",
+            "pointName": "Gian hàng FPT",
+            "eventCode": "tfNWk",
+            "username": "bachkhoa"
+        }
+    ]
+}

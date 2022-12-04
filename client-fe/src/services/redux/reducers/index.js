@@ -2,6 +2,8 @@ import { combineReducers } from "redux";
 import { pocReducer, listPocReducer } from "./poc";
 import eventReducer from "./event";
 import tenantReducer from "./tenant";
+import pocAccountReducer from "./pocAccount";
+import accountReducer from "./account";
 import { updateEventReducer } from "./event/updateEvent";
 import { createEventReducer } from "./event/createEvent";
 import { deleteEventReducer } from "./event/deleteEvent";
@@ -15,13 +17,17 @@ const rootReducer = combineReducers({
   /**
    * POC reducers
    */
-  poc: pocReducer,
-  listPoc: listPocReducer,
+  pocState: pocReducer,
 
   /**
    * Company (who organize event) reducers
    */
   tenantState: tenantReducer,
+
+  /**
+   * Account
+   */
+  accountState: accountReducer,
 });
 
 export default rootReducer;

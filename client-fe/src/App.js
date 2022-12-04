@@ -59,22 +59,22 @@ function App() {
             element={<DetailEvent />}
           ></Route>
           <Route exact path="/admin/event/edit" element={<EditEvent />}></Route>
-          <Route exact path="/admin/company" element={<ListCompany />}></Route>
+          <Route exact path="/admin/tenant" element={<ListCompany />}></Route>
           <Route
             exact
-            path="/admin/company/create"
+            path="/admin/tenant/create"
             element={<CreateNewCompany />}
           ></Route>
 
           <Route
             exact
-            path="/admin/company/detail"
+            path="/admin/tenant/detail"
             element={<DetailInfoCompany />}
           ></Route>
 
           <Route
             exact
-            path="/admin/company/custom"
+            path="/admin/tenant/custom"
             element={<CustomInfoCompany />}
           ></Route>
 

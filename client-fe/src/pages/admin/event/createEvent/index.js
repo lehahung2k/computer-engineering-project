@@ -16,6 +16,8 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import { StepButton } from "@mui/material";
 import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const breadcrumbs =
   sessionStorage.getItem("role") === 0
@@ -54,14 +56,18 @@ function getStepContent(step) {
 export default function CreateEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
 
   const newEventInfo = useSelector((state) => state.eventState.event);
+  const newListPoc = useSelector((state) => state.pocState.listPoc);
+  const loadingCreateEvent = useSelector((state) => state.eventState.loading);
+  const loadingCreateListPoc = useSelector((state) => state.pocState.loading);
+
+  const loading = loadingCreateEvent || loadingCreateListPoc;
 
   const dispatch = useDispatch();
 
   const handleCreateNewEvent = () => {
-    dispatch(createNewEvent(newEventInfo));
+    dispatch(createNewEvent(newEventInfo, newListPoc));
   };
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -152,6 +158,12 @@ export default function CreateEvent() {
           </Grid>
         </Grid>
       </Grid>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }
