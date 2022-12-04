@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       active: {
+        /**
+         * 0: Not active, 1: Active but not activated, 2: Activated
+         */
         type: DataTypes.INTEGER,
         allowNull: false,
       },

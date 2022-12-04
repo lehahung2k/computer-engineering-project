@@ -1,64 +1,43 @@
-import Backdrop from "@mui/material/Backdrop";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import Iconify from "../../../../components/iconify";
 import SideBar from "../../../../components/navigation";
 import { tenantCodeGenerator } from "../../../../services/hashFunction";
-import style from "./style.module.css";
-import { useSelector, useDispatch } from "react-redux";
+import { createNewTenant } from "../../../../services/redux/actions/tenant/createTenant";
 import {
-  newTenantAction,
-  newContactNumberTenantAction,
+  newAddressTenantAction,
   newContactMailTenantAction,
   newContactNameTenantAction,
-  newWebsiteTenantAction,
-  newAddressTenantAction,
+  newContactNumberTenantAction,
   newNameTenantAction,
   newPasswordTenantAction,
-  newUsernameTenantAction,
   newTenantCodeAction,
-  resetApiState,
+  newUsernameTenantAction,
+  newWebsiteTenantAction,
 } from "../../../../services/redux/actions/tenant/tenant";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { useNavigate } from "react-router-dom";
-import { createNewTenant } from "../../../../services/redux/actions/tenant/createTenant";
-
+import AlertResponseCreateTenant from "./component/alertResponse";
+import style from "./style.module.css";
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "/admin/tenant", label: "Ban tổ chức" },
   { link: "#", label: "Thêm ban tổ chức" },
 ];
 
 export default function CreateNewCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
-  const [openBackdrop, setOpenBackdrop] = React.useState(false);
 
-  const [code, setCode] = React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
-  const loadingTenant = useSelector((state) => state.tenantState.loading);
-  const loadingAccount = useSelector((state) => state.accountState.loading);
+  const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
 
-  const loading = loadingTenant || loadingAccount;
-
-  const successTenant = useSelector((state) => state.tenantState.success);
-  const failureTenant = useSelector((state) => state.tenantState.failure);
-
-  const successAccount = useSelector((state) => state.accountState.success);
-  const failureAccount = useSelector((state) => state.accountState.failure);
-
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {
@@ -73,20 +52,20 @@ export default function CreateNewCompany() {
     event.preventDefault();
   };
   const handleCreateNewCompany = () => {
-    // if (
-    //   tenantInfo.tenantName === "" ||
-    //   tenantInfo.tenantAddress === "" ||
-    //   tenantInfo.website === "" ||
-    //   tenantInfo.contactName === "" ||
-    //   tenantInfo.contactEmail === "" ||
-    //   tenantInfo.contactPhone === "" ||
-    //   tenantInfo.username === "" ||
-    //   tenantInfo.password === "" ||
-    //   tenantInfo.tenantCode === ""
-    // ) {
-    //   return alert("Không để trống");
-    // }
-    dispatch(createNewTenant(tenantInfo));
+    if (
+      tenantInfo.tenantName === "" ||
+      tenantInfo.tenantAddress === "" ||
+      tenantInfo.website === "" ||
+      tenantInfo.contactName === "" ||
+      tenantInfo.contactEmail === "" ||
+      tenantInfo.contactPhone === "" ||
+      tenantAccount.username === "" ||
+      tenantAccount.password === "" ||
+      tenantInfo.tenantCode === ""
+    ) {
+      return alert("Không để trống");
+    }
+    dispatch(createNewTenant(tenantInfo, tenantAccount));
   };
   return (
     <div className={style.body}>
@@ -124,14 +103,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="company-name"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newNameTenantAction(e.target.value))
@@ -146,14 +117,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="company-website"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newWebsiteTenantAction(e.target.value))
@@ -169,14 +132,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="company-address"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newAddressTenantAction(e.target.value))
@@ -228,14 +183,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="contact-name"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newContactNameTenantAction(e.target.value))
@@ -252,14 +199,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="contact-mail"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newContactMailTenantAction(e.target.value))
@@ -275,14 +214,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="contact-number"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newContactNumberTenantAction(e.target.value))
@@ -304,14 +235,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="username"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newUsernameTenantAction(e.target.value))
@@ -328,14 +251,6 @@ export default function CreateNewCompany() {
                     fullWidth
                     autoComplete="password"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newPasswordTenantAction(e.target.value))
@@ -356,79 +271,7 @@ export default function CreateNewCompany() {
           </Grid>
         </Grid>
       </Grid>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-
-      <Dialog
-        open={failureTenant}
-        onClose={() => dispatch(resetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant không thành công, xin hãy thử lại
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => dispatch(resetApiState())} autoFocus>
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={successTenant && failureAccount === true}
-        onClose={() => dispatch(resetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công nhưng chưa thể tạo tài khoản đăng nhập,
-            xin hãy thêm tài khoản đăng nhập sau.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant/detail");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={successTenant && successAccount === true}
-        onClose={() => dispatch(resetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant/detail");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AlertResponseCreateTenant />
     </div>
   );
 }

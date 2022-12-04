@@ -43,9 +43,9 @@ export const ListBtc = [
     "Trung tâm nghiên cứu và phát triển ĐTDĐ Samsung Việt Nam",
     "www.facebook.com/SamsungVietnamRnD",
     "Tòa nhà PVI, Số 1 Phạm Văn Bạch, Yên Hòa, Cầu Giấy, Hà Nội",
-    "Nguyễn Văn A",
-    "abc@mail.com",
-    "0123456789",
+    "Nghiêm Hồng Thủy",
+    "nghiemhongthuy535@mail.com",
+    "092 076 1385",
     "samsung",
     "samsung",
     "OwaT"
@@ -169,7 +169,7 @@ export const listBtcHeadNormal = [
     label: "Tên tổ chức",
     sort: true,
     width: "20%",
-    link: "/admin/company/detail",
+    link: "/admin/tenant/detail",
   },
   {
     id: "website",

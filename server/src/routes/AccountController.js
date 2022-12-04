@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Account } = require("../models");
+const { Accounts } = require("../models");
 const bcrypt = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
@@ -8,7 +8,7 @@ const { validateToken } = require("../middlewares/AuthMiddlewares");
 router.post("/", async (req, res) => {
   const {
     username,
-    passwd,
+    password,
     fullName,
     active,
     role,
@@ -17,30 +17,29 @@ router.post("/", async (req, res) => {
     tenantCode,
     email,
   } = req.body;
-  // const user = await Account.findOne({
-  //   where: {
-  //     username: username,
-  //   },
-  // });
-  // if (user === null || !user) {
-  //   bcrypt.hash(passwd, 6).then((hash) => {
-  //     Account.create({
-  //       username: username,
-  //       passwd: hash,
-  //       fullName: fullName,
-  //       active: active,
-  //       role: role,
-  //       companyName: companyName,
-  //       phoneNumber: phoneNumber,
-  //       tenantCode: tenantCode,
-  //       email: email,
-  //     });
-  //     res.json("SUCCESS");
-  //   });
-  // } else {
-  //   res.json({ error: "Error: Username is existed!" });
-  // }
-  res.json(req.body);
+  const user = await Accounts.findOne({
+    where: {
+      username: username,
+    },
+  });
+  if (user === null || !user) {
+    bcrypt.hash(password, 6).then((hash) => {
+      Accounts.create({
+        username: username,
+        passwd: hash,
+        fullName: fullName,
+        active: active,
+        role: role,
+        companyName: companyName,
+        phoneNumber: phoneNumber,
+        tenantCode: tenantCode,
+        email: email,
+      });
+      res.json("SUCCESS");
+    });
+  } else {
+    res.json({ error: "Error: Username is existed!" });
+  }
 });
 
 router.post("/login", async (req, res) => {
@@ -72,6 +71,17 @@ router.post("/login", async (req, res) => {
 router.get("/auth", validateToken, (req, res) => {
   const role = req.user.role;
   res.json(req.user);
+});
+
+router.post("/tenant-account", async (req, res) => {
+  const { tenantCode } = req.body;
+  const account = await Accounts.findOne({
+    where: {
+      tenantCode: tenantCode,
+      role: "tenant",
+    },
+  });
+  res.json({ username: account.username });
 });
 
 module.exports = router;

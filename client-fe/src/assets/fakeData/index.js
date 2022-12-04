@@ -120,7 +120,7 @@ export const listCompanyHeadNormal = [
     label: "Công ty/ Doanh nghiệp",
     sort: true,
     width: "20%",
-    link: "/admin/company/detail",
+    link: "/admin/tenant/detail",
   },
   {
     id: "website",

@@ -30,7 +30,7 @@ import { updateTenant } from "../../../../services/redux/actions/tenant/updateTe
 
 const breadcrumbs = [
   { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/company", label: "Ban tổ chức" },
+  { link: "/admin/tenant", label: "Ban tổ chức" },
   { link: "#", label: "Sửa đổi thông tin ban tổ chức" },
 ];
 
@@ -184,7 +184,7 @@ export default function CustomInfoCompany() {
                         <InputAdornment position="start">
                           <IconButton
                             aria-label="toggle password visibility"
-                            onClick={handleClickGenerateCode}
+                            // onClick={handleClickGenerateCode}
                             onMouseDown={handleMouseDownGenerateCode}
                             edge="end"
                             sx={{ marginRight: "0" }}
@@ -276,13 +276,8 @@ export default function CustomInfoCompany() {
                     defaultValue={tenantInfo.contactPhone}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="body1" align="left">
-                    Tài khoản đăng nhập
-                  </Typography>
-                </Grid>
 
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <TextField
                     required
                     id="username"
@@ -330,15 +325,18 @@ export default function CustomInfoCompany() {
                     }
                     defaultValue={tenantInfo.password}
                   />
-                </Grid>
+                </Grid> */}
 
-                <Grid item xs={12}>
+                <Grid item xs={6} align="right">
                   <Button
                     variant="contained"
                     onClick={() => handleEditTenantInfo()}
                   >
                     Sửa thông tin
                   </Button>
+                </Grid>
+                <Grid item xs={6} align="left">
+                  <Button variant="contained">Đổi tài khoản đăng nhập</Button>
                 </Grid>
               </Grid>
             </div>

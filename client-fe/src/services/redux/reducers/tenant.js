@@ -8,9 +8,11 @@ const initialState = {
     contactName: "",
     contactEmail: "",
     contactPhone: "",
+    tenantCode: "",
+  },
+  tenantAccount: {
     username: "",
     password: "",
-    tenantCode: "",
   },
   pinnedTenantId: null,
   loading: false,
@@ -95,21 +97,27 @@ const tenantReducer = (state = initialState, action) => {
 
     case "TENANT/NEW_USERNAME": {
       const newUsername = action.payload;
-      const newTenant = { ...state.tenant, username: newUsername };
+      const newTenantAccount = {
+        ...state.tenantAccount,
+        username: newUsername,
+      };
 
       return {
         ...state,
-        tenant: newTenant,
+        tenantAccount: newTenantAccount,
       };
     }
 
     case "TENANT/NEW_PASSWORD": {
       const newPassword = action.payload;
-      const newTenant = { ...state.tenant, password: newPassword };
+      const newTenantAccount = {
+        ...state.tenantAccount,
+        password: newPassword,
+      };
 
       return {
         ...state,
-        tenant: newTenant,
+        tenantAccount: newTenantAccount,
       };
     }
 

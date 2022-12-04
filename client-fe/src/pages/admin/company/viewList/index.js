@@ -61,7 +61,7 @@ export default function ListCompany() {
 
   const handleClickAddNewCompany = () => {
     dispatch(resetApiState());
-    navigate("/admin/company/create");
+    navigate("/admin/tenant/create");
   };
 
   const handleClickButtonField = (field, row) => {
