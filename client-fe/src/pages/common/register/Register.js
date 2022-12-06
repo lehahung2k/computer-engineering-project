@@ -4,8 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./index.css";
 import authApi from "../../../api/AuthApi";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 
 function Register() {
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const [openFailure, setOpenFailure] = React.useState(false);
+
   const initialValues = {
     username: "",
     password: "",
@@ -29,15 +38,15 @@ function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
-    // authApi.registerApi(data).then((response) => {
-    //   console.log(data);
-    //   if (response.data.error) {
-    //     alert(response.data.error);
-    //   } else {
-    //     alert("Register success");
-    //     navigate("/login");
-    //   }
-    // });
+    authApi
+      .registerApi(data)
+      .then((response) => {
+        setOpenSuccess(true);
+      })
+      .catch((err) => {
+        setOpenFailure(true);
+        console.log(err);
+      });
   };
 
   return (
@@ -181,6 +190,60 @@ function Register() {
         <div className="center1"></div>
         <div className="center2"></div>
       </div>
+      <Dialog
+        open={openSuccess}
+        onClose={() => {
+          setOpenSuccess(false);
+          navigate("/login");
+        }}
+        aria-labelledby="responsive-dialog-title"
+        fullWidth="true"
+        maxWidth="sm"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Đã đăng ký tài khoản thành công, xin liên hệ với ban tổ chức để kích
+            hoạt tài khoản
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenSuccess(false);
+              navigate("/login");
+            }}
+            autoFocus
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openFailure}
+        onClose={() => {
+          setOpenFailure(false);
+        }}
+        aria-labelledby="responsive-dialog-title"
+        fullWidth="true"
+        maxWidth="sm"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Đã đăng ký tài khoản không thành công, xin hãy thử lại
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenFailure(false);
+            }}
+            autoFocus
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

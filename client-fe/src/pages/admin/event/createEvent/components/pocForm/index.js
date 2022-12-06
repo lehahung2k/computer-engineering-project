@@ -48,13 +48,15 @@ const headCells = [
 export default function EventPocInfoForm() {
   const [open, setOpen] = React.useState(false);
   const [openListAccount, setOpenListAccount] = React.useState(false);
-
+  const [openWarningNoTenant, setOpenWarningNoTenant] = React.useState(false);
   const listNewPoc = useSelector((state) => state.pocState.listPoc);
   const newPoc = useSelector((state) => state.pocState.poc);
   const eventInfo = useSelector((state) => state.eventState.event);
 
   React.useEffect(() => {
-    dispatch(fetchListPocAccount(eventInfo.tenant.tenantCode));
+    eventInfo.tenantCode
+      ? dispatch(fetchListPocAccount(eventInfo.tenantCode))
+      : console.log("No tenant code");
   }, []);
 
   const listPocAccount = useSelector(
@@ -72,9 +74,13 @@ export default function EventPocInfoForm() {
   };
 
   const handleClickOpen = () => {
-    setOpen(true);
-    console.log("Handle click open: open state: ", open);
-    console.log("Hanlde click open: Open list account", openListAccount);
+    if (eventInfo.tenantCode) {
+      setOpen(true);
+      console.log("Handle click open: open state: ", open);
+      console.log("Hanlde click open: Open list account", openListAccount);
+    } else {
+      setOpenWarningNoTenant(true);
+    }
   };
 
   const handleClose = () => {
@@ -84,9 +90,9 @@ export default function EventPocInfoForm() {
   };
 
   const handleAddNewPOC = () => {
-    dispatch(NewPocEventCodeAction(eventInfo.eventCode));
     const actionAddNewPoc = AddNewPocAction(newPoc);
     dispatch(actionAddNewPoc);
+    dispatch(selectAccountForPocAction(newPoc.username));
     setOpen(false);
   };
 
@@ -101,7 +107,6 @@ export default function EventPocInfoForm() {
 
     const newAccountAction = NewAccountAction(value ? value.label : "");
     dispatch(newAccountAction);
-    dispatch(selectAccountForPocAction(value ? value.label : ""));
   };
 
   const handleChangeNote = (e) => {
@@ -112,7 +117,11 @@ export default function EventPocInfoForm() {
   const handleChangePocCode = () => {
     const today = new Date();
     const time = today.getTime().toString();
-    const pocCode = pocCodeGenerator([newPoc.name, eventInfo.name, time]);
+    const pocCode = pocCodeGenerator([
+      newPoc.pointName,
+      eventInfo.eventName,
+      time,
+    ]);
     dispatch(NewCodePocAction(pocCode));
   };
 
@@ -162,7 +171,7 @@ export default function EventPocInfoForm() {
                 InputProps={{
                   readOnly: true,
                 }}
-                value={eventInfo.name}
+                value={eventInfo.eventName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -263,6 +272,18 @@ export default function EventPocInfoForm() {
         <DialogActions>
           <Button onClick={handleClose}>Hủy bỏ</Button>
           <Button onClick={handleAddNewPOC}>Thêm mới</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openWarningNoTenant}
+        onClose={() => setOpenWarningNoTenant(false)}
+        fullWidth={true}
+        maxWidth={"md"}
+      >
+        <DialogContent>Bạn chưa thêm ban tổ chức cho sự kiện</DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenWarningNoTenant(false)}>OK</Button>
         </DialogActions>
       </Dialog>
     </>

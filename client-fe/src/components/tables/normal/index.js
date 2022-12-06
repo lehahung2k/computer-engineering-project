@@ -111,6 +111,7 @@ export default function NormalTable({
   numOfRowsPerPage = 8,
   activeHandle = (f) => f,
   handleClickButtonField = (f) => f,
+  customField = [],
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -191,25 +192,31 @@ export default function NormalTable({
                           );
                         }
 
-                        if (headCell.active) {
-                          return (
-                            <TableCell align="center" width={headCell.width}>
-                              <Button
-                                style={{ textTransform: "none" }}
-                                variant="outlined"
-                                color={
-                                  row[headCell.id] === 0 ? "error" : "inherit"
-                                }
-                                onClick={() => activeHandle(headCell.userName)}
-                                sx={{ whiteSpace: "normal", fontSize: "10px" }}
-                              >
-                                {row[headCell.id] === 0
-                                  ? "Chưa xác minh"
-                                  : "Đã xác minh"}
-                              </Button>
-                            </TableCell>
-                          );
+                        const checkCustomField = customField.filter(
+                          (field) => field.id === headCell.id
+                        );
+                        if (checkCustomField.length > 0) {
+                          return checkCustomField[0].component(row);
                         }
+                        // if (headCell.active) {
+                        //   return (
+                        //     <TableCell align="center" width={headCell.width}>
+                        //       <Button
+                        //         style={{ textTransform: "none" }}
+                        //         variant="outlined"
+                        //         color={
+                        //           row[headCell.id] === 0 ? "error" : "primary"
+                        //         }
+                        //         onClick={() => activeHandle(headCell.userName)}
+                        //         sx={{ whiteSpace: "normal", fontSize: "10px" }}
+                        //       >
+                        //         {row[headCell.id] === 0
+                        //           ? "Chưa xác minh"
+                        //           : "Đã xác minh"}
+                        //       </Button>
+                        //     </TableCell>
+                        //   );
+                        // }
                         return (
                           <TableCell align="center" width={headCell.width}>
                             {row[headCell.id]}

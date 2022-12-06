@@ -49,7 +49,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          {event.name}
+          {event.eventName}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -59,7 +59,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          {event.code}
+          {event.eventCode}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -69,7 +69,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          {event.start}
+          {event.startTime}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -79,7 +79,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          {event.end}{" "}
+          {event.endTime}{" "}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -89,7 +89,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={8} align="left">
-          {event.note}
+          {event.eventDescription}
         </Grid>
         <Grid item xs={2}></Grid>
         <Grid item xs={2}>
@@ -100,13 +100,13 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
 
         <Grid item xs={10}>
           <div className={style.map}>
-            {event.map === "" ? (
+            {event.eventImg === "" ? (
               <></>
             ) : (
               <img
                 className={style.map__image}
                 alt="Map preview"
-                src={event.map}
+                src={event.eventImg}
               />
             )}
           </div>

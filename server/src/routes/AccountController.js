@@ -75,27 +75,61 @@ router.get("/auth", validateToken, (req, res) => {
 
 router.post("/tenant-account", async (req, res) => {
   const { tenantCode } = req.body;
-  const account = await Accounts.findAll({
-    where: {
-      tenantCode: tenantCode,
-      role: "tenant",
-    },
-  });
-  res.json({ username: account.username });
+  try {
+    const account = await Accounts.findAll({
+      where: {
+        tenantCode: tenantCode,
+        role: "tenant",
+      },
+    });
+    res.json({ username: account.username });
+  } catch (err) {
+    console.log(err);
+    res.json({ error: err.message });
+  }
 });
 
 router.post("/poc-account", async (req, res) => {
   const { tenantCode } = req.body;
-  const account = await Accounts.findAll({
-    where: {
-      tenantCode: tenantCode,
-      role: "poc",
-    },
-  });
-  const listUsername = account.map((account) => ({
-    username: account.username,
-  }));
-  res.json(listUsername);
+  console.log(tenantCode);
+  try {
+    const account = !tenantCode
+      ? await Accounts.findAll({
+          where: {
+            role: "poc",
+          },
+        })
+      : await Accounts.findAll({
+          where: {
+            tenantCode: tenantCode,
+            role: "poc",
+          },
+        });
+    const listUsername = account.map((account) => ({
+      username: account.username,
+    }));
+    res.json(listUsername);
+  } catch (err) {
+    console.log(err);
+    res.json({ error: err.message });
+  }
+});
+
+router.put("/update-account", async (req, res) => {
+  const username = req.body.username;
+  if (!username) return res.sendStatus(400);
+  try {
+    await Accounts.update(
+      { active: 1 },
+      {
+        where: { username: username },
+      }
+    );
+    res.json({ message: "Update success" });
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;

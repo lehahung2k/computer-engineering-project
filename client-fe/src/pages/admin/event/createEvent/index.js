@@ -193,7 +193,7 @@ export default function CreateEvent() {
           <Button
             onClick={() => {
               dispatch(resetApiStateEvent());
-              navigate("/admin/event");
+              // navigate("/admin/event");
             }}
             autoFocus
           >

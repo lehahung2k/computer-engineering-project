@@ -24,6 +24,8 @@ import {
   pinEventId,
   newEventAction,
 } from "../../../../services/redux/actions/event/event";
+import { fetchListEventAdmin } from "../../../../services/redux/actions/event/fetchListEvent";
+
 const breadcrumbs =
   sessionStorage.getItem("role") === "0"
     ? [
@@ -41,6 +43,10 @@ export default function ListEvent() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    dispatch(fetchListEventAdmin());
+  }, []);
 
   const handleClickAddNewEvent = () => {
     sessionStorage.getItem("role") === 0

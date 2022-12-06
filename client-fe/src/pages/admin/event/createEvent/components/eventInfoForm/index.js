@@ -28,10 +28,6 @@ import { fetchListTenant } from "../../../../../../services/redux/actions/tenant
 
 export default function EventInfoForm() {
   const dispatch = useDispatch();
-  let tenantName = "";
-  // if (sessionStorage.getItem("role") === "0") {
-  //   tenantName = "This is test";
-  // }
 
   React.useEffect(() => {
     dispatch(fetchListTenant());
@@ -43,16 +39,30 @@ export default function EventInfoForm() {
     id: tenant.id,
     tenantCode: tenant.tenantCode,
   }));
+  const tenantCode = useSelector((state) => state.eventState.event.tenantCode);
 
-  const startTime = useSelector((state) => state.eventState.event.start);
-  const endTime = useSelector((state) => state.eventState.event.end);
-  const eventImage = useSelector((state) => state.eventState.event.map);
-  const eventCode = useSelector((state) => state.eventState.event.code);
-  const eventName = useSelector((state) => state.eventState.event.name);
+  let selectedTenant = null;
+  if (tenantCode) {
+    selectedTenant = listSelectTenant.filter(
+      (tenant) => tenant.tenantCode === tenantCode
+    )[0];
+  }
+
+  const startTime = useSelector((state) => state.eventState.event.startTime);
+  const endTime = useSelector((state) => state.eventState.event.endTime);
+  const eventImage = useSelector((state) => state.eventState.event.eventImg);
+  const eventCode = useSelector((state) => state.eventState.event.eventCode);
+  const eventName = useSelector((state) => state.eventState.event.eventName);
+  const eventNote = useSelector(
+    (state) => state.eventState.event.eventDescription
+  );
+  const eventInfo = useSelector((state) => state.eventState.event);
   const handleClickGenerateCode = () => {
     const today = new Date();
     const time = today.getTime().toString();
-    const newCode = eventCodeGenerator([tenantName, eventName, time]);
+    const newCode = selectedTenant
+      ? eventCodeGenerator([selectedTenant, eventName, time])
+      : eventCodeGenerator(["", eventName, time]);
     dispatch(newCodeEventAction(newCode));
   };
 
@@ -89,11 +99,14 @@ export default function EventInfoForm() {
 
   const handleChangeTenantEvent = (value) => {
     dispatch(
-      newTenantEventAction({
-        name: value.label,
-        id: value.id,
-        tenantCode: value.tenantCode,
-      })
+      newTenantEventAction(
+        //   {
+        //   name: value.label,
+        //   id: value.id,
+        //   tenantCode: value.tenantCode,
+        // }
+        value.tenantCode
+      )
     );
   };
   return (
@@ -120,10 +133,11 @@ export default function EventInfoForm() {
             // onClick={() => setCheckName(0)}
             // error={name.length === 0 && checkName === 0 ? true : false}
             InputLabelProps={{ shrink: true }}
+            defaultValue={eventName}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          {tenantName ? (
+          {/* {tenantName ? (
             <TextField
               required
               id="tenantName"
@@ -135,27 +149,36 @@ export default function EventInfoForm() {
               value={tenantName}
               InputLabelProps={{ shrink: true }}
             />
-          ) : (
-            <Autocomplete
-              disablePortal
-              noOptionsText={"Không tìm thấy tổ chức"}
-              id="combo-box-demo"
-              options={listSelectTenant}
-              // sx={{ width: 300 }}
-              // isOptionEqualToValue={(option, value) => option.id === value.id}
-              ListboxProps={{ style: { maxHeight: 150 } }}
-              onChange={(event, value) => handleChangeTenantEvent(value)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Ban tổ chức"
-                  variant="standard"
-                  InputLabelProps={{ shrink: true }}
-                  required
-                />
-              )}
-            />
-          )}
+          ) : ( */}
+          <Autocomplete
+            disablePortal
+            noOptionsText={"Không tìm thấy tổ chức"}
+            id="combo-box-demo"
+            options={listSelectTenant}
+            // sx={{ width: 300 }}
+            // isOptionEqualToValue={(option, value) => option.id === value.id}
+            ListboxProps={{ style: { maxHeight: 150 } }}
+            onChange={(event, value) => handleChangeTenantEvent(value)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Ban tổ chức"
+                variant="standard"
+                InputLabelProps={{ shrink: true }}
+                required
+              />
+            )}
+            defaultValue={
+              selectedTenant
+                ? {
+                    label: selectedTenant.label,
+                    id: selectedTenant.id,
+                    tenantCode: selectedTenant.tenantCode,
+                  }
+                : null
+            }
+          />
+          {/* )} */}
         </Grid>
 
         <Grid item xs={12} sm={6}>
@@ -230,6 +253,7 @@ export default function EventInfoForm() {
             autoComplete="event-note"
             multiline
             variant="standard"
+            defaultValue={eventNote}
             InputLabelProps={{ shrink: true }}
             onChange={(e) => dispatch(newNoteEventAction(e.target.value))}
           />

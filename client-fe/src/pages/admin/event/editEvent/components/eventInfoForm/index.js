@@ -53,7 +53,7 @@ export default function EventInfoForm() {
   const handleClickGenerateCode = () => {
     const today = new Date();
     const time = today.getTime().toString();
-    const newCode = eventCodeGenerator([tenantName, eventInfo.name, time]);
+    const newCode = eventCodeGenerator([tenantName, eventInfo.eventName, time]);
     dispatch(newCodeEventAction(newCode));
   };
 
@@ -112,7 +112,7 @@ export default function EventInfoForm() {
             //     ? "Tên không được để trống"
             //     : ""
             // }
-            defaultValue={eventInfo.name}
+            defaultValue={eventInfo.eventName}
             onChange={(e) => dispatch(newNameEventAction(e.target.value))}
             // onClick={() => setCheckName(0)}
             // error={name.length === 0 && checkName === 0 ? true : false}
@@ -131,7 +131,7 @@ export default function EventInfoForm() {
               variant="standard"
               value={tenantName}
               InputLabelProps={{ shrink: true }}
-              defaultValue={eventInfo.tenant}
+              defaultValue={eventInfo.tenantCode}
             />
           ) : (
             <Autocomplete
@@ -164,7 +164,7 @@ export default function EventInfoForm() {
             autoComplete="event-code"
             variant="standard"
             helperText="Chọn để tạo mã ngẫu nhiên"
-            value={eventInfo.code}
+            value={eventInfo.eventCode}
             // onChange={(e) => dispatch(newCodeEventAction(e.target.value))}
             InputLabelProps={{ shrink: true }}
             InputProps={{
@@ -189,7 +189,7 @@ export default function EventInfoForm() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Thời gian bắt đầu"
-              value={eventInfo.start}
+              value={eventInfo.startTime}
               onChange={(newValue) => dispatch(newStartEventAction(newValue))}
               renderInput={(params) => (
                 <TextField
@@ -205,7 +205,7 @@ export default function EventInfoForm() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker
               label="Thời gian kết thúc"
-              value={eventInfo.end}
+              value={eventInfo.endTime}
               onChange={(newValue) => dispatch(newEndEventAction(newValue))}
               renderInput={(params) => (
                 <TextField
@@ -228,7 +228,7 @@ export default function EventInfoForm() {
             variant="standard"
             InputLabelProps={{ shrink: true }}
             onChange={(e) => dispatch(newNoteEventAction(e.target.value))}
-            defaultValue={eventInfo.note}
+            defaultValue={eventInfo.eventDescription}
           />
         </Grid>
 
@@ -253,13 +253,13 @@ export default function EventInfoForm() {
               Bỏ ảnh
             </Button>
           </div>
-          {eventInfo.map === "" ? (
+          {eventInfo.eventImg === "" ? (
             <></>
           ) : (
             <img
               className={style.map__image}
               alt="Map preview"
-              src={eventInfo.map}
+              src={eventInfo.eventImg}
             />
           )}
         </div>

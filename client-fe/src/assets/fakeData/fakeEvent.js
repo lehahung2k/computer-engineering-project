@@ -39,7 +39,7 @@ export const listFakeEvents = [
 
 export const headCellsListFakeEvents = [
   {
-    id: "name",
+    id: "eventName",
     label: "Tên sự kiện",
     sort: true,
     width: "20%",
@@ -48,7 +48,7 @@ export const headCellsListFakeEvents = [
     time: false,
   },
   {
-    id: "tenant",
+    id: "tenantCode",
     label: "Ban tổ chức",
     sort: true,
     width: "20%",
@@ -57,7 +57,7 @@ export const headCellsListFakeEvents = [
     time: false,
   },
   {
-    id: "start",
+    id: "startTime",
     label: "Thời gian bắt đầu",
     sort: true,
     width: "15%",
@@ -66,7 +66,7 @@ export const headCellsListFakeEvents = [
     time: true,
   },
   {
-    id: "end",
+    id: "endTime",
     label: "Thời gian kết thúc",
     sort: false,
     width: "15%",
@@ -75,7 +75,7 @@ export const headCellsListFakeEvents = [
     time: false,
   },
   {
-    id: "note",
+    id: "eventDescription",
     label: "Ghi chú",
     sort: true,
     with: "20%",

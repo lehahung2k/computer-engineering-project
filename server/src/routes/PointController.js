@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { PointCheckin } = require("../models");
+const { PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 
 router.get("/:event_id", async (req, res) => {
   const id = req.params.event_id;
   console.log(id);
-  const listPointOfCheck = await PointCheckin.findAll({
+  const listPointOfCheck = await PointOfCheckins.findAll({
     where: { event_id: id },
   });
   res.json(listPointOfCheck);
@@ -17,7 +17,7 @@ router.post(
   // validateToken,
   async (req, res) => {
     const post = req.body;
-    // await PointCheckin.bulkCreate(post);
+    await PointOfCheckins.bulkCreate(post);
     res.json(post);
   }
 );
@@ -26,7 +26,7 @@ router.put("/:event_id/update-point/:point_id", async (req, res) => {
   try {
     const event_id = req.params.event_id;
     const point_id = req.params.point_id;
-    await PointCheckin.update(req.body, {
+    await PointOfCheckins.update(req.body, {
       where: {
         event_id: event_id,
         point_id: point_id,
@@ -41,7 +41,7 @@ router.put("/:event_id/update-point/:point_id", async (req, res) => {
 router.delete("/:event_id/delete-point/:point_id", async (req, res) => {
   const event_id = req.params.event_id;
   const point_id = req.params.point_id;
-  await PointCheckin.destroy({
+  await PointOfCheckins.destroy({
     where: {
       event_id: event_id,
       point_id: point_id,
@@ -52,7 +52,7 @@ router.delete("/:event_id/delete-point/:point_id", async (req, res) => {
 
 router.delete("/delete-all-poc/:event_id", validateToken, async (req, res) => {
   const event_id = req.params.event_id;
-  await PointCheckin.destroy({
+  await PointOfCheckins.destroy({
     where: {
       event_id: event_id,
     },

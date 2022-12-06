@@ -1,6 +1,6 @@
 import eventApi from "../../../../api/eventAPI";
 
-export const fetchListEvent = () => async (dispatch) => {
+export const fetchListEventAdmin = () => async (dispatch) => {
   dispatch({ type: "EVENT/FETCH_LIST_EVENT" });
 
   const response = eventApi.getAll();
