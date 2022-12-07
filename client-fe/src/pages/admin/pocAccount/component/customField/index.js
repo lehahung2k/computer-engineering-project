@@ -2,11 +2,22 @@ import Button from "@mui/material/Button";
 import TableCell from "@mui/material/TableCell";
 import * as React from "react";
 import AlertPocAccount from "../alert";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePocAccount } from "../../../../../services/redux/actions/accounts/updateAccount";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import { resetApiState } from "../../../../../services/redux/actions/accounts/account";
+
 export default function CustomField({ width, row, field }) {
   const [openDialog, setOpenDialog] = React.useState(false);
-  let handlerActivate = (open) => {
-    setOpenDialog(open);
-  };
+  const usernameSelected = React.useRef("");
+  const selected = React.useRef(false);
+  const dispatch = useDispatch();
+
   let message = React.useRef();
   let fieldHandler = () => {
     console.log(typeof field);
@@ -19,11 +30,15 @@ export default function CustomField({ width, row, field }) {
           message.current =
             "Tài khoản chưa được xác minh, bạn có muốn xác minh tài khoản này";
         }
+        usernameSelected.current = row["username"];
+        selected.current = true;
+        dispatch(resetApiState());
         setOpenDialog(true);
         break;
       }
       default: {
         console.log("Default case");
+        selected.current = false;
       }
     }
   };
@@ -44,8 +59,10 @@ export default function CustomField({ width, row, field }) {
 
       <AlertPocAccount
         open={openDialog}
-        handler={handlerActivate}
+        selected={selected.current}
+        setOpen={setOpenDialog}
         message={message.current}
+        usernameSelected={usernameSelected.current}
       />
     </>
   );

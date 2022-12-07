@@ -18,6 +18,14 @@ class AccountApi {
     };
     return axios.post(url, params, config);
   };
+
+  updatePocAccount = (params, token) => {
+    const url = baseUrl + "/update-account";
+    const config = {
+      headers: { accessToken: token, "Content-Type": "application/json" },
+    };
+    return axios.put(url, params, config);
+  };
 }
 
 const accountApi = new AccountApi();

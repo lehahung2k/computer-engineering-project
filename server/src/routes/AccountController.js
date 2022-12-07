@@ -110,6 +110,7 @@ router.post("/poc-account", async (req, res) => {
       fullName: account.fullName,
       phoneNumber: account.phoneNumber,
       companyName: account.companyName,
+      active: account.active,
     }));
     res.json(listUsername);
   } catch (err) {
@@ -128,7 +129,7 @@ router.put("/update-account", async (req, res) => {
         where: { username: username },
       }
     );
-    res.json({ message: "Update success" });
+    res.json({ username: username });
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

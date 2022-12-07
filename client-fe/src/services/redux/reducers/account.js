@@ -102,12 +102,20 @@ const accountReducer = (state = initialState, action) => {
     }
 
     case "ACCOUNT/UPDATE_ACCOUNT_SUCCESS": {
-      const eventUpdated = action.payload;
+      const updatedListPocAccount = state.listPocAccount.map((account) => {
+        if (account.username === action.payload.username)
+          return {
+            ...account,
+            active: 1,
+          };
+        return account;
+      });
+
       return {
         ...state,
         loading: false,
         success: true,
-        event: eventUpdated,
+        listPocAccount: updatedListPocAccount,
       };
     }
 
@@ -115,8 +123,18 @@ const accountReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
+      };
+    }
+
+    case "ACCOUNT/RESET_API_STATE": {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        message: "",
+        failure: false,
       };
     }
 

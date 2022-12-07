@@ -4,3 +4,9 @@ export const selectAccountForPocAction = (username) => {
     payload: username,
   };
 };
+
+export const resetApiState = () => {
+  return {
+    type: "ACCOUNT/RESET_API_STATE",
+  };
+};
