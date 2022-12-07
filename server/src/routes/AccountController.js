@@ -107,6 +107,9 @@ router.post("/poc-account", async (req, res) => {
         });
     const listUsername = account.map((account) => ({
       username: account.username,
+      fullName: account.fullName,
+      phoneNumber: account.phoneNumber,
+      companyName: account.companyName,
     }));
     res.json(listUsername);
   } catch (err) {

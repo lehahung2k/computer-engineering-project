@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { EventsMng } = require("../models");
+const { EventsMng, PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
 
@@ -64,5 +64,28 @@ router.delete(
     res.json("Delete success");
   }
 );
+
+router.post("/list-event-by-account", async (req, res) => {
+  const username = req.body.username;
+  if (!username) {
+    return res.sendStatus(400);
+  }
+  try {
+    let listEventCode = await PointOfCheckins.findAll({
+      where: { username: username },
+      attributes: ["eventCode"],
+    });
+    let listEvent = [];
+    for (let eventCode of listEventCode) {
+      let event = await EventsMng.findOne({
+        where: { eventCode: eventCode.dataValues.eventCode },
+      });
+      listEvent.push(event);
+    }
+    res.json(listEvent);
+  } catch (err) {
+    return res.sendStatus(500);
+  }
+});
 
 module.exports = router;
