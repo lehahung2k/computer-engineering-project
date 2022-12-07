@@ -48,7 +48,7 @@ export const headCellsListFakeEvents = [
     time: false,
   },
   {
-    id: "tenantCode",
+    id: "tenantName",
     label: "Ban tổ chức",
     sort: true,
     width: "20%",

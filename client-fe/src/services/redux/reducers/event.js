@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { listFakeEvents } from "../../../assets/fakeData/fakeEvent";
 const initialState = {
-  listEvents: listFakeEvents,
+  listEvents: [],
   event: {
     eventName: "",
     eventCode: "",
@@ -180,7 +180,7 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
       };
     }

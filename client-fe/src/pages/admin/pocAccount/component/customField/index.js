@@ -15,9 +15,10 @@ export default function CustomField({ width, row, field }) {
       case "active": {
         if (row[field] !== 0) {
           message.current = "Tài khoản đã được xác minh";
+        } else {
+          message.current =
+            "Tài khoản chưa được xác minh, bạn có muốn xác minh tài khoản này";
         }
-        message.current =
-          "Tài khoản chưa được xác minh, bạn có muốn xác minh tài khoản này";
         setOpenDialog(true);
         break;
       }

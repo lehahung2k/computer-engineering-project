@@ -1,6 +1,6 @@
 import { ListBtc } from "../../../assets/fakeData/fakeBtc";
 const initialState = {
-  listTenant: ListBtc,
+  listTenant: [],
   tenant: {
     tenantName: "",
     tenantAddress: "",

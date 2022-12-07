@@ -198,25 +198,7 @@ export default function NormalTable({
                         if (checkCustomField.length > 0) {
                           return checkCustomField[0].component(row);
                         }
-                        // if (headCell.active) {
-                        //   return (
-                        //     <TableCell align="center" width={headCell.width}>
-                        //       <Button
-                        //         style={{ textTransform: "none" }}
-                        //         variant="outlined"
-                        //         color={
-                        //           row[headCell.id] === 0 ? "error" : "primary"
-                        //         }
-                        //         onClick={() => activeHandle(headCell.userName)}
-                        //         sx={{ whiteSpace: "normal", fontSize: "10px" }}
-                        //       >
-                        //         {row[headCell.id] === 0
-                        //           ? "Chưa xác minh"
-                        //           : "Đã xác minh"}
-                        //       </Button>
-                        //     </TableCell>
-                        //   );
-                        // }
+
                         return (
                           <TableCell align="center" width={headCell.width}>
                             {row[headCell.id]}
