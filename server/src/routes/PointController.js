@@ -61,4 +61,23 @@ router.delete("/delete-all-poc/:event_id", validateToken, async (req, res) => {
   res.json("Delete success");
 });
 
+router.post(
+  "/get-all-poc-by-event-code",
+  // validateToken,
+  async (req, res) => {
+    const eventCode = req.body.eventCode;
+    console.log(req.body);
+    if (!eventCode) return res.sendStatus(400);
+    try {
+      const listPoc = await PointOfCheckins.findAll({
+        where: { eventCode: eventCode },
+        attributes: ["pointName", "username", "pointNote"],
+      });
+      return res.json(listPoc);
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  }
+);
+
 module.exports = router;

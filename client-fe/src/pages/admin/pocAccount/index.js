@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomField from "./component/customField";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === 0
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "#", label: "Tài khoản POC" },

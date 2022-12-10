@@ -43,28 +43,40 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, passwd } = req.body;
-  const user = await Account.findOne({
-    where: {
-      username: username,
-    },
-  });
+  const { username, password } = req.body;
 
-  if (user === null || !user) {
-    res.json({ error: "User not found!" });
-  } else {
-    bcrypt.compare(passwd, user.passwd).then(async (match) => {
-      if (!match) {
-        res.json({ error: "Wrong username or password" });
-      } else {
-        let secretKey = process.env.SECRET_KEY;
-        let algorithm = process.env.ALGORITHM;
-        const accessToken = sign({ username: user.username }, secretKey, {
-          algorithm: algorithm,
-        });
-        res.json({ accessToken: accessToken, userRole: user.role });
-      }
+  if (!username || !password) {
+    return res.sendStatus(400);
+  }
+  try {
+    const user = await Accounts.findOne({
+      where: {
+        username: username,
+      },
     });
+
+    if (user === null || !user) {
+      res.json({ error: "User not found!" });
+    } else {
+      bcrypt.compare(password, user.passwd).then(async (match) => {
+        if (!match) {
+          res.json({ error: "Wrong username or password" });
+        } else {
+          let secretKey = process.env.SECRET_KEY;
+          let algorithm = process.env.ALGORITHM;
+          const accessToken = sign(
+            { username: user.username, userRole: user.role },
+            secretKey,
+            {
+              algorithm: algorithm,
+            }
+          );
+          res.json({ accessToken: accessToken, userRole: user.role });
+        }
+      });
+    }
+  } catch (error) {
+    res.sendStatus(500);
   }
 });
 
@@ -118,6 +130,32 @@ router.post("/poc-account", async (req, res) => {
     res.json({ error: err.message });
   }
 });
+
+router.post(
+  "/get-account-info-by-username",
+  validateToken,
+  async (req, res) => {
+    const username = req.body.username;
+    if (!username) return res.sendStatus(400);
+    try {
+      const accountInfo = await Accounts.findOne({
+        where: { username: username },
+        attributes: [
+          "username",
+          "fullName",
+          "email",
+          "phoneNumber",
+          "tenantCode",
+        ],
+      });
+
+      res.json(accountInfo);
+    } catch (err) {
+      console.log(err.message);
+      res.sendStatus(500);
+    }
+  }
+);
 
 router.put("/update-account", async (req, res) => {
   const username = req.body.username;

@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === "0"
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/tenant", label: "Ban tổ chức" },
@@ -140,7 +140,7 @@ export default function DetailInfoCompany() {
                     : "Chưa có tài khoản đăng nhập"}
                 </Grid>
 
-                {sessionStorage.getItem("role") === "0" ? (
+                {sessionStorage.getItem("role") === "admin" ? (
                   <Grid item xs={12}>
                     <Button
                       variant="contained"

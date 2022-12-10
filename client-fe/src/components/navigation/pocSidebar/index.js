@@ -30,6 +30,17 @@ export default function PocSidebar() {
           </a>
         </ListItem>
         <ListItem>
+          <a href="/poc/event" className={style.listBtn}>
+            <ListItemButton>
+              <FontAwesomeIcon
+                icon={faCalendarDay}
+                className={style.iconPage}
+              />
+              Sự kiện
+            </ListItemButton>
+          </a>
+        </ListItem>
+        <ListItem>
           <a href="/check-in" className={style.listBtn}>
             <ListItemButton>
               <FontAwesomeIcon

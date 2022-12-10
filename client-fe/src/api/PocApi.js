@@ -37,6 +37,14 @@ class PocApi {
     return axios.get(url, config);
   };
 
+  getAllByEventCode = (params, token) => {
+    const url = baseUrl + "/get-all-poc-by-event-code";
+    const config = {
+      headers: { accessToken: token, "Content-Type": "application/json" },
+    };
+    return axios.post(url, params, config);
+  };
+
   deletePoc = (params, token) => {
     const url =
       baseUrl + "/" + params.event_id + "/delete-point/" + params.point_id;

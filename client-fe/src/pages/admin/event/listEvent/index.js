@@ -29,7 +29,7 @@ import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetch
 import moment from "moment";
 import AlertResponse from "./components/alert";
 const breadcrumbs =
-  sessionStorage.getItem("role") === "0"
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "#", label: "Sự kiện" },
@@ -66,13 +66,13 @@ export default function ListEvent() {
   }, []);
 
   const handleClickAddNewEvent = () => {
-    sessionStorage.getItem("role") === 0
+    sessionStorage.getItem("role") === "admin"
       ? navigate("/admin/create-event")
       : navigate("/event-admin/create-event");
   };
 
   const handleClickButtonField = (fieldName, row) => {
-    if (fieldName === "name") {
+    if (fieldName === "eventName") {
       dispatch(pinEventId(row["id"]));
       const eventInfo = listEvents.find((event) => event.id === row["id"]);
       dispatch(newEventAction(eventInfo));

@@ -26,7 +26,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import { useNavigate } from "react-router-dom";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === 0
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/event", label: "Sự kiện" },

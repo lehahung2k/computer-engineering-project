@@ -45,7 +45,7 @@ export default function EventInfoForm() {
 
   const dispatch = useDispatch();
   let tenantName = "";
-  if (sessionStorage.getItem("role") === "0") {
+  if (sessionStorage.getItem("role") === "admin") {
     tenantName = "This is test";
   }
 

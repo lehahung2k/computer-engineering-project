@@ -31,7 +31,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   };
 
   const handleEditEvent = () => {
-    sessionStorage.getItem("role") === "0"
+    sessionStorage.getItem("role") === "admin"
       ? navigate("/admin/event/edit")
       : navigate("/event-admin/event/edit");
   };

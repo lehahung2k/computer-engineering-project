@@ -93,10 +93,28 @@ const pocReducer = (state = initialPoc, action) => {
     /**
      * Fetching list poc
      */
-    case "POC/FETCH_LIST_EVENT": {
+    case "POC/FETCH_LIST_POC": {
       return {
         ...state,
         loading: true,
+      };
+    }
+
+    case "POC/FETCH_LIST_POC_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        listPoc: action.payload,
+        success: true,
+      };
+    }
+
+    case "POC/FETCH_LIST_POC_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
       };
     }
 

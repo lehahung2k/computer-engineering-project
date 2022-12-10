@@ -19,6 +19,18 @@ class AccountApi {
     return axios.post(url, params, config);
   };
 
+  fetchPocAccountInfoByUsername = (params, token) => {
+    const url = baseUrl + "/get-account-info-by-username";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    };
+
+    return axios.post(url, params, config);
+  };
+
   updatePocAccount = (params, token) => {
     const url = baseUrl + "/update-account";
     const config = {

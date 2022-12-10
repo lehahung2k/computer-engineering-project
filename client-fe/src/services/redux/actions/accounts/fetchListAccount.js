@@ -19,3 +19,12 @@ export const fetchListPocAccount = (tenantCode) => async (dispatch) => {
       });
     });
 };
+
+export const fetchPocAccountInfo = (username) => async (dispatch) => {
+  dispatch({ type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO" });
+
+  const params = { username: username };
+  const response = accountApi.fetchPocAccountInfoByUsername(params);
+
+  response.then((response) => {});
+};

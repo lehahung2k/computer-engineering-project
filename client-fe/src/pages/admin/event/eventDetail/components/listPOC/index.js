@@ -9,6 +9,10 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import NormalTable from "../../../../../../components/tables/normal";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function createData(name, account, note) {
   return {
@@ -27,18 +31,18 @@ const rows = [
 
 const headCells = [
   {
-    id: "name",
+    id: "pointName",
     label: "Tên POC",
 
     sort: true,
   },
   {
-    id: "account",
+    id: "username",
     label: "Tài khoản phụ trách",
     sort: false,
   },
   {
-    id: "note",
+    id: "pointNote",
     label: "Ghi chú",
     sort: false,
   },
@@ -48,6 +52,15 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
   const handleClickBack = () => {
     setActiveStep(0);
   };
+
+  const listPoc = useSelector((state) => state.pocState.listPoc);
+  const eventCode = useSelector((state) => state.eventState.event.eventCode);
+  const loading = useSelector((state) => state.pocState.loading);
+
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    dispatch(fetchListPocByEventCode(eventCode));
+  }, []);
   return (
     <div>
       <Grid container spacing={3}>
@@ -67,9 +80,16 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={12}>
-          <NormalTable rows={rows} headCells={headCells} />
+          <NormalTable rows={listPoc} headCells={headCells} />
         </Grid>
       </Grid>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 }

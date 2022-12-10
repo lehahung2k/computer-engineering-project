@@ -164,7 +164,11 @@ export default function NormalTable({
                         if (headCell.link) {
                           if (headCell.external) {
                             return (
-                              <TableCell align="center" width={headCell.width}>
+                              <TableCell
+                                align="center"
+                                width={headCell.width}
+                                key={index}
+                              >
                                 <a
                                   href={"https://" + headCell.link}
                                   target="_blank"
@@ -176,7 +180,11 @@ export default function NormalTable({
                             );
                           }
                           return (
-                            <TableCell align="center" width={headCell.width}>
+                            <TableCell
+                              align="center"
+                              width={headCell.width}
+                              key={index}
+                            >
                               <Button
                                 style={{ textTransform: "none" }}
                                 variant="text"

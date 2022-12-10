@@ -5,25 +5,27 @@ import Welcome from "./pages/common/welcome";
 // import { WebcamCapture } from './component/Webcam';
 // import SearchEvent from './component/search';
 // import EventAction from './component/eventAction';
-import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/common/login/Login";
-import Register from "./pages/common/register/Register";
+import { Navigate, Route, Routes } from "react-router-dom";
 import PrivateRoute from "./components/routing";
-import Checkin from "./pages/poc/checkin";
-import PocManageEvent from "./pages/poc/listEvents";
-import PocEventDetail from "./pages/poc/eventDetail";
-import PocListGuest from "./pages/poc/listGuests";
-import AdminDashBoard from "./pages/admin/dashboard";
-import CreateEvent from "./pages/admin/event/createEvent";
-import ListEvent from "./pages/admin/event/listEvent";
-import DetailEvent from "./pages/admin/event/eventDetail";
 import CreateNewCompany from "./pages/admin/company/create";
+import CustomInfoCompany from "./pages/admin/company/customizeInfo";
 import DetailInfoCompany from "./pages/admin/company/viewDetail";
 import ListCompany from "./pages/admin/company/viewList";
-import CustomInfoCompany from "./pages/admin/company/customizeInfo";
-import PocAccount from "./pages/admin/pocAccount";
+import AdminDashBoard from "./pages/admin/dashboard";
+import CreateEvent from "./pages/admin/event/createEvent";
 import EditEvent from "./pages/admin/event/editEvent";
+import DetailEvent from "./pages/admin/event/eventDetail";
+import ListEvent from "./pages/admin/event/listEvent";
+import PocAccount from "./pages/admin/pocAccount";
+import Login from "./pages/common/login/Login";
+import Register from "./pages/common/register/Register";
+import Checkin from "./pages/poc/checkin";
+import PocEventDetail from "./pages/poc/eventDetail";
+import PocManageEvent from "./pages/poc/listEvents";
+import PocListGuest from "./pages/poc/listGuests";
+import PocDashBoard from "./pages/poc/dashboard";
 // import Footer from './components/Footer'
+
 function App() {
   return (
     <div className="App">
@@ -40,12 +42,7 @@ function App() {
       )} */}
         <Route exact path="/" element={<Welcome />} />
 
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute role={sessionStorage.getItem("role")} type={2} />
-          }
-        >
+        <Route path="/admin" element={<PrivateRoute type={"admin"} />}>
           <Route exact path="/admin" element={<AdminDashBoard />}></Route>
           <Route
             exact
@@ -86,12 +83,7 @@ function App() {
           <Route path="/admin/*" element={<Navigate to="/" />}></Route>
         </Route>
 
-        <Route
-          path="/event-admin"
-          element={
-            <PrivateRoute role={sessionStorage.getItem("role")} type={2} />
-          }
-        >
+        <Route path="/event-admin" element={<PrivateRoute type={"tenant"} />}>
           <Route exact path="/event-admin" element={<AdminDashBoard />}></Route>
           <Route
             exact
@@ -129,13 +121,8 @@ function App() {
           <Route path="/event-admin/*" element={<Navigate to="/" />}></Route>
         </Route>
 
-        <Route
-          path="/poc"
-          element={
-            <PrivateRoute role={sessionStorage.getItem("role")} type={2} />
-          }
-        >
-          <Route exact path="/poc" element={<PocManageEvent />}></Route>
+        <Route path="/poc" element={<PrivateRoute type={"poc"} />}>
+          <Route exact path="/poc" element={<PocDashBoard />}></Route>
           <Route exact path="/poc/event" element={<PocManageEvent />}></Route>
           <Route
             exact
@@ -150,17 +137,12 @@ function App() {
           <Route path="/poc/*" element={<Navigate to="/" />}></Route>
         </Route>
 
-        <Route
-          path="/check-in"
-          element={
-            <PrivateRoute role={sessionStorage.getItem("role")} type={2} />
-          }
-        >
+        <Route path="/check-in" element={<PrivateRoute type={"poc"} />}>
           <Route path="/check-in" element={<Checkin />}></Route>
         </Route>
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/register" element={<Register />} />
         <Route path="/*" element={<Navigate to="/" />} />
       </Routes>
     </div>
