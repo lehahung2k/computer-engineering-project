@@ -90,6 +90,33 @@ const accountReducer = (state = initialState, action) => {
         message: action.message,
       };
     }
+    /**
+     * Fetching account info
+     */
+    case "ACCOUNT/FETCH_POC_ACCOUNT_INFO": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "ACCOUNT/FETCH_POC_ACCOUNT_INFO_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        account: action.payload,
+      };
+    }
+
+    case "ACCOUNT/FETCH_POC_ACCOUNT_INFO_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
 
     /**
      * Update account

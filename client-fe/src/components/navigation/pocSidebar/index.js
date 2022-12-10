@@ -9,7 +9,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import React from "react";
 import style from "./style.module.css";
-
+import { Link } from "react-router-dom";
 export default function PocSidebar() {
   const logout = () => {
     sessionStorage.removeItem("accessToken");
@@ -19,7 +19,7 @@ export default function PocSidebar() {
     <>
       <List className={style.navigationList}>
         <ListItem>
-          <a href="/poc" className={style.listBtn}>
+          <Link to="/poc" className={style.listBtn}>
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faHome}
@@ -27,10 +27,10 @@ export default function PocSidebar() {
               ></FontAwesomeIcon>
               Trang chủ
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         <ListItem>
-          <a href="/poc/event" className={style.listBtn}>
+          <Link to="/poc/event" className={style.listBtn}>
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faCalendarDay}
@@ -38,10 +38,10 @@ export default function PocSidebar() {
               />
               Sự kiện
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         <ListItem>
-          <a href="/check-in" className={style.listBtn}>
+          <Link to="/check-in" className={style.listBtn}>
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faCalendarDay}
@@ -49,7 +49,7 @@ export default function PocSidebar() {
               />
               Check-in
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         <ListItem>
           <a href="/" className={style.logout}>

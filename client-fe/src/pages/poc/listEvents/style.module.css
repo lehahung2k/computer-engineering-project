@@ -4,6 +4,12 @@
   width: 100%;
 }
 
+.wrapper {
+  background-color: #f6f6f6;
+  height: 100vh;
+  width: 100%;
+}
+
 .main {
   margin-top: 20px;
   margin-left: 20px;

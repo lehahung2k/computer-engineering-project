@@ -19,7 +19,7 @@
 
 .main__info {
   display: grid;
-  grid-template-columns: auto 400px;
+  grid-template-columns: auto 500px;
   grid-template-rows: auto auto auto auto auto auto auto auto;
   padding-bottom: 100px;
   margin-top: 20px;
@@ -59,7 +59,7 @@
 .poc__name__value,
 .poc__code__value,
 .poc__account__value {
-  grid-column: 2/7;
+  grid-column: 2/6;
 }
 
 .info__value {
@@ -74,8 +74,19 @@
 }
 
 .map {
-  display: grid;
-  grid-template-rows: auto auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+}
+
+.map__image {
+  display: block;
+  border-radius: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  width: 400px;
+  height: 300px;
 }
 
 .map__label {

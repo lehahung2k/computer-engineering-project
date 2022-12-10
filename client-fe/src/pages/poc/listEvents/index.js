@@ -10,176 +10,53 @@ import EventTable from "./components/eventTable";
 import Box from "@mui/material/Box";
 import BreadCrumbs from "../../../components/breadCrumbs";
 import NormalTable from "../../../components/tables/normal";
-
+import { fetchListEventByUsername } from "../../../services/redux/actions/event/fetchListEvent";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  listFakeEvents,
+  headCellsListFakeEvents,
+} from "../../../assets/fakeData/fakeEvent";
+import moment from "moment";
+import {
+  pinEventId,
+  newEventAction,
+} from "../../../services/redux/actions/event/event";
+import { useNavigate } from "react-router-dom";
+import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
 const breadcrumbs = [{ link: "#", label: "Danh sách sự kiện" }];
-
-function createData(name, start, end, note, checkin) {
-  return {
-    name,
-    start,
-    end,
-    note,
-    checkin,
-  };
-}
-
-const rows = [
-  createData(
-    "JobFair",
-    "2022-12-12T09:30:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "Inovation Day",
-    "2022-12-12T08:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội đổi mới sáng tạo 2022",
-    "Xem"
-  ),
-  createData(
-    "Đây là tên sự kiện dài để kiểm thử chức năng hiển thị",
-    "2022-12-12T07:30:00",
-    "2022-12-12T09:00:00",
-    "Đây là note dài để kiểm thử chức năng hiển thị. Nếu note được xuống dòng tức chức năng đã ổn định. Đây là note dài để kiểm thử chức năng hiển thị. Nếu note được xuống dòng tức chức năng đã ổn định",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-21T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-01T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-  createData(
-    "JobFair",
-    "2022-12-12T09:00:00",
-    "2022-12-12T09:00:00",
-    "Ngày hội việc làm 2022",
-    "Xem"
-  ),
-];
-
-const headCells = [
-  {
-    id: "name",
-    label: "Tên sự kiện",
-    sort: true,
-    width: "25%",
-    button: true,
-    link: "/poc/event/detail",
-    time: false,
-  },
-  {
-    id: "start",
-    label: "Thời gian bắt đầu",
-    sort: true,
-    width: "15%",
-    button: false,
-    link: "#",
-    time: true,
-  },
-  {
-    id: "end",
-    label: "Thời gian kết thúc",
-    sort: false,
-    width: "15%",
-    button: false,
-    link: "#",
-    time: false,
-  },
-  {
-    id: "note",
-    label: "Ghi chú",
-    sort: true,
-    with: "35%",
-    button: false,
-    link: "#",
-    time: false,
-  },
-  {
-    id: "checkin",
-    label: "Thông tin check-in",
-    sort: false,
-    width: "10%",
-    button: true,
-    link: "/poc/event/detail",
-    time: false,
-  },
-];
 
 export default function PocManageEvent() {
   const [filterName, setFilterName] = useState("");
   const [openSidebar, setOpenSidebar] = useState(true);
 
-  const filteredEvents = rows.filter((event) => {
+  const listEvent = useSelector((state) => state.eventState.listEvents);
+  const tenantName = useSelector(
+    (state) => state.tenantState.tenant.tenantName
+  );
+
+  const formatListEvent = listEvent.map((event) => {
+    let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
+    let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
+
+    return {
+      ...event,
+      startTime: startTime,
+      endTime: endTime,
+      tenantName: tenantName,
+    };
+  });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    dispatch(fetchListEventByUsername());
+  }, []);
+
+  const filteredEvents = formatListEvent.filter((event) => {
     return (
-      event.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-      event.note.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+      event.eventName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+      event.eventDescription.toLowerCase().indexOf(filterName.toLowerCase()) !==
+        -1
     );
   });
   console.log(filteredEvents);
@@ -187,52 +64,68 @@ export default function PocManageEvent() {
     setFilterName(e.target.value);
   };
 
-  return (
-    <div className={style.body}>
-      <Grid container spacing={0}>
-        {openSidebar ? (
-          <Grid xs="auto">
-            <div>
-              <SideBar id="1" />
-            </div>
-          </Grid>
-        ) : (
-          <></>
-        )}
-        <Grid xs>
-          <Header
-            openSidebar={openSidebar}
-            handleOpenSidebar={setOpenSidebar}
-          />
-          {/* <BreadCrumbs breadcrumbs={breadcrumbs} /> */}
+  const handleClickButtonField = (fieldName, row) => {
+    if (fieldName === "eventName") {
+      dispatch(pinEventId(row["eventId"]));
+      const eventInfo = filteredEvents.find(
+        (event) => event.eventId === row["eventId"]
+      );
+      dispatch(newEventAction(eventInfo));
+      dispatch(fetchPocInfoByUsername(eventInfo.eventCode));
+      navigate("/poc/event/detail");
+    }
+    if (fieldName === "checkin") console.log("checkin");
+  };
 
-          <Grid container spacing="0" id="container">
-            <div className={style.main}>
-              <div className={style.main__head}>
-                <h3>Danh sách sự kiện</h3>
-                <div className={style.main__head__utils}>
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <SearchEvent
-                      filterName={filterName}
-                      onFilterName={handleFilterByName}
-                    />
-                    <EventFilter />
-                  </Box>
+  return (
+    <div className={style.wrapper}>
+      <div className={style.body}>
+        <Grid container spacing={0}>
+          {openSidebar ? (
+            <Grid xs="auto">
+              <div>
+                <SideBar id="1" />
+              </div>
+            </Grid>
+          ) : (
+            <></>
+          )}
+          <Grid xs>
+            <Header
+              openSidebar={openSidebar}
+              handleOpenSidebar={setOpenSidebar}
+            />
+            {/* <BreadCrumbs breadcrumbs={breadcrumbs} /> */}
+
+            <Grid container spacing="0" id="container">
+              <div className={style.main}>
+                <div className={style.main__head}>
+                  <h3>Danh sách sự kiện</h3>
+                  <div className={style.main__head__utils}>
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      <SearchEvent
+                        filterName={filterName}
+                        onFilterName={handleFilterByName}
+                      />
+                      <EventFilter />
+                    </Box>
+                  </div>
+                </div>
+
+                <div>
+                  {/* <EventTable key={filteredEvents} rows={filteredEvents} /> */}
+                  <NormalTable
+                    key={filteredEvents}
+                    rows={filteredEvents}
+                    headCells={headCellsListFakeEvents}
+                    handleClickButtonField={handleClickButtonField}
+                  />
                 </div>
               </div>
-
-              <div>
-                {/* <EventTable key={filteredEvents} rows={filteredEvents} /> */}
-                <NormalTable
-                  key={filteredEvents}
-                  rows={filteredEvents}
-                  headCells={headCells}
-                />
-              </div>
-            </div>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </div>
     </div>
   );
 }

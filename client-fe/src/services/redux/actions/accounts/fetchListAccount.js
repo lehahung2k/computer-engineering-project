@@ -1,5 +1,5 @@
 import accountApi from "../../../../api/AccountApi";
-
+import { fetchTenantInfoByTenantCode } from "../tenant/fetchListTenant";
 export const fetchListPocAccount = (tenantCode) => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT" });
   const params = { tenantCode: tenantCode };
@@ -20,11 +20,24 @@ export const fetchListPocAccount = (tenantCode) => async (dispatch) => {
     });
 };
 
-export const fetchPocAccountInfo = (username) => async (dispatch) => {
+export const fetchPocAccountInfo = () => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO" });
 
-  const params = { username: username };
-  const response = accountApi.fetchPocAccountInfoByUsername(params);
+  const response = accountApi.fetchPocAccountInfoByUsername();
 
-  response.then((response) => {});
+  response
+    .then((response) => {
+      const params = { tenantCode: response.data.tenantCode };
+      dispatch(fetchTenantInfoByTenantCode(params));
+      dispatch({
+        type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO_SUCCESS",
+        payload: response.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO_FAIL",
+        message: error.message,
+      });
+    });
 };

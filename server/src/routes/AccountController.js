@@ -135,8 +135,8 @@ router.post(
   "/get-account-info-by-username",
   validateToken,
   async (req, res) => {
-    const username = req.body.username;
-    if (!username) return res.sendStatus(400);
+    const username = req.user.username;
+    if (!username) return res.status(401).send("Invalid token");
     try {
       const accountInfo = await Accounts.findOne({
         where: { username: username },

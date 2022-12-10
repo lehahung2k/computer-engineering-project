@@ -33,28 +33,28 @@ export default function Checkin() {
   const handleSubmitForm = (e) => {
     const clientId = document.querySelector("#student-id");
     const clientDescription = document.querySelector("#check-in-note");
-    //   const params = {
-    //     event_id: 1,
-    //     client_id: clientId.value,
-    //     create_time: moment().format(),
-    //     note: clientDescription.value,
-    //   };
+    const params = {
+      pointCode: "nT8q",
+      guestCode: 1,
+      createTime: moment().format(),
+      note: clientDescription.value,
+    };
+    console.log(params);
 
-    //   const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
-    //     params,
-    //     sessionStorage.getItem("accessToken")
-    //   );
+    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+      params,
+      sessionStorage.getItem("accessToken")
+    );
 
-    //   responseAddNewCheckinClient
-    //     .then((response) => {
-    //       alert("Khách checkin thành công");
-    //       setNewCheckin(true);
-    //       setImage1('');
-    //       setImage2('');
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
+    responseAddNewCheckinClient
+      .then((response) => {
+        alert("Khách checkin thành công");
+        setImage1("");
+        setImage2("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   return (
     <div>
@@ -136,7 +136,9 @@ export default function Checkin() {
                     ></textarea>
                     <br />
                   </form>
-                  <Button variant='contained' onClick={handleSubmitForm}>Submit</Button>
+                  <Button variant="contained" onClick={handleSubmitForm}>
+                    Submit
+                  </Button>
                 </div>
               </Grid>
             </Grid>

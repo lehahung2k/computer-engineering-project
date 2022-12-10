@@ -80,4 +80,20 @@ router.post(
   }
 );
 
+router.post("/get-poc-info-by-username", validateToken, async (req, res) => {
+  const username = req.user.username;
+  const eventCode = req.body.eventCode;
+  if (!username) res.status(401).send("Invalid token");
+  if (!eventCode) res.sendStatus(400);
+
+  try {
+    const pocInfo = await PointOfCheckins.findOne({
+      where: { username: username, eventCode: eventCode },
+    });
+    res.json(pocInfo);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
 module.exports = router;

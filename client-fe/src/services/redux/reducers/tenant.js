@@ -161,6 +161,34 @@ const tenantReducer = (state = initialState, action) => {
     }
 
     /**
+     * Fetching tenant info
+     */
+    case "TENANT/FETCH_TENANT_INFO": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "TENANT/FETCH_TENANT_INFO_SUCCESS": {
+      return {
+        ...state,
+        tenant: action.payload,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "TENANT/FETCH_TENANT_INFO_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    /**
      * Posting create new tenant
      */
     case "TENANT/CREATE_NEW_TENANT": {

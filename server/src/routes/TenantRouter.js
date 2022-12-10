@@ -40,6 +40,7 @@ router.post(
           "contactName",
           "contactEmail",
           "contactPhone",
+          "tenantCode",
         ],
       });
       res.json(tenantInfo);

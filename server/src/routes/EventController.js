@@ -4,9 +4,14 @@ const { EventsMng, PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
 
-router.get("/", async (req, res) => {
-  const listEvents = await EventsMng.findAll();
-  res.json(listEvents);
+router.get("/", validateToken, async (req, res) => {
+  const listEvents = await EventsMng.findAll({ raw: true });
+  const formattedListEvent = listEvents.map((event) => {
+    const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
+    const formattedEvent = { ...event, eventImg: formattedEventImage };
+    return formattedEvent;
+  });
+  res.json(formattedListEvent);
 });
 
 router.get(
@@ -65,10 +70,10 @@ router.delete(
   }
 );
 
-router.post("/list-event-by-account", async (req, res) => {
-  const username = req.body.username;
+router.get("/list-event-by-account", validateToken, async (req, res) => {
+  const username = req.user.username;
   if (!username) {
-    return res.sendStatus(400);
+    return res.status(401).send("Invalid token");
   }
   try {
     let listEventCode = await PointOfCheckins.findAll({
@@ -76,11 +81,16 @@ router.post("/list-event-by-account", async (req, res) => {
       attributes: ["eventCode"],
     });
     let listEvent = [];
+    console.log(listEventCode);
     for (let eventCode of listEventCode) {
+      console.log(eventCode.dataValues.eventCode);
       let event = await EventsMng.findOne({
         where: { eventCode: eventCode.dataValues.eventCode },
+        raw: true,
       });
-      listEvent.push(event);
+      const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
+      let formattedEvent = { ...event, eventImg: formattedEventImage };
+      listEvent.push(formattedEvent);
     }
     res.json(listEvent);
   } catch (err) {

@@ -8,29 +8,32 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import BreadCrumbs from "../../../components/breadCrumbs";
+import { useSelector, useDispatch } from "react-redux";
 
 const breadcrumbs = [
   { link: "/poc/event", label: "Danh sách sự kiện" },
   { link: "#", label: "Chi tiết sự kiện" },
 ];
 
-const eventInfo = {
-  name: "JobFair",
-  start: "08:00 12/12/2022",
-  end: "10:00 12/12/2022",
-  note: "Ngày hôi việc làm 2022",
-};
+// const eventInfo = {
+//   name: "JobFair",
+//   start: "08:00 12/12/2022",
+//   end: "10:00 12/12/2022",
+//   note: "Ngày hôi việc làm 2022",
+// };
 
-const poc = {
-  name: "Soict POC",
-  code: "12345",
-  account: "adminPOC01",
-};
+// const poc = {
+//   name: "Soict POC",
+//   code: "12345",
+//   account: "adminPOC01",
+// };
 
 export default function PocEventDetail() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
-
+  const eventInfo = useSelector((state) => state.eventState.event);
+  const pocInfo = useSelector((state) => state.pocState.poc);
   const navigate = useNavigate();
+
   const handleShowListGuest = () => {
     navigate("/poc/event/detail/guests");
   };
@@ -61,7 +64,10 @@ export default function PocEventDetail() {
                   <div className={style.event__name__label}>Tên sự kiện:</div>
 
                   <div className={style.event__name__value}>
-                    <div className={style.info__value}> {eventInfo.name}</div>
+                    <div className={style.info__value}>
+                      {" "}
+                      {eventInfo.eventName}
+                    </div>
                   </div>
 
                   <div className={style.event__start__label}>
@@ -69,7 +75,9 @@ export default function PocEventDetail() {
                   </div>
 
                   <div className={style.event__start__value}>
-                    <div className={style.info__value}>{eventInfo.start}</div>
+                    <div className={style.info__value}>
+                      {eventInfo.startTime}
+                    </div>
                   </div>
 
                   <div className={style.event__end__label}>
@@ -78,7 +86,10 @@ export default function PocEventDetail() {
 
                   <div className={style.event__end__value}>
                     {" "}
-                    <div className={style.info__value}> {eventInfo.end}</div>
+                    <div className={style.info__value}>
+                      {" "}
+                      {eventInfo.endTime}
+                    </div>
                   </div>
 
                   <h3> Thông tin POC </h3>
@@ -86,14 +97,14 @@ export default function PocEventDetail() {
                   <div className={style.poc__name__label}>Tên POC:</div>
 
                   <div className={style.poc__name__value}>
-                    <div className={style.info__value}>{poc.name}</div>
+                    <div className={style.info__value}>{pocInfo.name}</div>
                   </div>
 
                   <div className={style.poc__code__label}>Mã POC:</div>
 
                   <div className={style.poc__code__value}>
                     {" "}
-                    <div className={style.info__value}>{poc.code}</div>
+                    <div className={style.info__value}>{pocInfo.code}</div>
                   </div>
 
                   <div className={style.poc__account__label}>
@@ -102,16 +113,22 @@ export default function PocEventDetail() {
 
                   <div className={style.poc__account__value}>
                     {" "}
-                    <div className={style.info__value}>{poc.account}</div>
+                    <div className={style.info__value}>{pocInfo.account}</div>
                   </div>
                   {/* <Button>Xem danh sách check-in</Button> */}
                 </div>
 
                 <div className={style.map}>
                   <div className={style.map__label}>Ảnh sơ đồ sự kiện</div>
-                  <div className={style.map__image}>
-                    <img src="/image/map_example.jpg"></img>
-                  </div>
+                  {eventInfo.eventImg === "" ? (
+                    <></>
+                  ) : (
+                    <img
+                      className={style.map__image}
+                      alt="Map preview"
+                      src={eventInfo.eventImg}
+                    />
+                  )}
                 </div>
               </div>
 
