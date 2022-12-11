@@ -1,8 +1,9 @@
 import * as React from "react";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
+// import Link from "@mui/material/Link";
 import style from "./style.module.css";
+import { Link } from "react-router-dom";
 export default function BreadCrumbs({ breadcrumbs }) {
   return (
     <div className={style.breadcrumb}>
@@ -13,10 +14,9 @@ export default function BreadCrumbs({ breadcrumbs }) {
       >
         {breadcrumbs.map((item, index) => (
           <Link
-            style={{ textDecoration: "none" }}
+            style={{ textDecoration: "none", color: "black" }}
             key={index}
-            color="inherit"
-            href={item.link}
+            to={item.link}
           >
             {item.label}
           </Link>

@@ -236,6 +236,12 @@ const eventReducer = (state = initialState, action) => {
         failure: false,
       };
     }
+
+    case "EVENT/RESET_STATE": {
+      return {
+        ...initialState,
+      };
+    }
     default:
       return state;
   }

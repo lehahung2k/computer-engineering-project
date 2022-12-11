@@ -23,6 +23,8 @@ import {
 } from "../../../services/redux/actions/event/event";
 import { useNavigate } from "react-router-dom";
 import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
+import { fetchPocAccountInfo } from "../../../services/redux/actions/accounts/fetchListAccount";
+
 const breadcrumbs = [{ link: "#", label: "Danh sách sự kiện" }];
 
 export default function PocManageEvent() {
@@ -50,6 +52,9 @@ export default function PocManageEvent() {
 
   React.useEffect(() => {
     dispatch(fetchListEventByUsername());
+    if (!tenantName) {
+      dispatch(fetchPocAccountInfo());
+    }
   }, []);
 
   const filteredEvents = formatListEvent.filter((event) => {

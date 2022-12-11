@@ -12,6 +12,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Checkbox from "@mui/material/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { fetchListEventByUsername } from "../../../services/redux/actions/event/fetchListEvent";
+import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
+import pocApi from "../../../api/PocApi";
 
 export default function Checkin() {
   const [capture, setCapture] = React.useState("hello");
@@ -23,22 +26,44 @@ export default function Checkin() {
   const [identityType, setIdentityType] = React.useState("");
   const [enableImage, setEnableImage] = React.useState(false);
   const [note, setNote] = React.useState("");
-
+  const [loadingPocInfo, setLoadingPocInfo] = React.useState(true);
+  const [loadingCheckin, setLoadingCheckin] = React.useState(false);
   const childRef1 = React.useRef();
   const childRef2 = React.useRef();
 
   const tenant = useSelector((state) => state.tenantState.tenant);
+  const listEvent = useSelector((state) => state.eventState.listEvents);
 
-  // const webcamRef1 = React.useRef(null);
-  // const webcamRef2 = React.useRef(null);
-  // const [deviceId, setDeviceId] = React.useState();
-  // const [devices, setDevices] = React.useState([]);
-  // const [captureState, setCaptureState] = React.useState(capture["capture"]);
-  // const [clientId, setClientId] = React.useState();
-  // const [clientDescription, setClientDescription] = React.useState();
-  // const [checkinTime, setCheckinTime] = React.useState();
-  // const [error, setError] = React.useState();
-  // const [newCheckin, setNewCheckin] = React.useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (listEvent.length === 0) {
+      console.log("Fetch list event");
+      dispatch(fetchListEventByUsername());
+    } else {
+      console.log("Fetch poc info");
+      const compareTime = (startTime, endTime) => {
+        const currentTime = new Date();
+        if (
+          Date.parse(startTime) <= Date.parse(currentTime) &&
+          Date.parse(endTime) >= Date.parse(currentTime)
+        ) {
+          return true;
+        }
+        return false;
+      };
+      const currentEvent = listEvent.filter((event) =>
+        compareTime(event.startTime, event.endTime)
+      );
+      if (currentEvent.length > 0) {
+        pocApi.fetchPocInfoByUsername(currentEvent[0].eventCode);
+      } else {
+        alert("Không có sự kiện nào đang diễn ra");
+        // navigate("/poc/event");
+      }
+    }
+  }, [listEvent]);
 
   const handleImageWebCam = (image, camId) => {
     if (camId === 1) setImage1(image);
@@ -46,31 +71,31 @@ export default function Checkin() {
   };
 
   const handleSubmitForm = (e) => {
-    // const clientId = document.querySelector("#student-id");
-    // const clientDescription = document.querySelector("#check-in-note");
-    // const params = {
-    //   pointCode: "nT8q",
-    //   guestCode: 1,
-    //   createTime: moment().format(),
-    //   note: clientDescription.value,
-    // };
-    // console.log(params);
+    const params = {
+      pointCode: "nT8q",
+      guestCode: guestCode,
+      createTime: moment().format(),
+      note: note,
+      enable: enableImage,
+      identityType: identityType,
+    };
+    console.log(params);
 
-    // const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
-    //   params,
-    //   sessionStorage.getItem("accessToken")
-    // );
+    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+      params,
+      sessionStorage.getItem("accessToken")
+    );
 
-    // responseAddNewCheckinClient
-    //   .then((response) => {
-    //     alert("Khách checkin thành công");
-    // setImage1("");
-    // setImage2("");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    // navigate(0);
+    responseAddNewCheckinClient
+      .then((response) => {
+        alert("Khách checkin thành công");
+        setImage1("");
+        setImage2("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     setRefresh((refresh) => refresh + 1);
   };
   return (
@@ -126,24 +151,6 @@ export default function Checkin() {
               <Grid item xs={12} md={12} lg={4}>
                 <div className={style.check_in_info}>
                   <Grid container spacing={2}>
-                    {/* <div id="check-in-info-div">
-                  <form id="check-in-info-form">
-                    <br /> */}
-                    {/* <input
-                      type="text"
-                      id="student-id"
-                      name="student-id"
-                      autofocus="true"
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          console.log("Enter");
-                          e.preventDefault();
-                          childRef1.current.captureCamera();
-                          childRef2.current.captureCamera();
-                        }
-                      }}
-                      key={refresh}
-                    ></input> */}
                     <Grid item xs={12}>
                       <TextField
                         inputProps={{ autoFocus: true }}
@@ -152,7 +159,7 @@ export default function Checkin() {
                         variant="outlined"
                         InputLabelProps={{ shrink: true }}
                         fullWidth
-                        defaultValue={guestCode}
+                        // defaultValue={guestCode}
                         onKeyPress={(e) => {
                           if (e.key === "Enter") {
                             console.log("Enter key pressed");
@@ -162,7 +169,7 @@ export default function Checkin() {
                           }
                         }}
                         key={refresh}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => setGuestCode(e.target.value)}
                       />
                       <br />
                     </Grid>
@@ -173,6 +180,7 @@ export default function Checkin() {
                         variant="outlined"
                         InputLabelProps={{ shrink: true }}
                         fullWidth
+                        key={refresh}
                       />
                     </Grid>
 
@@ -182,12 +190,9 @@ export default function Checkin() {
                         noOptionsText={"Không tìm thấy tổ chức"}
                         id="combo-box-demo"
                         options={[
-                          { label: "Thẻ sinh viên" },
-                          { label: "CMND/CCCD" },
-                          { label: "Khác" },
+                          { label: "Thẻ sự kiện", id: "1" },
+                          { label: "Khác", id: "0" },
                         ]}
-                        // sx={{ width: 300 }}
-                        // isOptionEqualToValue={(option, value) => option.id === value.id}
                         ListboxProps={{ style: { maxHeight: 150 } }}
                         renderInput={(params) => (
                           <TextField
@@ -198,11 +203,17 @@ export default function Checkin() {
                             required
                           />
                         )}
+                        onChange={(event, value) => setIdentityType(value)}
+                        key={refresh}
                       />
                     </Grid>
 
                     <Grid item xs={6}>
-                      <Checkbox color="primary" />
+                      <Checkbox
+                        color="primary"
+                        onChange={(e) => setEnableImage(e.target.value)}
+                        key={refresh}
+                      />
                       Cho phép ảnh
                     </Grid>
 
@@ -216,56 +227,21 @@ export default function Checkin() {
                         multiline
                         variant="standard"
                         InputLabelProps={{ shrink: true }}
+                        onChange={(e) => setNote(e.target.value)}
+                        key={refresh}
                       />
                     </Grid>
-                    {/* <label>Họ và tên</label>
-                    <br />
-                    <input type="text" id="name" name="name"></input>
-                    <br />
-                    <div className={style.checkin_form_option}>
-                      <div class="custom-select">
-                        <label for="identity_type">
-                          Chọn loại thẻ định danh:
-                        </label>
-                        <select id="identity_type">
-                          <option value="0">Thẻ sinh viên</option>
-                          <option value="1">CMND/CCCD</option>
-                          <option value="2">Khác</option>
-                        </select>
-                      </div>
 
-                      <div class="enable_image-check">
-                        <input
-                          type="checkbox"
-                          name="enable_image"
-                          value="enable"
-                          id="enable_image"
-                          style={{ width: "20px", height: "20spx" }}
-                        />
-                        <label for="enable_image">Cho phép ảnh</label>
-                        <br />
-                      </div>
-                    </div>
-                    <br />
-                    <label>Ghi chú</label>
-                    <br />
-                    <textarea
-                      type="text"
-                      id="check-in-note"
-                      name="check-in-note"
-                    ></textarea>
-                    <br /> */}
-                    {/* </form> */}
                     <Grid item xs={12}>
                       <Button
                         variant="contained"
                         onClick={handleSubmitForm}
                         style={{ textTransform: "none" }}
+                        key={refresh}
                       >
                         Submit
                       </Button>{" "}
                     </Grid>
-                    {/* </div> */}
                   </Grid>
                 </div>
               </Grid>

@@ -15,19 +15,6 @@ const breadcrumbs = [
   { link: "#", label: "Chi tiết sự kiện" },
 ];
 
-// const eventInfo = {
-//   name: "JobFair",
-//   start: "08:00 12/12/2022",
-//   end: "10:00 12/12/2022",
-//   note: "Ngày hôi việc làm 2022",
-// };
-
-// const poc = {
-//   name: "Soict POC",
-//   code: "12345",
-//   account: "adminPOC01",
-// };
-
 export default function PocEventDetail() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const eventInfo = useSelector((state) => state.eventState.event);
@@ -115,7 +102,6 @@ export default function PocEventDetail() {
                     {" "}
                     <div className={style.info__value}>{pocInfo.account}</div>
                   </div>
-                  {/* <Button>Xem danh sách check-in</Button> */}
                 </div>
 
                 <div className={style.map}>

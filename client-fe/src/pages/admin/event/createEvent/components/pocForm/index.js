@@ -26,6 +26,7 @@ import NormalTable from "../../../../../../components/tables/normal";
 import { pocCodeGenerator } from "../../../../../../services/hashFunction";
 import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
 import { fetchListPocAccount } from "../../../../../../services/redux/actions/accounts/fetchListAccount";
+
 const headCells = [
   {
     id: "pointName",
@@ -56,7 +57,7 @@ export default function EventPocInfoForm() {
   React.useEffect(() => {
     eventInfo.tenantCode
       ? dispatch(fetchListPocAccount(eventInfo.tenantCode))
-      : console.log("No tenant code");
+      : setOpenWarningNoTenant(true);
   }, []);
 
   const listPocAccount = useSelector(
@@ -93,6 +94,7 @@ export default function EventPocInfoForm() {
     const actionAddNewPoc = AddNewPocAction(newPoc);
     dispatch(actionAddNewPoc);
     dispatch(selectAccountForPocAction(newPoc.username));
+    dispatch(NewCodePocAction(""));
     setOpen(false);
   };
 

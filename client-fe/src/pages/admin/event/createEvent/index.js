@@ -1,29 +1,31 @@
-import * as React from "react";
-import Grid from "@mui/material/Grid";
-import style from "./style.module.css";
-import SideBar from "../../../../components/navigation";
-import Header from "../../../../components/header";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import EventInfoForm from "./components/eventInfoForm";
-import EventPocInfoForm from "./components/pocForm";
-import EventCompanyForm from "./components/companyForm";
-import BreadCrumbs from "../../../../components/breadCrumbs";
-import { StepButton } from "@mui/material";
-import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { resetApiStateEvent } from "../../../../services/redux/actions/event/event";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import Grid from "@mui/material/Grid";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Stepper from "@mui/material/Stepper";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import BreadCrumbs from "../../../../components/breadCrumbs";
+import Header from "../../../../components/header";
+import SideBar from "../../../../components/navigation";
+import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
+import {
+  resetApiState as eventResetApiState,
+  resetState as eventResetState,
+} from "../../../../services/redux/actions/event/event";
+import { resetState as pocResetState } from "../../../../services/redux/actions/poc/poc";
+import EventInfoForm from "./components/eventInfoForm";
+import EventPocInfoForm from "./components/pocForm";
+import style from "./style.module.css";
 
 const breadcrumbs =
   sessionStorage.getItem("role") === "admin"
@@ -44,14 +46,14 @@ const steps = [
   "Thêm thông tin POC sự kiện",
 ];
 
-function getStepContent(step) {
+function getStepContent(step, key) {
   switch (step) {
     case 0:
-      return <EventInfoForm />;
+      return <EventInfoForm key={key} />;
     // case 1:
     //   return <EventCompanyForm />;
     case 1:
-      return <EventPocInfoForm />;
+      return <EventPocInfoForm key={key} />;
     case 2:
       return <>Test is done</>;
     default:
@@ -62,6 +64,7 @@ function getStepContent(step) {
 export default function CreateEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
+  const [key, setKey] = React.useState(0);
 
   const newEventInfo = useSelector((state) => state.eventState.event);
   const newListPoc = useSelector((state) => state.pocState.listPoc);
@@ -78,6 +81,13 @@ export default function CreateEvent() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    console.log("Reset state create new event");
+    dispatch(eventResetState());
+    dispatch(pocResetState());
+    setKey((key) => key + 1);
+  }, []);
 
   const handleCreateNewEvent = () => {
     dispatch(createNewEvent(newEventInfo, newListPoc));
@@ -142,7 +152,7 @@ export default function CreateEvent() {
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    {getStepContent(activeStep)}
+                    {getStepContent(activeStep, key)}
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                       {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -180,19 +190,19 @@ export default function CreateEvent() {
 
       <Dialog
         open={failureEvent}
-        onClose={() => dispatch(resetApiStateEvent())}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant không thành công, xin hãy thử lại
+            Không thể tạo mới sự kiện, xin hãy thử lại
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiStateEvent());
+              dispatch(eventResetApiState());
               // navigate("/admin/event");
             }}
             autoFocus
@@ -204,7 +214,7 @@ export default function CreateEvent() {
 
       <Dialog
         open={successEvent && failurePoc === true}
-        onClose={() => dispatch(resetApiStateEvent())}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -217,7 +227,7 @@ export default function CreateEvent() {
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiStateEvent());
+              dispatch(eventResetApiState());
               navigate("/admin/event");
             }}
             autoFocus
@@ -229,19 +239,19 @@ export default function CreateEvent() {
 
       <Dialog
         open={successEvent && successPoc === true}
-        onClose={() => dispatch(resetApiStateEvent())}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công.
+            Tạo mới sự kiện thành công.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiStateEvent());
+              dispatch(eventResetApiState());
               navigate("/admin/event/detail");
             }}
             autoFocus

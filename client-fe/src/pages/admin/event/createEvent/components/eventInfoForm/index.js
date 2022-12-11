@@ -20,6 +20,7 @@ import {
   newEndEventAction,
   newMapEventAction,
   newTenantEventAction,
+  resetState as eventResetState,
 } from "../../../../../../services/redux/actions/event/event";
 import style from "./style.module.css";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -31,6 +32,8 @@ export default function EventInfoForm() {
 
   React.useEffect(() => {
     dispatch(fetchListTenant());
+    // dispatch(eventResetState());
+    // setKey((key) => key + 1);
   }, []);
 
   const listTenant = useSelector((state) => state.tenantState.listTenant);

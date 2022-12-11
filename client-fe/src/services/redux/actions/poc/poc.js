@@ -46,3 +46,9 @@ export const AddNewPocAction = (poc) => {
     payload: poc,
   };
 };
+
+export const resetState = () => {
+  return {
+    type: "POC/RESET_STATE",
+  };
+};

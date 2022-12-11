@@ -8,7 +8,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { resetApiState } from "../../../../../../services/redux/actions/tenant/tenant";
+import { resetApiState as tenantResetApiState } from "../../../../../../services/redux/actions/tenant/tenant";
+import { resetApiState as eventResetApiState } from "../../../../../../services/redux/actions/event/event";
 
 export default function AlertResponse() {
   const loadingTenant = useSelector((state) => state.tenantState.loading);
@@ -24,6 +25,12 @@ export default function AlertResponse() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  React.useEffect(() => {
+    if (successTenant && successEvent) {
+      dispatch(tenantResetApiState());
+      dispatch(eventResetApiState());
+    }
+  }, [successTenant, successEvent]);
 
   return (
     <div>
@@ -34,73 +41,52 @@ export default function AlertResponse() {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      {/* <Dialog
-        open={failureTenant}
-        onClose={() => dispatch(resetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant không thành công, xin hãy thử lại
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-
-      {/* <Dialog
-        open={successTenant && successEvent}
-        onClose={() => dispatch(resetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công nhưng chưa thể tạo tài khoản đăng nhập,
-            xin hãy thêm tài khoản đăng nhập sau.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-
       <Dialog
         open={failureTenant && failureEvent}
         onClose={() => {
-          dispatch(resetApiState());
+          dispatch(tenantResetApiState());
+          dispatch(eventResetApiState());
         }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tải danh sách sự kiện không thành công.
+            Không thể tải danh sách sự kiện
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiState());
-              //   navigate("/admin/tenant/detail");
+              dispatch(tenantResetApiState());
+              dispatch(eventResetApiState());
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={failureTenant && successEvent}
+        onClose={() => {
+          dispatch(tenantResetApiState());
+          dispatch(eventResetApiState());
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Không thể tải ban tổ chức
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(tenantResetApiState());
+              dispatch(eventResetApiState());
             }}
             autoFocus
           >

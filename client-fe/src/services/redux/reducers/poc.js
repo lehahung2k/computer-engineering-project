@@ -174,29 +174,38 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
-    default:
-      return state;
-  }
-};
-
-const listPocReducer = (state = [], action) => {
-  switch (action.type) {
-    case "POC/ADD_POC": {
-      const newList = state.map((e) => e);
-
-      return [...newList, action.payload];
-    }
-
-    case "POC/REMOVE_POC": {
-      return state;
-    }
-
-    case "POC/UPDATE_POC": {
-      return state;
+    /**
+     * Reset state
+     */
+    case "POC/RESET_STATE": {
+      return {
+        ...initialPoc,
+      };
     }
 
     default:
       return state;
   }
 };
-export { pocReducer, listPocReducer };
+
+// const listPocReducer = (state = [], action) => {
+//   switch (action.type) {
+//     case "POC/ADD_POC": {
+//       const newList = state.map((e) => e);
+
+//       return [...newList, action.payload];
+//     }
+
+//     case "POC/REMOVE_POC": {
+//       return state;
+//     }
+
+//     case "POC/UPDATE_POC": {
+//       return state;
+//     }
+
+//     default:
+//       return state;
+//   }
+// };
+export { pocReducer };

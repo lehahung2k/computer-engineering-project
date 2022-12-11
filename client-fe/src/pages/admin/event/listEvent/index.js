@@ -50,18 +50,30 @@ export default function ListEvent() {
     let tenant = listTenant.filter(
       (tenant) => tenant.tenantCode === event.tenantCode
     );
-    return {
-      ...event,
-      startTime: startTime,
-      endTime: endTime,
-      tenantName: tenant[0].tenantName,
-    };
+
+    if (tenant.length > 0) {
+      return {
+        ...event,
+        startTime: startTime,
+        endTime: endTime,
+        tenantName: tenant[0].tenantName,
+      };
+    } else {
+      return {
+        ...event,
+        startTime: startTime,
+        endTime: endTime,
+        tenantName: "",
+      };
+    }
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    // if (listEvents.length === 0)
     dispatch(fetchListEventAdmin());
+    // if (listTenant.length === 0)
     dispatch(fetchListTenant());
   }, []);
 
@@ -73,8 +85,11 @@ export default function ListEvent() {
 
   const handleClickButtonField = (fieldName, row) => {
     if (fieldName === "eventName") {
-      dispatch(pinEventId(row["id"]));
-      const eventInfo = listEvents.find((event) => event.id === row["id"]);
+      dispatch(pinEventId(row["eventId"]));
+      const eventInfo = listEvents.find(
+        (event) => event.eventId === row["eventId"]
+      );
+      console.log(eventInfo);
       dispatch(newEventAction(eventInfo));
       navigate("/admin/event/detail");
     }
@@ -85,7 +100,7 @@ export default function ListEvent() {
     <div className={style.body}>
       <Grid container spacing={0}>
         {openSidebar ? (
-          <Grid xs="auto">
+          <Grid item xs="auto">
             <div>
               <SideBar id="1" />
             </div>
@@ -93,7 +108,7 @@ export default function ListEvent() {
         ) : (
           <></>
         )}
-        <Grid xs>
+        <Grid item xs>
           <Header
             openSidebar={openSidebar}
             handleOpenSidebar={setOpenSidebar}

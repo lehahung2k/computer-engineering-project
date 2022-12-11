@@ -9,10 +9,27 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  pinEventId,
+  newEventAction,
+} from "../../../../../../services/redux/actions/event/event";
 
 export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const listEvents = useSelector((state) => state.eventState.listEvents);
+  const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
+
+  React.useEffect(() => {
+    const eventInfo = listEvents.find(
+      (event) => event.eventId === pinnedEventId
+    );
+    console.log(eventInfo);
+    dispatch(newEventAction(eventInfo));
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);

@@ -61,8 +61,14 @@ export const newTenantEventAction = (tenant) => {
   };
 };
 
-export const resetApiStateEvent = () => {
+export const resetApiState = () => {
   return {
     type: "EVENT/RESET_API_STATE",
+  };
+};
+
+export const resetState = () => {
+  return {
+    type: "EVENT/RESET_STATE",
   };
 };
