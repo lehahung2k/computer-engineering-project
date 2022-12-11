@@ -117,6 +117,33 @@ const pocReducer = (state = initialPoc, action) => {
         message: action.message,
       };
     }
+    /**
+     * Fetch poc info
+     */
+    case "POC/FETCH_POC_INFO": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "POC/FETCH_POC_INFO_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        poc: action.payload,
+      };
+    }
+
+    case "POC/FETCH_POC_INFO_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
 
     /**
      * Posting create new list poc

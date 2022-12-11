@@ -41,7 +41,13 @@ export default function PocSidebar() {
           </Link>
         </ListItem>
         <ListItem>
-          <Link to="/check-in" className={style.listBtn}>
+          <Link
+            to={{
+              pathname: "/check-in",
+              state: { test: "test navigate state" },
+            }}
+            className={style.listBtn}
+          >
             <ListItemButton>
               <FontAwesomeIcon
                 icon={faCalendarDay}

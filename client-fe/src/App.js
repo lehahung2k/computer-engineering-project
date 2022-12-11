@@ -138,7 +138,11 @@ function App() {
         </Route>
 
         <Route path="/check-in" element={<PrivateRoute type={"poc"} />}>
-          <Route path="/check-in" element={<Checkin />}></Route>
+          <Route
+            path="/check-in"
+            element={<Checkin />}
+            render={() => <Checkin />}
+          ></Route>
         </Route>
 
         <Route exact path="/login" element={<Login />} />

@@ -3,9 +3,10 @@ const router = express.Router();
 const { Transactions } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 
-router.get("/get-all-by-point-code", validateToken, async (req, res) => {
+router.post("/get-all-by-point-code", validateToken, async (req, res) => {
   if (!req.user.username) return res.status(401).send("Invalid token");
   const pointCode = req.body.pointCode;
+  console.log(req.body);
   if (!pointCode) return res.sendStatus(400);
   try {
     const listTransactions = await Transactions.findAll({
