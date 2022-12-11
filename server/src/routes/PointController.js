@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { PointCheckin } = require("../models");
+const { PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 
 router.get("/:event_id", async (req, res) => {
   const id = req.params.event_id;
   console.log(id);
-  const listPointOfCheck = await PointCheckin.findAll({
+  const listPointOfCheck = await PointOfCheckins.findAll({
     where: { event_id: id },
   });
   res.json(listPointOfCheck);
@@ -17,7 +17,7 @@ router.post(
   // validateToken,
   async (req, res) => {
     const post = req.body;
-    await PointCheckin.bulkCreate(post);
+    await PointOfCheckins.bulkCreate(post);
     res.json(post);
   }
 );
@@ -26,7 +26,7 @@ router.put("/:event_id/update-point/:point_id", async (req, res) => {
   try {
     const event_id = req.params.event_id;
     const point_id = req.params.point_id;
-    await PointCheckin.update(req.body, {
+    await PointOfCheckins.update(req.body, {
       where: {
         event_id: event_id,
         point_id: point_id,
@@ -41,7 +41,7 @@ router.put("/:event_id/update-point/:point_id", async (req, res) => {
 router.delete("/:event_id/delete-point/:point_id", async (req, res) => {
   const event_id = req.params.event_id;
   const point_id = req.params.point_id;
-  await PointCheckin.destroy({
+  await PointOfCheckins.destroy({
     where: {
       event_id: event_id,
       point_id: point_id,
@@ -52,7 +52,7 @@ router.delete("/:event_id/delete-point/:point_id", async (req, res) => {
 
 router.delete("/delete-all-poc/:event_id", validateToken, async (req, res) => {
   const event_id = req.params.event_id;
-  await PointCheckin.destroy({
+  await PointOfCheckins.destroy({
     where: {
       event_id: event_id,
     },
@@ -61,4 +61,39 @@ router.delete("/delete-all-poc/:event_id", validateToken, async (req, res) => {
   res.json("Delete success");
 });
 
+router.post(
+  "/get-all-poc-by-event-code",
+  // validateToken,
+  async (req, res) => {
+    const eventCode = req.body.eventCode;
+    console.log(req.body);
+    if (!eventCode) return res.sendStatus(400);
+    try {
+      const listPoc = await PointOfCheckins.findAll({
+        where: { eventCode: eventCode },
+        attributes: ["pointName", "username", "pointNote"],
+      });
+      return res.json(listPoc);
+    } catch (err) {
+      res.sendStatus(500);
+    }
+  }
+);
+
+router.post("/get-poc-info-by-username", validateToken, async (req, res) => {
+  const username = req.user.username;
+  const eventCode = req.body.eventCode;
+  if (!username) res.status(401).send("Invalid token");
+  if (!eventCode) res.sendStatus(400);
+
+  try {
+    const pocInfo = await PointOfCheckins.findOne({
+      where: { username: username, eventCode: eventCode },
+    });
+    res.json(pocInfo);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
 module.exports = router;

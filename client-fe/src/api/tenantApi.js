@@ -26,6 +26,17 @@ class TenantApi {
     };
     return axios.put(url, params, config);
   };
+
+  fetchTenantInfoByTenantCode = (params) => {
+    const url = baseUrl + "/get-tenant-info-by-tenant-code";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.post(url, params, config);
+  };
 }
 
 const tenantApi = new TenantApi();

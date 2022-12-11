@@ -24,8 +24,12 @@ import {
   pinEventId,
   newEventAction,
 } from "../../../../services/redux/actions/event/event";
+import { fetchListEventAdmin } from "../../../../services/redux/actions/event/fetchListEvent";
+import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
+import moment from "moment";
+import AlertResponse from "./components/alert";
 const breadcrumbs =
-  sessionStorage.getItem("role") === "0"
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "#", label: "Sự kiện" },
@@ -38,20 +42,54 @@ const breadcrumbs =
 export default function ListEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const listEvents = useSelector((state) => state.eventState.listEvents);
+  const listTenant = useSelector((state) => state.tenantState.listTenant);
 
+  const customListEvents = listEvents.map((event) => {
+    let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
+    let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
+    let tenant = listTenant.filter(
+      (tenant) => tenant.tenantCode === event.tenantCode
+    );
+
+    if (tenant.length > 0) {
+      return {
+        ...event,
+        startTime: startTime,
+        endTime: endTime,
+        tenantName: tenant[0].tenantName,
+      };
+    } else {
+      return {
+        ...event,
+        startTime: startTime,
+        endTime: endTime,
+        tenantName: "",
+      };
+    }
+  });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    // if (listEvents.length === 0)
+    dispatch(fetchListEventAdmin());
+    // if (listTenant.length === 0)
+    dispatch(fetchListTenant());
+  }, []);
+
   const handleClickAddNewEvent = () => {
-    sessionStorage.getItem("role") === 0
+    sessionStorage.getItem("role") === "admin"
       ? navigate("/admin/create-event")
       : navigate("/event-admin/create-event");
   };
 
   const handleClickButtonField = (fieldName, row) => {
-    if (fieldName === "name") {
-      dispatch(pinEventId(row["id"]));
-      const eventInfo = listEvents.find((event) => event.id === row["id"]);
+    if (fieldName === "eventName") {
+      dispatch(pinEventId(row["eventId"]));
+      const eventInfo = listEvents.find(
+        (event) => event.eventId === row["eventId"]
+      );
+      console.log(eventInfo);
       dispatch(newEventAction(eventInfo));
       navigate("/admin/event/detail");
     }
@@ -62,7 +100,7 @@ export default function ListEvent() {
     <div className={style.body}>
       <Grid container spacing={0}>
         {openSidebar ? (
-          <Grid xs="auto">
+          <Grid item xs="auto">
             <div>
               <SideBar id="1" />
             </div>
@@ -70,7 +108,7 @@ export default function ListEvent() {
         ) : (
           <></>
         )}
-        <Grid xs>
+        <Grid item xs>
           <Header
             openSidebar={openSidebar}
             handleOpenSidebar={setOpenSidebar}
@@ -101,7 +139,7 @@ export default function ListEvent() {
                   <Grid item xs={12}>
                     <NormalTable
                       key={listEvents}
-                      rows={listEvents}
+                      rows={customListEvents}
                       headCells={headCellsListFakeEvents}
                       handleClickButtonField={handleClickButtonField}
                     />
@@ -112,6 +150,7 @@ export default function ListEvent() {
           </Grid>
         </Grid>
       </Grid>
+      <AlertResponse />
     </div>
   );
 }

@@ -43,28 +43,40 @@ router.post("/", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  const { username, passwd } = req.body;
-  const user = await Account.findOne({
-    where: {
-      username: username,
-    },
-  });
+  const { username, password } = req.body;
 
-  if (user === null || !user) {
-    res.json({ error: "User not found!" });
-  } else {
-    bcrypt.compare(passwd, user.passwd).then(async (match) => {
-      if (!match) {
-        res.json({ error: "Wrong username or password" });
-      } else {
-        let secretKey = process.env.SECRET_KEY;
-        let algorithm = process.env.ALGORITHM;
-        const accessToken = sign({ username: user.username }, secretKey, {
-          algorithm: algorithm,
-        });
-        res.json({ accessToken: accessToken, userRole: user.role });
-      }
+  if (!username || !password) {
+    return res.sendStatus(400);
+  }
+  try {
+    const user = await Accounts.findOne({
+      where: {
+        username: username,
+      },
     });
+
+    if (user === null || !user) {
+      res.json({ error: "User not found!" });
+    } else {
+      bcrypt.compare(password, user.passwd).then(async (match) => {
+        if (!match) {
+          res.json({ error: "Wrong username or password" });
+        } else {
+          let secretKey = process.env.SECRET_KEY;
+          let algorithm = process.env.ALGORITHM;
+          const accessToken = sign(
+            { username: user.username, userRole: user.role },
+            secretKey,
+            {
+              algorithm: algorithm,
+            }
+          );
+          res.json({ accessToken: accessToken, userRole: user.role });
+        }
+      });
+    }
+  } catch (error) {
+    res.sendStatus(500);
   }
 });
 
@@ -75,13 +87,91 @@ router.get("/auth", validateToken, (req, res) => {
 
 router.post("/tenant-account", async (req, res) => {
   const { tenantCode } = req.body;
-  const account = await Accounts.findOne({
-    where: {
-      tenantCode: tenantCode,
-      role: "tenant",
-    },
-  });
-  res.json({ username: account.username });
+  try {
+    const account = await Accounts.findAll({
+      where: {
+        tenantCode: tenantCode,
+        role: "tenant",
+      },
+    });
+    res.json({ username: account.username });
+  } catch (err) {
+    console.log(err);
+    res.json({ error: err.message });
+  }
+});
+
+router.post("/poc-account", async (req, res) => {
+  const { tenantCode } = req.body;
+  console.log(tenantCode);
+  try {
+    const account = !tenantCode
+      ? await Accounts.findAll({
+          where: {
+            role: "poc",
+          },
+        })
+      : await Accounts.findAll({
+          where: {
+            tenantCode: tenantCode,
+            role: "poc",
+          },
+        });
+    const listUsername = account.map((account) => ({
+      username: account.username,
+      fullName: account.fullName,
+      phoneNumber: account.phoneNumber,
+      companyName: account.companyName,
+      active: account.active,
+    }));
+    res.json(listUsername);
+  } catch (err) {
+    console.log(err);
+    res.json({ error: err.message });
+  }
+});
+
+router.post(
+  "/get-account-info-by-username",
+  validateToken,
+  async (req, res) => {
+    const username = req.user.username;
+    if (!username) return res.status(401).send("Invalid token");
+    try {
+      const accountInfo = await Accounts.findOne({
+        where: { username: username },
+        attributes: [
+          "username",
+          "fullName",
+          "email",
+          "phoneNumber",
+          "tenantCode",
+        ],
+      });
+
+      res.json(accountInfo);
+    } catch (err) {
+      console.log(err.message);
+      res.sendStatus(500);
+    }
+  }
+);
+
+router.put("/update-account", async (req, res) => {
+  const username = req.body.username;
+  if (!username) return res.sendStatus(400);
+  try {
+    await Accounts.update(
+      { active: 1 },
+      {
+        where: { username: username },
+      }
+    );
+    res.json({ username: username });
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;

@@ -39,5 +39,40 @@
             "eventCode": "tfNWk",
             "username": "bachkhoa"
         }
+    ],
+    "listPocAccount": [
+        {
+            "username": "dinhangminh899",
+            "password": "To7P-WYL^]Dd",
+            "fullName": "Đinh Ðăng Minh",
+            "active": 1,
+            "role": "poc",
+            "companyName": "",
+            "phoneNumber": "",
+            "tenantCode": "8xFi",
+            "email": "dinhangminh8992@mail.com"
+        },
+        {
+            "username": "nghiemhongthuy535",
+            "password": "PWL4~p-0ul[i",
+            "fullName": "Nghiêm Hồng Thủy",
+            "active": 1,
+            "role": "poc",
+            "companyName": "",
+            "phoneNumber": "",
+            "tenantCode": "8xFi",
+            "email": ""
+        },
+        {
+            "username": "hangbichquan635",
+            "password": "%C9(*b]0w#KN",
+            "fullName": "Hàng Bích Quân",
+            "active": 1,
+            "role": "poc",
+            "companyName": "",
+            "phoneNumber": "",
+            "tenantCode": "8xFi",
+            "email": ""
+        }
     ]
 }

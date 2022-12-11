@@ -404,7 +404,7 @@ export const ListPocAccount = [
 
 export const ListPocAccountHeadNormal = [
   {
-    id: "name",
+    id: "fullName",
     label: "Họ và tên",
     sort: true,
     width: "20%",

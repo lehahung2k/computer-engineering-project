@@ -20,7 +20,7 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === 0
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/event", label: "Sự kiện" },

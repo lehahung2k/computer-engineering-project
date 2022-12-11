@@ -11,7 +11,7 @@ import style from "./style.module.css";
 import { useSelector, useDispatch } from "react-redux";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === "0"
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/event", label: "Sự kiện" },

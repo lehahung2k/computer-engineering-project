@@ -3,21 +3,21 @@ import { createNewListPoc } from "../poc/createListPoc";
 export const createNewEvent = (event, listPoc) => async (dispatch) => {
   dispatch({ type: "EVENT/CREATE_NEW_EVENT" });
   const params = {
-    eventCode: event.code,
-    eventName: event.name,
+    eventCode: event.eventCode,
+    eventName: event.eventName,
     isActivate: 1,
-    eventDescription: event.note,
-    startTime: event.start,
-    endTime: event.end,
-    eventImg: event.map,
-    // tenantCode: event.tenant.tenantCode,
+    eventDescription: event.eventDescription,
+    startTime: event.startTime,
+    endTime: event.endTime,
+    eventImg: event.eventImg,
+    tenantCode: event.tenantCode,
   };
   console.log(params);
   const response = eventApi.addNew(params);
 
   response
     .then((res) => {
-      dispatch(createNewListPoc(listPoc));
+      dispatch(createNewListPoc({ listPoc, eventCode: event.eventCode }));
       dispatch({ type: "EVENT/CREATE_NEW_EVENT_SUCCESS", payload: res.data });
       console.log("EVENT/CREATE_NEW_EVENT_SUCCESS", res.data);
     })

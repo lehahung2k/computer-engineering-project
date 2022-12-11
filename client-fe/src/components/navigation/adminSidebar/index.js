@@ -11,6 +11,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import React from "react";
 import style from "./style.module.css";
+import { Link } from "react-router-dom";
 
 export default function AdminSidebar() {
   const logout = () => {
@@ -23,9 +24,11 @@ export default function AdminSidebar() {
         {/* {sessionStorage.getItem("accessToken") && (
           <> */}
         <ListItem>
-          <a
-            href={
-              sessionStorage.getItem("role") === "0" ? "/admin" : "/event-admin"
+          <Link
+            to={
+              sessionStorage.getItem("role") === "admin"
+                ? "/admin"
+                : "/event-admin"
             }
             className={style.listBtn}
           >
@@ -36,12 +39,12 @@ export default function AdminSidebar() {
               ></FontAwesomeIcon>
               Trang chủ
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         <ListItem>
-          <a
-            href={
-              sessionStorage.getItem("role") === "0"
+          <Link
+            to={
+              sessionStorage.getItem("role") === "admin"
                 ? "/admin/event"
                 : "/event-admin/event"
             }
@@ -54,12 +57,12 @@ export default function AdminSidebar() {
               />
               Sự kiện
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         <ListItem>
-          <a
-            href={
-              sessionStorage.getItem("role") === "0"
+          <Link
+            to={
+              sessionStorage.getItem("role") === "admin"
                 ? "/admin/tenant"
                 : "/event-admin/detail-info"
             }
@@ -72,13 +75,13 @@ export default function AdminSidebar() {
               />
               Ban tổ chức
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
 
         <ListItem>
-          <a
-            href={
-              sessionStorage.getItem("role") === "0"
+          <Link
+            to={
+              sessionStorage.getItem("role") === "admin"
                 ? "/admin/poc-account"
                 : "/event-admin/poc-account"
             }
@@ -91,15 +94,15 @@ export default function AdminSidebar() {
               />
               Tài khoản POC
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         <ListItem>
-          <a href="/" className={style.logout}>
+          <Link to="/" className={style.logout}>
             <ListItemButton onClick={logout}>
               <FontAwesomeIcon icon={faSignOutAlt} className="iconPage" />
               Đăng xuất
             </ListItemButton>
-          </a>
+          </Link>
         </ListItem>
         {/* </>
         )} */}

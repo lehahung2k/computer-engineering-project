@@ -25,57 +25,22 @@ import {
 import NormalTable from "../../../../../../components/tables/normal";
 import { pocCodeGenerator } from "../../../../../../services/hashFunction";
 import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
-
-const rowsAccount = [
-  { label: "NVA01" },
-  { label: "NVA02" },
-  { label: "NVB01" },
-  { label: "NVC01" },
-  { label: "NVD01" },
-  { label: "NVG01" },
-  { label: "NVG03" },
-  { label: "NVH01" },
-  { label: "NVY01" },
-  { label: "NVki01" },
-  { label: "sNVA01" },
-  { label: "sNVA02" },
-  { label: "sNVB01" },
-  { label: "sNVC01" },
-  { label: "sNVD01" },
-  { label: "sNVG01" },
-  { label: "sNVG03" },
-  { label: "sNVH01" },
-  { label: "sNVY01" },
-  { label: "sNVki01" },
-];
-
-const rowsCompany = [
-  { label: "Doanh nghiệp 01" },
-  { label: "Doanh nghiệp 02" },
-  { label: "Doanh nghiệp 03" },
-  { label: "Doanh nghiệp 04" },
-  { label: "Doanh nghiệp 06" },
-  { label: "Doanh nghiệp 05" },
-  { label: "Doanh nghiệp 07" },
-  { label: "Doanh nghiệp 08" },
-  { label: "Doanh nghiệp 09" },
-  { label: "Doanh nghiệp 10" },
-];
+import { fetchListPocAccount } from "../../../../../../services/redux/actions/accounts/fetchListAccount";
 
 const headCells = [
   {
-    id: "name",
+    id: "pointName",
     label: "Tên POC",
 
     sort: true,
   },
   {
-    id: "account",
+    id: "username",
     label: "Tài khoản phụ trách",
     sort: false,
   },
   {
-    id: "note",
+    id: "pointNote",
     label: "Ghi chú",
     sort: false,
   },
@@ -83,20 +48,21 @@ const headCells = [
 
 export default function EventPocInfoForm() {
   const [open, setOpen] = React.useState(false);
-  const [code, setCode] = React.useState("");
-  const [name, setName] = React.useState("");
   const [openListAccount, setOpenListAccount] = React.useState(false);
-
+  const [openWarningNoTenant, setOpenWarningNoTenant] = React.useState(false);
   const listNewPoc = useSelector((state) => state.pocState.listPoc);
   const newPoc = useSelector((state) => state.pocState.poc);
   const eventInfo = useSelector((state) => state.eventState.event);
+
+  React.useEffect(() => {
+    eventInfo.tenantCode
+      ? dispatch(fetchListPocAccount(eventInfo.tenantCode))
+      : setOpenWarningNoTenant(true);
+  }, []);
+
   const listPocAccount = useSelector(
     (state) => state.accountState.listPocAccount
   );
-
-  // const listPocAccount = listAccount.filter(
-  //   (account) => account.role === "poc"
-  // );
 
   const listPocAccountSelect = listPocAccount.map((account) => ({
     label: account.username,
@@ -104,18 +70,18 @@ export default function EventPocInfoForm() {
 
   const dispatch = useDispatch();
 
-  const handleClickGenerateCode = () => {
-    setCode("test");
-  };
-
   const handleMouseDownGenerateCode = (event) => {
     event.preventDefault();
   };
 
   const handleClickOpen = () => {
-    setOpen(true);
-    console.log("Handle click open: open state: ", open);
-    console.log("Hanlde click open: Open list account", openListAccount);
+    if (eventInfo.tenantCode) {
+      setOpen(true);
+      console.log("Handle click open: open state: ", open);
+      console.log("Hanlde click open: Open list account", openListAccount);
+    } else {
+      setOpenWarningNoTenant(true);
+    }
   };
 
   const handleClose = () => {
@@ -127,6 +93,8 @@ export default function EventPocInfoForm() {
   const handleAddNewPOC = () => {
     const actionAddNewPoc = AddNewPocAction(newPoc);
     dispatch(actionAddNewPoc);
+    dispatch(selectAccountForPocAction(newPoc.username));
+    dispatch(NewCodePocAction(""));
     setOpen(false);
   };
 
@@ -141,10 +109,7 @@ export default function EventPocInfoForm() {
 
     const newAccountAction = NewAccountAction(value ? value.label : "");
     dispatch(newAccountAction);
-    dispatch(selectAccountForPocAction(value ? value.label : ""));
   };
-
-  const handleChangeCompany = () => {};
 
   const handleChangeNote = (e) => {
     const newNotePocAction = NewNotePocAction(e.target.value);
@@ -154,7 +119,11 @@ export default function EventPocInfoForm() {
   const handleChangePocCode = () => {
     const today = new Date();
     const time = today.getTime().toString();
-    const pocCode = pocCodeGenerator([newPoc.name, eventInfo.name, time]);
+    const pocCode = pocCodeGenerator([
+      newPoc.pointName,
+      eventInfo.eventName,
+      time,
+    ]);
     dispatch(NewCodePocAction(pocCode));
   };
 
@@ -204,7 +173,7 @@ export default function EventPocInfoForm() {
                 InputProps={{
                   readOnly: true,
                 }}
-                value={eventInfo.name}
+                value={eventInfo.eventName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -230,7 +199,7 @@ export default function EventPocInfoForm() {
                 autoComplete="poc-code"
                 variant="standard"
                 helperText="Chọn để tạo mã ngẫu nhiên"
-                value={newPoc.code}
+                value={newPoc.pointCode}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
                   startAdornment: (
@@ -305,6 +274,18 @@ export default function EventPocInfoForm() {
         <DialogActions>
           <Button onClick={handleClose}>Hủy bỏ</Button>
           <Button onClick={handleAddNewPOC}>Thêm mới</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openWarningNoTenant}
+        onClose={() => setOpenWarningNoTenant(false)}
+        fullWidth={true}
+        maxWidth={"md"}
+      >
+        <DialogContent>Bạn chưa thêm ban tổ chức cho sự kiện</DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenWarningNoTenant(false)}>OK</Button>
         </DialogActions>
       </Dialog>
     </>

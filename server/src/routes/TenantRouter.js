@@ -23,4 +23,32 @@ router.put("/update-tenant", async (req, res) => {
   res.json(updatedTenant);
 });
 
+router.post(
+  "/get-tenant-info-by-tenant-code",
+  validateToken,
+  async (req, res) => {
+    if (!req.user.userRole) return res.status(401).send("Invalid token");
+    const tenantCode = req.body.tenantCode;
+    if (!tenantCode) return res.sendStatus(400);
+
+    try {
+      const tenantInfo = await Tenants.findOne({
+        where: { tenantCode: tenantCode },
+        attributes: [
+          "tenantName",
+          "tenantAddress",
+          "contactName",
+          "contactEmail",
+          "contactPhone",
+          "tenantCode",
+        ],
+      });
+      res.json(tenantInfo);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  }
+);
+
 module.exports = router;

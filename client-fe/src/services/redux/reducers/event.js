@@ -1,19 +1,20 @@
 import dayjs from "dayjs";
 import { listFakeEvents } from "../../../assets/fakeData/fakeEvent";
 const initialState = {
-  listEvents: listFakeEvents,
+  listEvents: [],
   event: {
-    name: "",
-    code: "",
-    start: dayjs(),
-    end: dayjs(),
-    note: "",
-    map: "",
-    tenant: null,
+    eventName: "",
+    eventCode: "",
+    startTime: dayjs(),
+    endTime: dayjs(),
+    eventDescription: "",
+    eventImg: "",
+    tenantCode: null,
   },
   pinnedEventId: null,
   loading: false,
   success: false,
+  failure: false,
   message: "",
 };
 
@@ -33,7 +34,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_NAME": {
       const newName = action.payload;
-      const newEvent = { ...state.event, name: newName };
+      const newEvent = { ...state.event, eventName: newName };
 
       return {
         ...state,
@@ -43,7 +44,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_CODE": {
       const newCode = action.payload;
-      const newEvent = { ...state.event, code: newCode };
+      const newEvent = { ...state.event, eventCode: newCode };
       return {
         ...state,
         event: newEvent,
@@ -52,7 +53,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_START": {
       const newStart = action.payload;
-      const newEvent = { ...state.event, start: newStart };
+      const newEvent = { ...state.event, startTime: newStart };
 
       return {
         ...state,
@@ -62,7 +63,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_END": {
       const newEnd = action.payload;
-      const newEvent = { ...state.event, end: newEnd };
+      const newEvent = { ...state.event, endTime: newEnd };
 
       return {
         ...state,
@@ -72,7 +73,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_NOTE": {
       const newNote = action.payload;
-      const newEvent = { ...state.event, note: newNote };
+      const newEvent = { ...state.event, eventDescription: newNote };
 
       return {
         ...state,
@@ -82,7 +83,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_MAP": {
       const newMap = action.payload;
-      const newEvent = { ...state.event, map: newMap };
+      const newEvent = { ...state.event, eventImg: newMap };
 
       return {
         ...state,
@@ -92,7 +93,7 @@ const eventReducer = (state = initialState, action) => {
 
     case "EVENT/NEW_TENANT": {
       const newTenant = action.payload;
-      const newEvent = { ...state.event, tenant: newTenant };
+      const newEvent = { ...state.event, tenantCode: newTenant };
 
       return {
         ...state,
@@ -123,7 +124,7 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
       };
     }
@@ -179,7 +180,7 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
       };
     }
@@ -220,6 +221,25 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         pinnedEventId: action.payload,
+      };
+    }
+
+    /**
+     * Reset api status
+     */
+    case "EVENT/RESET_API_STATE": {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        message: "",
+        failure: false,
+      };
+    }
+
+    case "EVENT/RESET_STATE": {
+      return {
+        ...initialState,
       };
     }
     default:

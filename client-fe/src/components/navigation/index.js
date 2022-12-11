@@ -9,11 +9,11 @@ import PocSidebar from "./pocSidebar";
 const AuthorizeSidebar = () => {
   console.log(sessionStorage.getItem("role"));
   switch (sessionStorage.getItem("role")) {
-    case "0":
+    case "admin":
       return <AdminSidebar />;
-    case "1":
+    case "tenant":
       return <AdminSidebar />;
-    case "2":
+    case "poc":
       return <PocSidebar />;
     default:
       return <></>;

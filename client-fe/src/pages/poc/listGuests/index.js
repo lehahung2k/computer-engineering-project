@@ -11,7 +11,16 @@ import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import BreadCrumbs from "../../../components/breadCrumbs";
-
+import checkinApi from "../../../api/CheckinAPI";
+import { useDispatch, useSelector } from "react-redux";
+import Backdrop from "@mui/material/Backdrop";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import NormalTable from "../../../components/tables/normal";
 const breadcrumbs = [
   { link: "/poc/event", label: "Danh sách sự kiện" },
   { link: "/poc/event/detail", label: "Chi tiết sự kiện" },
@@ -158,12 +167,12 @@ const headCells = [
     sort: true,
   },
   {
-    id: "id",
+    id: "guestCode",
     label: "Mã định danh",
     sort: false,
   },
   {
-    id: "time",
+    id: "createTime",
     label: "Thời điểm check-in",
     sort: true,
   },
@@ -181,7 +190,26 @@ const headCells = [
 
 export default function PocListGuest() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const [listTransactions, setListTransactions] = React.useState([]);
+  const [failure, setFailure] = React.useState(false);
+  const pocInfo = useSelector((state) => state.pocState.poc);
+  const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    const params = { pointCode: pocInfo.pointCode };
+    const responseFetchListTransaction =
+      checkinApi.getAllTransactionByPointCode(params);
+
+    responseFetchListTransaction
+      .then((res) => {
+        setListTransactions((listTransactions) => [...res.data]);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        setFailure(true);
+      });
+  }, []);
+  console.log(listTransactions);
   return (
     <div className={style.body}>
       <Grid container spacing={0}>
@@ -208,12 +236,35 @@ export default function PocListGuest() {
               </div>
 
               <div>
-                <GuestsTable rows={rows} headCells={headCells} />
+                <NormalTable rows={listTransactions} headCells={headCells} />
               </div>
             </div>
           </Grid>
         </Grid>
       </Grid>
+
+      <Dialog
+        open={failure}
+        onClose={() => setFailure(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tải danh sách check-in không thành công, xin thử lại.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setFailure(false);
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

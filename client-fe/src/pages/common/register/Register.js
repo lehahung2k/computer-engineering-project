@@ -4,13 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import "./index.css";
 import authApi from "../../../api/AuthApi";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Register() {
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const [openFailure, setOpenFailure] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const initialValues = {
     username: "",
     password: "",
     fullName: "",
-    active: 1,
+    active: 0,
     role: "poc",
     companyName: "",
     phoneNumber: "",
@@ -20,6 +31,7 @@ function Register() {
   const validationSchema = Yup.object().shape({
     username: Yup.string().required(),
     password: Yup.string().required(),
+    tenantCode: Yup.string().required(),
     // full_name: Yup.string().required(),
     // companyName: Yup.string().required(),
     // phoneNumber: Yup.string().min(9).max(12).required()
@@ -29,15 +41,18 @@ function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
-    // authApi.registerApi(data).then((response) => {
-    //   console.log(data);
-    //   if (response.data.error) {
-    //     alert(response.data.error);
-    //   } else {
-    //     alert("Register success");
-    //     navigate("/login");
-    //   }
-    // });
+    setLoading(true);
+    authApi
+      .registerApi(data)
+      .then((response) => {
+        setLoading(false);
+        setOpenSuccess(true);
+      })
+      .catch((err) => {
+        setLoading(false);
+        setOpenFailure(true);
+        console.log(err);
+      });
   };
 
   return (
@@ -164,6 +179,11 @@ function Register() {
                   name="tenantCode"
                   component="span"
                   className="errorMsg"
+                  render={(msg) => (
+                    <span className="errorMsg">
+                      Mã ban tổ chức không được để trống
+                    </span>
+                  )}
                 />
               </div>
 
@@ -181,6 +201,67 @@ function Register() {
         <div className="center1"></div>
         <div className="center2"></div>
       </div>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      <Dialog
+        open={openSuccess}
+        onClose={() => {
+          setOpenSuccess(false);
+          navigate("/login");
+        }}
+        aria-labelledby="responsive-dialog-title"
+        fullWidth="true"
+        maxWidth="sm"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Đã đăng ký tài khoản thành công, xin liên hệ với ban tổ chức để kích
+            hoạt tài khoản
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenSuccess(false);
+              navigate("/login");
+            }}
+            autoFocus
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openFailure}
+        onClose={() => {
+          setOpenFailure(false);
+        }}
+        aria-labelledby="responsive-dialog-title"
+        fullWidth="true"
+        maxWidth="sm"
+      >
+        <DialogContent>
+          <DialogContentText>
+            Đã đăng ký tài khoản không thành công, xin hãy thử lại
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenFailure(false);
+            }}
+            autoFocus
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

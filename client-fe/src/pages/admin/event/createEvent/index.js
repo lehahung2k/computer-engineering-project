@@ -1,26 +1,34 @@
-import * as React from "react";
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
 import Grid from "@mui/material/Grid";
-import style from "./style.module.css";
-import SideBar from "../../../../components/navigation";
-import Header from "../../../../components/header";
-import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import BreadCrumbs from "../../../../components/breadCrumbs";
+import Header from "../../../../components/header";
+import SideBar from "../../../../components/navigation";
+import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
+import {
+  resetApiState as eventResetApiState,
+  resetState as eventResetState,
+} from "../../../../services/redux/actions/event/event";
+import { resetState as pocResetState } from "../../../../services/redux/actions/poc/poc";
 import EventInfoForm from "./components/eventInfoForm";
 import EventPocInfoForm from "./components/pocForm";
-import EventCompanyForm from "./components/companyForm";
-import BreadCrumbs from "../../../../components/breadCrumbs";
-import { StepButton } from "@mui/material";
-import { createNewEvent } from "../../../../services/redux/actions/event/createNewEvent";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import style from "./style.module.css";
 
 const breadcrumbs =
-  sessionStorage.getItem("role") === 0
+  sessionStorage.getItem("role") === "admin"
     ? [
         { link: "/admin", label: "Trang chủ" },
         { link: "/admin/event", label: "Sự kiện" },
@@ -38,14 +46,14 @@ const steps = [
   "Thêm thông tin POC sự kiện",
 ];
 
-function getStepContent(step) {
+function getStepContent(step, key) {
   switch (step) {
     case 0:
-      return <EventInfoForm />;
+      return <EventInfoForm key={key} />;
     // case 1:
     //   return <EventCompanyForm />;
     case 1:
-      return <EventPocInfoForm />;
+      return <EventPocInfoForm key={key} />;
     case 2:
       return <>Test is done</>;
     default:
@@ -56,6 +64,7 @@ function getStepContent(step) {
 export default function CreateEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
+  const [key, setKey] = React.useState(0);
 
   const newEventInfo = useSelector((state) => state.eventState.event);
   const newListPoc = useSelector((state) => state.pocState.listPoc);
@@ -64,7 +73,21 @@ export default function CreateEvent() {
 
   const loading = loadingCreateEvent || loadingCreateListPoc;
 
+  const successEvent = useSelector((state) => state.eventState.success);
+  const successPoc = useSelector((state) => state.pocState.success);
+
+  const failureEvent = useSelector((state) => state.eventState.failure);
+  const failurePoc = useSelector((state) => state.pocState.failure);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    console.log("Reset state create new event");
+    dispatch(eventResetState());
+    dispatch(pocResetState());
+    setKey((key) => key + 1);
+  }, []);
 
   const handleCreateNewEvent = () => {
     dispatch(createNewEvent(newEventInfo, newListPoc));
@@ -129,7 +152,7 @@ export default function CreateEvent() {
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
-                    {getStepContent(activeStep)}
+                    {getStepContent(activeStep, key)}
                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                       {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -164,6 +187,79 @@ export default function CreateEvent() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      <Dialog
+        open={failureEvent}
+        onClose={() => dispatch(eventResetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Không thể tạo mới sự kiện, xin hãy thử lại
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(eventResetApiState());
+              // navigate("/admin/event");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={successEvent && failurePoc === true}
+        onClose={() => dispatch(eventResetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới sự kiện thành công nhưng chưa thể tạo danh sách Poc, xin hãy
+            thêm danh sách Poc sau.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(eventResetApiState());
+              navigate("/admin/event");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={successEvent && successPoc === true}
+        onClose={() => dispatch(eventResetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tạo mới sự kiện thành công.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(eventResetApiState());
+              navigate("/admin/event/detail");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

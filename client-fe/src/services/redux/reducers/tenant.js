@@ -1,6 +1,6 @@
 import { ListBtc } from "../../../assets/fakeData/fakeBtc";
 const initialState = {
-  listTenant: ListBtc,
+  listTenant: [],
   tenant: {
     tenantName: "",
     tenantAddress: "",
@@ -152,6 +152,34 @@ const tenantReducer = (state = initialState, action) => {
     }
 
     case "TENANT/FETCH_LIST_TENANT_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    /**
+     * Fetching tenant info
+     */
+    case "TENANT/FETCH_TENANT_INFO": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "TENANT/FETCH_TENANT_INFO_SUCCESS": {
+      return {
+        ...state,
+        tenant: action.payload,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "TENANT/FETCH_TENANT_INFO_FAIL": {
       return {
         ...state,
         loading: false,

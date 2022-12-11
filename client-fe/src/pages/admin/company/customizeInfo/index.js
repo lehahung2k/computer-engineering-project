@@ -177,9 +177,10 @@ export default function CustomInfoCompany() {
                     autoComplete="tenant-code"
                     variant="standard"
                     helperText="Chọn để tạo mã ngẫu nhiên"
-                    value={tenantInfo.tenantCode}
+                    defaultValue={tenantInfo.tenantCode}
                     InputLabelProps={{ shrink: true }}
                     InputProps={{
+                      readOnly: true,
                       startAdornment: (
                         <InputAdornment position="start">
                           <IconButton

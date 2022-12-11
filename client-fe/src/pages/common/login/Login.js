@@ -14,41 +14,33 @@ function Login() {
 
   const login = () => {
     const data = { username: username, password: passwd };
-    // authApi.loginApi(data).then((response) => {
-    //   if (response.data.error) {
-    //     alert(response.data.error);
-    //   } else {
-    // sessionStorage.setItem("accessToken", response.data.accessToken);
-    // sessionStorage.setItem("role", response.data.userRole);
-    //     navigate("/");
-    //   }
-    // });
-
-    FakeAccount.forEach((account) => {
-      if (
-        account.username === data.password &&
-        account.password === data.password
-      ) {
-        sessionStorage.setItem("accessToken", account.accessToken);
-        sessionStorage.setItem("role", account.role);
-        console.log(account.role === "0");
-        switch (account.role) {
-          case "0": {
-            console.log("hello");
+    authApi
+      .loginApi(data)
+      .then((response) => {
+        if (response.data.error)
+          return alert("Mật khẩu hoặc tên đăng nhập không đúng");
+        sessionStorage.setItem("accessToken", response.data.accessToken);
+        sessionStorage.setItem("role", response.data.userRole);
+        console.log("Access token: " + response.data.accessToken);
+        console.log("User Role: " + response.data.userRole);
+        switch (response.data.userRole) {
+          case "admin": {
             return navigate("/admin");
           }
-          case "1": {
+          case "tenant": {
             return navigate("/event-admin");
           }
-          case "2": {
+          case "poc": {
             return navigate("/poc");
           }
           default: {
             return navigate("/");
           }
         }
-      }
-    });
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
   return (
     <div className="body">

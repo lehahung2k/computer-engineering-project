@@ -6,7 +6,21 @@ class EventApi {
   getAll = (token) => {
     const url = baseUrl + "/";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
+
+  fetchListEventByUsername = () => {
+    const url = baseUrl + "/list-event-by-account";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.get(url, config);
   };
@@ -19,7 +33,10 @@ class EventApi {
   addNew = (params, token) => {
     const url = baseUrl + "/add-event";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.post(url, params, config);
   };
@@ -27,7 +44,10 @@ class EventApi {
   fetchEventInfo = (params, token) => {
     const url = baseUrl + "/find-event-by-id/" + params.id;
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.get(url, config);
   };
@@ -35,7 +55,10 @@ class EventApi {
   updateEventInfo = (params, token) => {
     const url = baseUrl + "/update-event/" + params.id;
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.put(url, params.event, config);
   };
@@ -43,7 +66,10 @@ class EventApi {
   deleteEvent = (params, token) => {
     const url = baseUrl + "/delete-event-by-id/" + params.id;
     const config = {
-      headers: { accessToken: token },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.delete(url, config);
   };

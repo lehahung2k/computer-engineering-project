@@ -6,24 +6,64 @@ import Webcam from "react-webcam";
 import moment from "moment";
 import WebCam from "./components/webcam";
 import Button from "@mui/material/Button";
+import style from "./style.module.css";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import Checkbox from "@mui/material/Checkbox";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import { fetchListEventByUsername } from "../../../services/redux/actions/event/fetchListEvent";
+import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
+import pocApi from "../../../api/PocApi";
 
 export default function Checkin() {
   const [capture, setCapture] = React.useState("hello");
   const [image1, setImage1] = React.useState("");
   const [image2, setImage2] = React.useState("");
+  const [guestCode, setGuestCode] = React.useState("");
+  const [refresh, setRefresh] = React.useState(0);
+  const [name, setName] = React.useState("");
+  const [identityType, setIdentityType] = React.useState("");
+  const [enableImage, setEnableImage] = React.useState(false);
+  const [note, setNote] = React.useState("");
+  const [loadingPocInfo, setLoadingPocInfo] = React.useState(true);
+  const [loadingCheckin, setLoadingCheckin] = React.useState(false);
   const childRef1 = React.useRef();
   const childRef2 = React.useRef();
 
-  // const webcamRef1 = React.useRef(null);
-  // const webcamRef2 = React.useRef(null);
-  // const [deviceId, setDeviceId] = React.useState();
-  // const [devices, setDevices] = React.useState([]);
-  // const [captureState, setCaptureState] = React.useState(capture["capture"]);
-  // const [clientId, setClientId] = React.useState();
-  // const [clientDescription, setClientDescription] = React.useState();
-  // const [checkinTime, setCheckinTime] = React.useState();
-  // const [error, setError] = React.useState();
-  // const [newCheckin, setNewCheckin] = React.useState(false);
+  const tenant = useSelector((state) => state.tenantState.tenant);
+  const listEvent = useSelector((state) => state.eventState.listEvents);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (listEvent.length === 0) {
+      console.log("Fetch list event");
+      dispatch(fetchListEventByUsername());
+    } else {
+      console.log("Fetch poc info");
+      const compareTime = (startTime, endTime) => {
+        const currentTime = new Date();
+        if (
+          Date.parse(startTime) <= Date.parse(currentTime) &&
+          Date.parse(endTime) >= Date.parse(currentTime)
+        ) {
+          return true;
+        }
+        return false;
+      };
+      const currentEvent = listEvent.filter((event) =>
+        compareTime(event.startTime, event.endTime)
+      );
+      if (currentEvent.length > 0) {
+        pocApi.fetchPocInfoByUsername(currentEvent[0].eventCode);
+      } else {
+        alert("Không có sự kiện nào đang diễn ra");
+        // navigate("/poc/event");
+      }
+    }
+  }, [listEvent]);
 
   const handleImageWebCam = (image, camId) => {
     if (camId === 1) setImage1(image);
@@ -31,56 +71,58 @@ export default function Checkin() {
   };
 
   const handleSubmitForm = (e) => {
-    const clientId = document.querySelector("#student-id");
-    const clientDescription = document.querySelector("#check-in-note");
-    //   const params = {
-    //     event_id: 1,
-    //     client_id: clientId.value,
-    //     create_time: moment().format(),
-    //     note: clientDescription.value,
-    //   };
+    const params = {
+      pointCode: "nT8q",
+      guestCode: guestCode,
+      createTime: moment().format(),
+      note: note,
+      enable: enableImage,
+      identityType: identityType,
+    };
+    console.log(params);
 
-    //   const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
-    //     params,
-    //     sessionStorage.getItem("accessToken")
-    //   );
+    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+      params,
+      sessionStorage.getItem("accessToken")
+    );
 
-    //   responseAddNewCheckinClient
-    //     .then((response) => {
-    //       alert("Khách checkin thành công");
-    //       setNewCheckin(true);
-    //       setImage1('');
-    //       setImage2('');
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
+    responseAddNewCheckinClient
+      .then((response) => {
+        alert("Khách checkin thành công");
+        setImage1("");
+        setImage2("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setRefresh((refresh) => refresh + 1);
   };
   return (
     <div>
       <Grid container spacing={0}>
-        <Grid xs>
+        <Grid item xs>
           <div id="header" color="blue">
             <h3>Checkin sự kiện </h3>
           </div>
 
           <div id="poc-info">
             <Grid container spacing={2}>
-              <Grid item xs={3}>
+              <Grid item xs={4} lg={2}>
                 <div id="event-name-label">Tên sự kiện</div>
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={8} lg={8}>
                 <div id="event-name-value">Tên sự kiện</div>
               </Grid>
             </Grid>
 
             <Grid container spacing={2}>
-              <Grid item xs={3}>
+              <Grid item xs={4} lg={2}>
                 <div id="poc-name-label">Tên quầy</div>{" "}
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={8} lg={8}>
                 <div id="poc-name-value">Tên quầy</div>{" "}
               </Grid>
             </Grid>
@@ -88,7 +130,7 @@ export default function Checkin() {
 
           <div id="check-in">
             <Grid container spacing={2}>
-              <Grid item xs={4}>
+              <Grid item xs={6} md={6} lg={4}>
                 <WebCam
                   image={image1}
                   camId={1}
@@ -97,7 +139,7 @@ export default function Checkin() {
                 />
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={6} md={6} lg={4}>
                 <WebCam
                   image={image2}
                   camId={2}
@@ -106,37 +148,101 @@ export default function Checkin() {
                 />
               </Grid>
 
-              <Grid item xs={4} id="check-in-info">
-                <div id="check-in-info-div">
-                  <form id="check-in-info-form">
-                    <label>Mã số sinh viên</label>
-                    <br />
-                    <input
-                      type="text"
-                      id="student-id"
-                      name="student-id"
-                      autofocus="true"
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          console.log("Enter");
-                          e.preventDefault();
-                          childRef1.current.captureCamera();
-                          childRef2.current.captureCamera();
-                        }
-                      }}
-                    ></input>
-                    <br />
+              <Grid item xs={12} md={12} lg={4}>
+                <div className={style.check_in_info}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <TextField
+                        inputProps={{ autoFocus: true }}
+                        id="identity_code"
+                        label="Mã số định danh"
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                        // defaultValue={guestCode}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            console.log("Enter key pressed");
+                            e.preventDefault();
+                            childRef1.current.captureCamera();
+                            childRef2.current.captureCamera();
+                          }
+                        }}
+                        key={refresh}
+                        onChange={(e) => setGuestCode(e.target.value)}
+                      />
+                      <br />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <TextField
+                        id="full_name"
+                        label="Họ và tên"
+                        variant="outlined"
+                        InputLabelProps={{ shrink: true }}
+                        fullWidth
+                        key={refresh}
+                      />
+                    </Grid>
 
-                    <label>Ghi chú</label>
-                    <br />
-                    <textarea
-                      type="text"
-                      id="check-in-note"
-                      name="check-in-note"
-                    ></textarea>
-                    <br />
-                  </form>
-                  <Button variant='contained' onClick={handleSubmitForm}>Submit</Button>
+                    <Grid item xs={6}>
+                      <Autocomplete
+                        disablePortal
+                        noOptionsText={"Không tìm thấy tổ chức"}
+                        id="combo-box-demo"
+                        options={[
+                          { label: "Thẻ sự kiện", id: "1" },
+                          { label: "Khác", id: "0" },
+                        ]}
+                        ListboxProps={{ style: { maxHeight: 150 } }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Loại thẻ định danh"
+                            variant="standard"
+                            InputLabelProps={{ shrink: true }}
+                            required
+                          />
+                        )}
+                        onChange={(event, value) => setIdentityType(value)}
+                        key={refresh}
+                      />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <Checkbox
+                        color="primary"
+                        onChange={(e) => setEnableImage(e.target.value)}
+                        key={refresh}
+                      />
+                      Cho phép ảnh
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <TextField
+                        id="note"
+                        name="note"
+                        label="Ghi chú"
+                        fullWidth
+                        autoComplete="event-note"
+                        multiline
+                        variant="standard"
+                        InputLabelProps={{ shrink: true }}
+                        onChange={(e) => setNote(e.target.value)}
+                        key={refresh}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={handleSubmitForm}
+                        style={{ textTransform: "none" }}
+                        key={refresh}
+                      >
+                        Submit
+                      </Button>{" "}
+                    </Grid>
+                  </Grid>
                 </div>
               </Grid>
             </Grid>

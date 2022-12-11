@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       tenantCode: {
         // Mã doanh nghiệp
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "Tenants",
           key: "tenantCode",
