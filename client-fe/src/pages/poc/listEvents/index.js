@@ -25,8 +25,6 @@ import { useNavigate } from "react-router-dom";
 import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
 import { fetchPocAccountInfo } from "../../../services/redux/actions/accounts/fetchListAccount";
 
-const breadcrumbs = [{ link: "#", label: "Danh sách sự kiện" }];
-
 export default function PocManageEvent() {
   const [filterName, setFilterName] = useState("");
   const [openSidebar, setOpenSidebar] = useState(true);
@@ -35,6 +33,8 @@ export default function PocManageEvent() {
   const tenantName = useSelector(
     (state) => state.tenantState.tenant.tenantName
   );
+
+  const breadcrumbs = [{ link: "#", label: "Danh sách sự kiện" }];
 
   const formatListEvent = listEvent.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");

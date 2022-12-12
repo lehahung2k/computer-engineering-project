@@ -9,23 +9,21 @@ import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/tenant", label: "Ban tổ chức" },
-        { link: "#", label: "Chi tiết ban tổ chức" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "#", label: "Thông tin ban tổ chức" },
-      ];
-
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
-
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/tenant", label: "Ban tổ chức" },
+          { link: "#", label: "Chi tiết ban tổ chức" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "#", label: "Thông tin ban tổ chức" },
+        ];
   const navigate = useNavigate();
 
   const handleCustomCompany = () => {

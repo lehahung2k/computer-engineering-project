@@ -10,15 +10,16 @@ import { useNavigate } from "react-router-dom";
 import BreadCrumbs from "../../../components/breadCrumbs";
 import { useSelector, useDispatch } from "react-redux";
 
-const breadcrumbs = [
-  { link: "/poc/event", label: "Danh sách sự kiện" },
-  { link: "#", label: "Chi tiết sự kiện" },
-];
-
 export default function PocEventDetail() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const eventInfo = useSelector((state) => state.eventState.event);
   const pocInfo = useSelector((state) => state.pocState.poc);
+
+  const breadcrumbs = [
+    { link: "/poc/event", label: "Danh sách sự kiện" },
+    { link: "#", label: "Chi tiết sự kiện" },
+  ];
+
   const navigate = useNavigate();
 
   const handleShowListGuest = () => {

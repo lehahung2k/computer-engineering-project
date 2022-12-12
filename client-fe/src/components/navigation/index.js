@@ -28,6 +28,7 @@ export default function SideBar(id) {
   //   });
   const logout = () => {
     sessionStorage.removeItem("accessToken");
+    window.location.reload();
   };
   //console.log(id);
   return (

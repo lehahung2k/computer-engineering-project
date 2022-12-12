@@ -10,3 +10,9 @@ export const resetApiState = () => {
     type: "ACCOUNT/RESET_API_STATE",
   };
 };
+
+export const resetState = () => {
+  return {
+    type: "ACCOUNT/RESET_STATE",
+  };
+};

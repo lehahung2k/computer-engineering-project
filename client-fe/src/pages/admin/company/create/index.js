@@ -26,18 +26,17 @@ import {
 } from "../../../../services/redux/actions/tenant/tenant";
 import AlertResponseCreateTenant from "./component/alertResponse";
 import style from "./style.module.css";
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/tenant", label: "Ban tổ chức" },
-  { link: "#", label: "Thêm ban tổ chức" },
-];
 
 export default function CreateNewCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
 
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
-
+  const breadcrumbs = [
+    { link: "/admin", label: "Trang chủ" },
+    { link: "/admin/tenant", label: "Ban tổ chức" },
+    { link: "#", label: "Thêm ban tổ chức" },
+  ];
   const dispatch = useDispatch();
 
   const handleClickGenerateCode = () => {

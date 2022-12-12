@@ -165,6 +165,15 @@ const accountReducer = (state = initialState, action) => {
       };
     }
 
+    /**
+     * Reset state
+     */
+    case "ACCOUNT/RESET_STATE": {
+      return {
+        ...initialState,
+      };
+    }
+
     default:
       return state;
   }

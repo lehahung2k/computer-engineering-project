@@ -10,19 +10,6 @@ import ListPoc from "./components/listPOC";
 import style from "./style.module.css";
 import { useSelector, useDispatch } from "react-redux";
 
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/event", label: "Sự kiện" },
-        { link: "#", label: "Chi tiết sự kiện" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "/event-admin/event", label: "Sự kiện" },
-        { link: "#", label: "Chi tiết sự kiện" },
-      ];
-
 export default function DetailEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
@@ -30,6 +17,20 @@ export default function DetailEvent() {
   const listEvents = useSelector((state) => state.eventState.listEvents);
 
   const eventInfo = useSelector((state) => state.eventState.event);
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/event", label: "Sự kiện" },
+          { link: "#", label: "Chi tiết sự kiện" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "/event-admin/event", label: "Sự kiện" },
+          { link: "#", label: "Chi tiết sự kiện" },
+        ];
+
   console.log("Xem chi tiết sự kiện", eventInfo);
   function getStepContent(step, setStep) {
     switch (step) {

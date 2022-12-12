@@ -27,19 +27,6 @@ import EventInfoForm from "./components/eventInfoForm";
 import EventPocInfoForm from "./components/pocForm";
 import style from "./style.module.css";
 
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/event", label: "Sự kiện" },
-        { link: "#", label: "Thêm mới sự kiện" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "/event-admin/event", label: "Sự kiện" },
-        { link: "#", label: "Thêm mới sự kiện" },
-      ];
-
 const steps = [
   "Thêm thông tin sự kiện tạo mới",
   // "Thêm doanh nghiệp tham gia",
@@ -78,6 +65,19 @@ export default function CreateEvent() {
 
   const failureEvent = useSelector((state) => state.eventState.failure);
   const failurePoc = useSelector((state) => state.pocState.failure);
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/event", label: "Sự kiện" },
+          { link: "#", label: "Thêm mới sự kiện" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "/event-admin/event", label: "Sự kiện" },
+          { link: "#", label: "Thêm mới sự kiện" },
+        ];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

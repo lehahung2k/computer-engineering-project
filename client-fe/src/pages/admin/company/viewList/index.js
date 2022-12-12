@@ -32,11 +32,6 @@ import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "#", label: "Ban tổ chức" },
-];
-
 export default function ListCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
@@ -52,6 +47,11 @@ export default function ListCompany() {
   const loading = useSelector((state) => state.tenantState.loading);
   const success = useSelector((state) => state.tenantState.success);
   const failure = useSelector((state) => state.tenantState.failure);
+  const breadcrumbs = [
+    { link: "/admin", label: "Trang chủ" },
+    { link: "#", label: "Ban tổ chức" },
+  ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

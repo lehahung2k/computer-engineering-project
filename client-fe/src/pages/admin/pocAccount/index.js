@@ -33,6 +33,18 @@ export default function PocAccount() {
   const listPocAccount = useSelector(
     (state) => state.accountState.listPocAccount
   );
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "#", label: "Tài khoản POC" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "#", label: "Tài khoản POC" },
+        ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

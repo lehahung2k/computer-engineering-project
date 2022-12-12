@@ -14,6 +14,7 @@ export default function PocSidebar() {
   const logout = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("role");
+    // window.location.reload(false);
   };
   return (
     <>

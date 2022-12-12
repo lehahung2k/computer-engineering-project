@@ -1,4 +1,4 @@
-import tenantApi from "../../../../api/TenantApi";
+import tenantApi from "../../../../api/tenantApi";
 
 export const updateTenant = (tenant, id) => async (dispatch) => {
   dispatch({ type: "TENANT/UPDATE_TENANT" });

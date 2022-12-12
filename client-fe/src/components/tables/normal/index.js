@@ -208,7 +208,11 @@ export default function NormalTable({
                         }
 
                         return (
-                          <TableCell align="center" width={headCell.width}>
+                          <TableCell
+                            align="center"
+                            width={headCell.width}
+                            key={index}
+                          >
                             {row[headCell.id]}
                           </TableCell>
                         );

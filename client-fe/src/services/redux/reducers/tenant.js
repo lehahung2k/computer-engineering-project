@@ -271,6 +271,16 @@ const tenantReducer = (state = initialState, action) => {
         pinnedTenantId: action.payload,
       };
     }
+
+    /**
+     * Reset state
+     */
+    case "TENANT/RESET_STATE": {
+      return {
+        ...initialState,
+      };
+    }
+
     default:
       return state;
   }

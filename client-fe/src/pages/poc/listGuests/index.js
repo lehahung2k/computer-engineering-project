@@ -21,11 +21,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import NormalTable from "../../../components/tables/normal";
-const breadcrumbs = [
-  { link: "/poc/event", label: "Danh sách sự kiện" },
-  { link: "/poc/event/detail", label: "Chi tiết sự kiện" },
-  { link: "#", label: "Khách check-in" },
-];
 
 function createData(name, id, time, note, image) {
   return {
@@ -193,6 +188,13 @@ export default function PocListGuest() {
   const [listTransactions, setListTransactions] = React.useState([]);
   const [failure, setFailure] = React.useState(false);
   const pocInfo = useSelector((state) => state.pocState.poc);
+
+  const breadcrumbs = [
+    { link: "/poc/event", label: "Danh sách sự kiện" },
+    { link: "/poc/event/detail", label: "Chi tiết sự kiện" },
+    { link: "#", label: "Khách check-in" },
+  ];
+
   const dispatch = useDispatch();
 
   React.useEffect(() => {

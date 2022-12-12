@@ -28,21 +28,22 @@ import { fetchListEventAdmin } from "../../../../services/redux/actions/event/fe
 import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
 import moment from "moment";
 import AlertResponse from "./components/alert";
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "#", label: "Sự kiện" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "#", label: "Sự kiện" },
-      ];
 
 export default function ListEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "#", label: "Sự kiện" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "#", label: "Sự kiện" },
+        ];
 
   const customListEvents = listEvents.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");

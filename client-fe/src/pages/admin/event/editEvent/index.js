@@ -19,19 +19,6 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/event", label: "Sự kiện" },
-        { link: "#", label: "Sửa thông tin sự kiện" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "/event-admin/event", label: "Sự kiện" },
-        { link: "#", label: "Sửa thông tin sự kiện" },
-      ];
-
 const steps = [
   "Thông tin sự kiện",
   // "Thêm doanh nghiệp tham gia",
@@ -62,6 +49,20 @@ export default function EditEvent() {
   const listEvents = useSelector((state) => state.eventState.listEvents);
 
   const eventInfo = listEvents.find((event) => event.id === pinnedEventId);
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/event", label: "Sự kiện" },
+          { link: "#", label: "Sửa thông tin sự kiện" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "/event-admin/event", label: "Sự kiện" },
+          { link: "#", label: "Sửa thông tin sự kiện" },
+        ];
+
   const dispatch = useDispatch();
 
   const handleUpdateEvent = () => {
