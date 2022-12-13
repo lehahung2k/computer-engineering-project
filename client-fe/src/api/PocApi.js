@@ -57,7 +57,7 @@ class PocApi {
     return axios.post(url, params, config);
   };
 
-  fetchPocInfoByUsername = (params) => {
+  fetchPocInfo = (params) => {
     const url = baseUrl + "/get-poc-info-by-username";
     const config = {
       headers: {

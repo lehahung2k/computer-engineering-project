@@ -34,3 +34,23 @@ export const fetchTenantInfoByTenantCode = (tenantCode) => async (dispatch) => {
       });
     });
 };
+
+export const fetchTenantInfoByAccount = () => async (dispatch) => {
+  dispatch({ type: "TENANT/FETCH_TENANT_INFO" });
+
+  const response = tenantApi.fetchTenantInfoByAccount();
+
+  response
+    .then((response) => {
+      dispatch({
+        type: "TENANT/FETCH_TENANT_INFO_SUCCESS",
+        payload: response.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: "TENANT/FETCH_TENANT_INFO_FAIL",
+        message: error.message,
+      });
+    });
+};

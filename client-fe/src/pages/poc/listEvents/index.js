@@ -22,7 +22,7 @@ import {
   newEventAction,
 } from "../../../services/redux/actions/event/event";
 import { useNavigate } from "react-router-dom";
-import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
+import { fetchPocInfo } from "../../../services/redux/actions/poc/fetchListPoc";
 import { fetchPocAccountInfo } from "../../../services/redux/actions/accounts/fetchListAccount";
 
 export default function PocManageEvent() {
@@ -76,7 +76,7 @@ export default function PocManageEvent() {
         (event) => event.eventId === row["eventId"]
       );
       dispatch(newEventAction(eventInfo));
-      dispatch(fetchPocInfoByUsername(eventInfo.eventCode));
+      dispatch(fetchPocInfo(eventInfo.eventCode));
       navigate("/poc/event/detail");
     }
     if (fieldName === "checkin") console.log("checkin");

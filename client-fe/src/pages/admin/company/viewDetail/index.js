@@ -8,11 +8,23 @@ import SideBar from "../../../../components/navigation";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchTenantInfoByAccount } from "../../../../services/redux/actions/tenant/fetchListTenant";
 
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
-  const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
+  const pinnedTenantId = useSelector(
+    (state) => state.tenantState.pinnedTenantId
+  );
+  const listTenant = useSelector((state) => state.tenantState.listTenant);
+
+  let tenantInfo = useSelector((state) => state.tenantState.tenant);
+
+  if (pinnedTenantId)
+    tenantInfo = listTenant.find(
+      (tenant) => tenant.tenantId === pinnedTenantId
+    );
+
   const breadcrumbs =
     sessionStorage.getItem("role") === "admin"
       ? [
@@ -24,11 +36,20 @@ export default function DetailInfoCompany() {
           { link: "/event-admin", label: "Trang chủ" },
           { link: "#", label: "Thông tin ban tổ chức" },
         ];
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    if (sessionStorage.getItem("role") === "tenant") {
+      dispatch(fetchTenantInfoByAccount());
+    }
+  }, []);
 
   const handleCustomCompany = () => {
     navigate("/admin/tenant/custom");
   };
+
   return (
     <div className={style.body}>
       <Grid container spacing={0}>

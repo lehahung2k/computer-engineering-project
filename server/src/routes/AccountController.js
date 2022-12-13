@@ -85,6 +85,9 @@ router.get("/auth", validateToken, (req, res) => {
   res.json(req.user);
 });
 
+/**
+ * Lấy thông tin tài khoản đăng nhập của ban tổ chức theo mã
+ */
 router.post("/tenant-account", async (req, res) => {
   const { tenantCode } = req.body;
   try {
@@ -101,6 +104,9 @@ router.post("/tenant-account", async (req, res) => {
   }
 });
 
+/**
+ * Xử lý yêu cầu lấy danh sách các tài khoản theo mã ban tổ chức
+ */
 router.post("/poc-account", async (req, res) => {
   const { tenantCode } = req.body;
   console.log(tenantCode);
@@ -131,6 +137,9 @@ router.post("/poc-account", async (req, res) => {
   }
 });
 
+/**
+ * Lấy thông tin tài khoản theo username
+ */
 router.post(
   "/get-account-info-by-username",
   validateToken,
@@ -157,6 +166,9 @@ router.post(
   }
 );
 
+/**
+ * Cập nhật trạng thái kích hoạt của tài khoản
+ */
 router.put("/update-account", async (req, res) => {
   const username = req.body.username;
   if (!username) return res.sendStatus(400);
