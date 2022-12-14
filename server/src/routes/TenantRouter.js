@@ -1,15 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const { Tenants } = require("../models");
+const { Tenants, Accounts } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
 const tenantController = require("../controller/TenantController");
 /**
  * Lấy danh sách thông tin tất cả ban tổ chức (chỉ dành cho admin)
  */
-router.get("/", async (req, res) => {
-  const listTenants = await Tenants.findAll();
-  res.json(listTenants);
+router.get("/", validateToken, async (req, res) => {
+  if (req.user.userRole !== "admin") return res.sendStatus(401);
+  try {
+    const listTenant = await Tenants.findAll({ raw: true });
+    let listTenantInfoFull = [];
+    for (let tenant of listTenant) {
+      const username = await Accounts.findOne({
+        where: {
+          tenantCode: tenant.tenantCode,
+          role: "tenant",
+        },
+        raw: true,
+      });
+
+      listTenantInfoFull.push({ ...tenant, ...username });
+    }
+    return res.json(listTenantInfoFull);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
 });
 
 /**
@@ -33,7 +51,7 @@ router.put("/update-tenant", async (req, res) => {
 });
 
 /**
- * Lấy thông tin của ban tổ chức theo mã
+ * Lấy thông tin của ban tổ chức theo mã (dành cho tài khoản poc)
  */
 router.post(
   "/get-tenant-info-by-tenant-code",
@@ -54,8 +72,21 @@ router.post(
           "contactPhone",
           "tenantCode",
         ],
+        raw: true,
       });
-      res.json(tenantInfo);
+
+      const username = await Accounts.findOne({
+        where: {
+          tenantCode: tenantCode,
+          role: "tenant",
+        },
+        raw: true,
+      });
+
+      const customTenantInfo = { ...tenantInfo, ...username };
+      if (req.user.userRole === "poc") return res.json(tenantInfo);
+      if (req.user.userRole === "admin" || req.user.userRole === "tenant")
+        return res.json(customTenantInfo);
     } catch (err) {
       console.log(err);
       res.sendStatus(500);

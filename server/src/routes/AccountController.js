@@ -4,6 +4,7 @@ const { Accounts } = require("../models");
 const bcrypt = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
+const accountController = require("../controller/AccountController");
 
 router.post("/", async (req, res) => {
   const {
@@ -88,54 +89,30 @@ router.get("/auth", validateToken, (req, res) => {
 /**
  * Lấy thông tin tài khoản đăng nhập của ban tổ chức theo mã
  */
-router.post("/tenant-account", async (req, res) => {
-  const { tenantCode } = req.body;
-  try {
-    const account = await Accounts.findAll({
-      where: {
-        tenantCode: tenantCode,
-        role: "tenant",
-      },
-    });
-    res.json({ username: account.username });
-  } catch (err) {
-    console.log(err);
-    res.json({ error: err.message });
-  }
-});
+// router.post("/tenant-account", async (req, res) => {
+//   const { tenantCode } = req.body;
+//   try {
+//     const account = await Accounts.findAll({
+//       where: {
+//         tenantCode: tenantCode,
+//         role: "tenant",
+//       },
+//     });
+//     res.json({ username: account.username });
+//   } catch (err) {
+//     console.log(err);
+//     res.json({ error: err.message });
+//   }
+// });
 
 /**
- * Xử lý yêu cầu lấy danh sách các tài khoản theo mã ban tổ chức
+ * Xử lý yêu cầu lấy danh sách các tài khoản Poc
  */
-router.post("/poc-account", async (req, res) => {
-  const { tenantCode } = req.body;
-  console.log(tenantCode);
-  try {
-    const account = !tenantCode
-      ? await Accounts.findAll({
-          where: {
-            role: "poc",
-          },
-        })
-      : await Accounts.findAll({
-          where: {
-            tenantCode: tenantCode,
-            role: "poc",
-          },
-        });
-    const listUsername = account.map((account) => ({
-      username: account.username,
-      fullName: account.fullName,
-      phoneNumber: account.phoneNumber,
-      companyName: account.companyName,
-      active: account.active,
-    }));
-    res.json(listUsername);
-  } catch (err) {
-    console.log(err);
-    res.json({ error: err.message });
-  }
-});
+router.get(
+  "/get-list-poc-account",
+  validateToken,
+  accountController.get_list_account_of_tenant
+);
 
 /**
  * Lấy thông tin tài khoản theo username

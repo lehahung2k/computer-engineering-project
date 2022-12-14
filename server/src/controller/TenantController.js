@@ -4,7 +4,7 @@ const { Accounts } = require("../models");
 /**
  * Lấy thông tin của ban tổ chức theo tài khoản đăng nhập (từ token)
  *
- * @param {Object} req (username, userRole)
+ * @param {Object} req user (username, userRole) từ token
  * @param {Object} res
  * @returns response tenant info if success and error code (401, 500)
  */

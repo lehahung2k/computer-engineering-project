@@ -3,7 +3,7 @@ const router = express.Router();
 const { EventsMng, PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
-
+const eventController = require("../controller/EventController");
 /**
  * Lấy danh sách tất cả các sự kiện (dành cho admin)
  */
@@ -16,6 +16,15 @@ router.get("/", validateToken, async (req, res) => {
   });
   res.json(formattedListEvent);
 });
+
+/**
+ *
+ */
+router.get(
+  "/get-list-event-by-tenant",
+  validateToken,
+  eventController.get_list_event_of_tenant
+);
 
 // router.get(
 //   "/find-event-by-id/:event_id", //authPermission([1]),

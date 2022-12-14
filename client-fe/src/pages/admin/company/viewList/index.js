@@ -30,7 +30,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
+import {
+  fetchListTenant,
+  fetchTenantInfoByTenantCode,
+} from "../../../../services/redux/actions/tenant/fetchListTenant";
 
 export default function ListCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
@@ -71,7 +74,7 @@ export default function ListCompany() {
       const pinnedTenantInfo = listTenant.find(
         (tenant) => tenant.tenantId === row.tenantId
       );
-      dispatch(newTenantAction(pinnedTenantInfo));
+      // dispatch(fetchTenantInfoByTenantCode(pinnedTenantInfo.tenantCode));
       navigate("/admin/tenant/detail");
     }
   };

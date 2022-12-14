@@ -6,7 +6,10 @@ class TenantApi {
   getAll = (token) => {
     const url = baseUrl + "/";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.get(url, config);
   };

@@ -146,18 +146,23 @@ export default function DetailInfoCompany() {
                 <Grid item xs={4} align="left">
                   {tenantInfo.tenantCode}
                 </Grid>
+                {sessionStorage.getItem("role") === "tenant" ? (
+                  <></>
+                ) : (
+                  <>
+                    <Grid item xs={2}>
+                      <Typography variant="body1" align="right">
+                        Tài khoản đăng nhập:
+                      </Typography>
+                    </Grid>
 
-                <Grid item xs={2}>
-                  <Typography variant="body1" align="right">
-                    Tài khoản đăng nhập:
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={4} align="left">
-                  {tenantAccount.username
-                    ? "Đã tạo tài khoản"
-                    : "Chưa có tài khoản đăng nhập"}
-                </Grid>
+                    <Grid item xs={4} align="left">
+                      {tenantInfo.username
+                        ? tenantInfo.username
+                        : "Chưa có tài khoản đăng nhập"}
+                    </Grid>
+                  </>
+                )}
 
                 {sessionStorage.getItem("role") === "admin" ? (
                   <Grid item xs={12}>

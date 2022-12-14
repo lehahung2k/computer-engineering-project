@@ -416,8 +416,8 @@ export const ListPocAccountHeadNormal = [
     width: "20%",
   },
   {
-    id: "companyName",
-    label: "Công ty/Doanh nghiệp",
+    id: "tenantName",
+    label: "Ban tổ chức",
     sort: true,
     width: "30%",
   },

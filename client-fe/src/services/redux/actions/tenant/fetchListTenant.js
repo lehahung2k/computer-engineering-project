@@ -18,7 +18,7 @@ export const fetchTenantInfoByTenantCode = (tenantCode) => async (dispatch) => {
   dispatch({ type: "TENANT/FETCH_TENANT_INFO" });
 
   const params = { tenantCode: tenantCode };
-  const response = tenantApi.fetchTenantInfoByTenantCode(params.tenantCode);
+  const response = tenantApi.fetchTenantInfoByTenantCode(params);
 
   response
     .then((response) => {

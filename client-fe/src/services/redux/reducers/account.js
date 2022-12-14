@@ -91,7 +91,7 @@ const accountReducer = (state = initialState, action) => {
       };
     }
     /**
-     * Fetching account info
+     * Fetching poc account info
      */
     case "ACCOUNT/FETCH_POC_ACCOUNT_INFO": {
       return {
