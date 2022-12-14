@@ -36,3 +36,68 @@ exports.get_list_event_of_tenant = async (req, res) => {
     return res.sendStatus(500);
   }
 };
+
+exports.get_list_event = async (req, res) => {
+  const username = req.user.username;
+  const userRole = req.user.userRole;
+  try {
+    if (userRole === "tenant") {
+      const tenantCode = await Accounts.findOne({
+        where: {
+          username: username,
+        },
+        raw: true,
+        attributes: ["tenantCode"],
+      });
+
+      const tenantName = await Tenants.findOne({
+        where: {
+          tenantCode: tenantCode.tenantCode,
+        },
+        attributes: ["tenantName"],
+        raw: true,
+      });
+
+      const listEvents = await EventsMng.findAll({
+        where: {
+          tenantCode: tenantCode.tenantCode,
+        },
+        raw: true,
+      });
+      const formattedListEvent = listEvents.map((event) => {
+        const formattedEventImage = Buffer.from(event.eventImg).toString(
+          "utf8"
+        );
+        const formattedEvent = {
+          ...event,
+          eventImg: formattedEventImage,
+          ...tenantName,
+        };
+        return formattedEvent;
+      });
+      return res.json(formattedListEvent);
+    } else if (userRole === "admin") {
+      const listEvents = await EventsMng.findAll({ raw: true });
+      const listTenant = await Tenants.findAll({ raw: true });
+
+      const formattedListEvent = listEvents.map((event) => {
+        const formattedEventImage = Buffer.from(event.eventImg).toString(
+          "utf8"
+        );
+        const tenantName = listTenant.find(
+          (tenant) => tenant.tenantCode === event.tenantCode
+        );
+        const formattedEvent = {
+          ...event,
+          eventImg: formattedEventImage,
+          tenantName: tenantName.tenantName,
+        };
+        return formattedEvent;
+      });
+      return res.json(formattedListEvent);
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};

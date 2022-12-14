@@ -48,25 +48,31 @@ export default function ListEvent() {
   const customListEvents = listEvents.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
     let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
-    let tenant = listTenant.filter(
-      (tenant) => tenant.tenantCode === event.tenantCode
-    );
+    // let tenant = listTenant.filter(
+    //   (tenant) => tenant.tenantCode === event.tenantCode
+    // );
 
-    if (tenant.length > 0) {
-      return {
-        ...event,
-        startTime: startTime,
-        endTime: endTime,
-        tenantName: tenant[0].tenantName,
-      };
-    } else {
-      return {
-        ...event,
-        startTime: startTime,
-        endTime: endTime,
-        tenantName: "",
-      };
-    }
+    // if (tenant.length > 0) {
+    //   return {
+    //     ...event,
+    //     startTime: startTime,
+    //     endTime: endTime,
+    //     tenantName: tenant[0].tenantName,
+    //   };
+    // } else {
+    //   return {
+    //     ...event,
+    //     startTime: startTime,
+    //     endTime: endTime,
+    //     tenantName: "",
+    //   };
+    // }
+
+    return {
+      ...event,
+      startTime: startTime,
+      endTime: endTime,
+    };
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,7 +81,7 @@ export default function ListEvent() {
     // if (listEvents.length === 0)
     dispatch(fetchListEventAdmin());
     // if (listTenant.length === 0)
-    dispatch(fetchListTenant());
+    // dispatch(fetchListTenant());
   }, []);
 
   const handleClickAddNewEvent = () => {

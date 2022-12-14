@@ -6,6 +6,9 @@ const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const accountController = require("../controller/AccountController");
 
+/**
+ * Đăng ký tài khoản
+ */
 router.post("/", async (req, res) => {
   const {
     username,
@@ -43,6 +46,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * Đăng nhập tài khoản
+ */
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
@@ -81,13 +87,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/auth", validateToken, (req, res) => {
-  const role = req.user.role;
-  res.json(req.user);
-});
+/**
+ * Nhóm API yêu cầu thông tin tài khoản
+ */
 
 /**
- * Lấy thông tin tài khoản đăng nhập của ban tổ chức theo mã
+ * Lấy thông tin tài khoản đăng nhập của ban tổ chức
  */
 // router.post("/tenant-account", async (req, res) => {
 //   const { tenantCode } = req.body;
@@ -106,7 +111,7 @@ router.get("/auth", validateToken, (req, res) => {
 // });
 
 /**
- * Xử lý yêu cầu lấy danh sách các tài khoản Poc
+ * Lấy danh sách các tài khoản Poc
  */
 router.get(
   "/get-list-poc-account",
@@ -144,23 +149,37 @@ router.post(
 );
 
 /**
- * Cập nhật trạng thái kích hoạt của tài khoản
+ * Cập nhật trạng thái kích hoạt của tài khoản Poc
  */
 router.put("/update-account", async (req, res) => {
   const username = req.body.username;
   if (!username) return res.sendStatus(400);
   try {
+    const currentActive = await Accounts.findOne({
+      where: { username: username },
+      attributes: ["active"],
+    });
     await Accounts.update(
-      { active: 1 },
+      { active: currentActive.active === 0 ? 1 : 0 },
       {
         where: { username: username },
       }
     );
-    res.json({ username: username });
+    res.json({
+      username: username,
+      active: currentActive.active === 0 ? 1 : 0,
+    });
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
 });
 
+/**
+ * Xóa tài khoản POC
+ */
+
+/**
+ * Xóa tài khoản tenant
+ */
 module.exports = router;

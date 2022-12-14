@@ -18,6 +18,7 @@ import { createNewEvent } from "../../../../services/redux/actions/event/createN
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import { updateEvent } from "../../../../services/redux/actions/event/updateEvent";
 
 const steps = [
   "Thông tin sự kiện",
@@ -43,12 +44,8 @@ function getStepContent(step) {
 export default function EditEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
 
-  const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
-  const listEvents = useSelector((state) => state.eventState.listEvents);
-
-  const eventInfo = listEvents.find((event) => event.id === pinnedEventId);
+  const eventInfo = useSelector((state) => state.eventState.event);
 
   const breadcrumbs =
     sessionStorage.getItem("role") === "admin"
@@ -66,7 +63,7 @@ export default function EditEvent() {
   const dispatch = useDispatch();
 
   const handleUpdateEvent = () => {
-    dispatch();
+    dispatch(updateEvent(eventInfo));
   };
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -79,17 +76,7 @@ export default function EditEvent() {
   const handleStep = (step) => {
     setActiveStep(step);
   };
-  if (!pinnedEventId)
-    return (
-      <>
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={true}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </>
-    );
+
   return (
     <div className={style.body}>
       <Grid container spacing={0}>

@@ -9,6 +9,7 @@ import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTenantInfoByAccount } from "../../../../services/redux/actions/tenant/fetchListTenant";
+import { newTenantAction } from "../../../../services/redux/actions/tenant/tenant";
 
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
@@ -47,6 +48,7 @@ export default function DetailInfoCompany() {
   }, []);
 
   const handleCustomCompany = () => {
+    dispatch(newTenantAction(tenantInfo));
     navigate("/admin/tenant/custom");
   };
 

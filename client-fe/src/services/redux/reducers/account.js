@@ -133,7 +133,7 @@ const accountReducer = (state = initialState, action) => {
         if (account.username === action.payload.username)
           return {
             ...account,
-            active: 1,
+            active: action.payload.active,
           };
         return account;
       });

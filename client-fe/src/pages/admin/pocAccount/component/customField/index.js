@@ -25,10 +25,11 @@ export default function CustomField({ width, row, field }) {
     switch (field) {
       case "active": {
         if (row[field] !== 0) {
-          message.current = "Tài khoản đã được xác minh";
+          message.current =
+            "Tài khoản đã được xác minh, bạn muốn thay đổi trạng thái xác minh của tài khoản này ?";
         } else {
           message.current =
-            "Tài khoản chưa được xác minh, bạn có muốn xác minh tài khoản này";
+            "Tài khoản chưa được xác minh, bạn có muốn xác minh tài khoản này ?";
         }
         usernameSelected.current = row["username"];
         selected.current = true;

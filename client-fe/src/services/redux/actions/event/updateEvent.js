@@ -1,9 +1,9 @@
 import eventApi from "../../../../api/eventAPI";
 
-export const updateEvent = () => async (dispatch) => {
+export const updateEvent = (event) => async (dispatch) => {
   dispatch({ type: "EVENT/UPDATE_EVENT" });
 
-  const response = eventApi.updateEventInfo();
+  const response = eventApi.updateEventInfo(event);
 
   response
     .then((res) => {

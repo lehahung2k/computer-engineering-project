@@ -24,11 +24,13 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
 
   React.useEffect(() => {
-    const eventInfo = listEvents.find(
-      (event) => event.eventId === pinnedEventId
-    );
-    console.log(eventInfo);
-    dispatch(newEventAction(eventInfo));
+    if (pinnedEventId) {
+      const eventInfo = listEvents.find(
+        (event) => event.eventId === pinnedEventId
+      );
+      console.log(eventInfo);
+      dispatch(newEventAction(eventInfo));
+    }
   }, []);
 
   const handleClickOpen = () => {

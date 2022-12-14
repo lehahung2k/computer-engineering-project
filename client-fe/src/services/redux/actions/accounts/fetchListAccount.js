@@ -27,8 +27,7 @@ export const fetchPocAccountInfo = () => async (dispatch) => {
 
   response
     .then((response) => {
-      const params = { tenantCode: response.data.tenantCode };
-      dispatch(fetchTenantInfoByTenantCode(params));
+      dispatch(fetchTenantInfoByTenantCode(response.data.tenantCode));
       dispatch({
         type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO_SUCCESS",
         payload: response.data,

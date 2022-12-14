@@ -7,15 +7,7 @@ const eventController = require("../controller/EventController");
 /**
  * Lấy danh sách tất cả các sự kiện (dành cho admin)
  */
-router.get("/", validateToken, async (req, res) => {
-  const listEvents = await EventsMng.findAll({ raw: true });
-  const formattedListEvent = listEvents.map((event) => {
-    const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
-    const formattedEvent = { ...event, eventImg: formattedEventImage };
-    return formattedEvent;
-  });
-  res.json(formattedListEvent);
-});
+router.get("/get-list-event", validateToken, eventController.get_list_event);
 
 /**
  *
@@ -53,10 +45,11 @@ router.post(
   async (req, res) => {
     const post = req.body;
     try {
-      await EventsMng.create(post);
-      res.json(req.body);
+      const newEvent = await EventsMng.create(post);
+      return res.json(newEvent);
     } catch (err) {
-      res.json(req.body);
+      console.log(err);
+      return res.sendStatus(500);
     }
   }
 );
@@ -65,14 +58,19 @@ router.post(
  * Cập nhật sự kiện
  */
 router.put(
-  "/update-event/:event_id",
+  "/update-event",
   // validateToken,
   async (req, res) => {
-    const event_id = req.params.event_id;
-    await EventsMng.update(req.body, {
-      where: { event_id: event_id },
-    });
-    res.json("Update success!");
+    const eventId = req.body.eventId;
+    try {
+      await EventsMng.update(req.body, {
+        where: { eventId: eventId },
+      });
+      return res.json("Update success!");
+    } catch (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    }
   }
 );
 

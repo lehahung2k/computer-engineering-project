@@ -60,7 +60,7 @@ router.post(
     if (!req.user.userRole) return res.status(401).send("Invalid token");
     const tenantCode = req.body.tenantCode;
     if (!tenantCode) return res.sendStatus(400);
-
+    console.log(tenantCode);
     try {
       const tenantInfo = await Tenants.findOne({
         where: { tenantCode: tenantCode },

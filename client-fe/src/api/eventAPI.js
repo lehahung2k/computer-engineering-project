@@ -4,7 +4,7 @@ const baseUrl = "http://localhost:8080/events-management";
 
 class EventApi {
   getAll = (token) => {
-    const url = baseUrl + "/";
+    const url = baseUrl + "/get-list-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -53,14 +53,14 @@ class EventApi {
   };
 
   updateEventInfo = (params, token) => {
-    const url = baseUrl + "/update-event/" + params.id;
+    const url = baseUrl + "/update-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
     };
-    return axios.put(url, params.event, config);
+    return axios.put(url, params, config);
   };
 
   deleteEvent = (params, token) => {
