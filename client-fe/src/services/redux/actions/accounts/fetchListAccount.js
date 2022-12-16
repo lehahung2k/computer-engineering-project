@@ -1,9 +1,30 @@
 import accountApi from "../../../../api/AccountApi";
 import { fetchTenantInfoByTenantCode } from "../tenant/fetchListTenant";
-export const fetchListPocAccount = (tenantCode) => async (dispatch) => {
+export const fetchListPocAccount = (type, payload) => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT" });
-  const params = { tenantCode: tenantCode };
-  const response = accountApi.fetchListPocAccount(params);
+
+  let params = {};
+  let response = accountApi.fetchListPocAccount();
+
+  switch (type) {
+    case "COMMON": {
+      break;
+    }
+
+    case "CREATE_EVENT": {
+      params = {
+        tenantCode: payload.tenantCode,
+        startTime: payload.startTime,
+        endTime: payload.endTime,
+      };
+      response = accountApi.fetchListPocAccountForCreateEvent(params);
+      break;
+    }
+
+    default: {
+      break;
+    }
+  }
 
   response
     .then((res) => {

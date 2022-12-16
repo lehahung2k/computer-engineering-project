@@ -220,7 +220,10 @@ export default function EventInfoForm() {
             <DateTimePicker
               label="Thời gian bắt đầu"
               value={startTime}
-              onChange={(newValue) => dispatch(newStartEventAction(newValue))}
+              onChange={(newValue) => {
+                // console.log("new start", newValue);
+                dispatch(newStartEventAction(newValue));
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}

@@ -6,7 +6,7 @@ import Welcome from "./pages/common/welcome";
 // import SearchEvent from './component/search';
 // import EventAction from './component/eventAction';
 import { Navigate, Route, Routes } from "react-router-dom";
-import PrivateRoute from "./components/routing";
+import { PrivateRoute, WelcomeRoute } from "./components/routing";
 import CreateNewCompany from "./pages/admin/company/create";
 import CustomInfoCompany from "./pages/admin/company/customizeInfo";
 import DetailInfoCompany from "./pages/admin/company/viewDetail";
@@ -40,7 +40,9 @@ function App() {
           <Route path='/event-action/:event_id' element={<EventAction />} />
         </>
       )} */}
-        <Route exact path="/" element={<Welcome />} />
+        <Route exact path="/" element={<WelcomeRoute />}>
+          <Route exact path="/" element={<Welcome />} />
+        </Route>
 
         <Route path="/admin" element={<PrivateRoute type={"admin"} />}>
           <Route exact path="/admin" element={<AdminDashBoard />}></Route>

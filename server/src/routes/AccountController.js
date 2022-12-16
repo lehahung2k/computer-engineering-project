@@ -1,114 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { Accounts } = require("../models");
-const bcrypt = require("bcryptjs");
-const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const accountController = require("../controller/AccountController");
 
 /**
  * Đăng ký tài khoản
  */
-router.post("/", async (req, res) => {
-  const {
-    username,
-    password,
-    fullName,
-    active,
-    role,
-    companyName,
-    phoneNumber,
-    tenantCode,
-    email,
-  } = req.body;
-  const user = await Accounts.findOne({
-    where: {
-      username: username,
-    },
-  });
-  if (user === null || !user) {
-    bcrypt.hash(password, 6).then((hash) => {
-      Accounts.create({
-        username: username,
-        passwd: hash,
-        fullName: fullName,
-        active: active,
-        role: role,
-        companyName: companyName,
-        phoneNumber: phoneNumber,
-        tenantCode: tenantCode,
-        email: email,
-      });
-      res.json("SUCCESS");
-    });
-  } else {
-    res.json({ error: "Error: Username is existed!" });
-  }
-});
+router.post("/", accountController.signup);
 
 /**
  * Đăng nhập tài khoản
  */
-router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.sendStatus(400);
-  }
-  try {
-    const user = await Accounts.findOne({
-      where: {
-        username: username,
-      },
-    });
-
-    if (user === null || !user) {
-      res.json({ error: "User not found!" });
-    } else {
-      bcrypt.compare(password, user.passwd).then(async (match) => {
-        if (!match) {
-          res.json({ error: "Wrong username or password" });
-        } else {
-          let secretKey = process.env.SECRET_KEY;
-          let algorithm = process.env.ALGORITHM;
-          const accessToken = sign(
-            { username: user.username, userRole: user.role },
-            secretKey,
-            {
-              algorithm: algorithm,
-            }
-          );
-          res.json({ accessToken: accessToken, userRole: user.role });
-        }
-      });
-    }
-  } catch (error) {
-    res.sendStatus(500);
-  }
-});
-
-/**
- * Nhóm API yêu cầu thông tin tài khoản
- */
-
-/**
- * Lấy thông tin tài khoản đăng nhập của ban tổ chức
- */
-// router.post("/tenant-account", async (req, res) => {
-//   const { tenantCode } = req.body;
-//   try {
-//     const account = await Accounts.findAll({
-//       where: {
-//         tenantCode: tenantCode,
-//         role: "tenant",
-//       },
-//     });
-//     res.json({ username: account.username });
-//   } catch (err) {
-//     console.log(err);
-//     res.json({ error: err.message });
-//   }
-// });
+router.post("/login", accountController.login);
 
 /**
  * Lấy danh sách các tài khoản Poc
@@ -116,7 +19,16 @@ router.post("/login", async (req, res) => {
 router.get(
   "/get-list-poc-account",
   validateToken,
-  accountController.get_list_account_of_tenant
+  accountController.get_list_account
+);
+
+/**
+ * Lấy danh sách các tài khoản Poc theo mã ban tổ chức (tenant)
+ */
+router.post(
+  "/get_list_account_for_create_event",
+  validateToken,
+  accountController.get_list_account_for_create_event
 );
 
 /**
@@ -125,55 +37,17 @@ router.get(
 router.post(
   "/get-account-info-by-username",
   validateToken,
-  async (req, res) => {
-    const username = req.user.username;
-    if (!username) return res.status(401).send("Invalid token");
-    try {
-      const accountInfo = await Accounts.findOne({
-        where: { username: username },
-        attributes: [
-          "username",
-          "fullName",
-          "email",
-          "phoneNumber",
-          "tenantCode",
-        ],
-      });
-
-      res.json(accountInfo);
-    } catch (err) {
-      console.log(err.message);
-      res.sendStatus(500);
-    }
-  }
+  accountController.get_account_info_by_username
 );
 
 /**
  * Cập nhật trạng thái kích hoạt của tài khoản Poc
  */
-router.put("/update-account", async (req, res) => {
-  const username = req.body.username;
-  if (!username) return res.sendStatus(400);
-  try {
-    const currentActive = await Accounts.findOne({
-      where: { username: username },
-      attributes: ["active"],
-    });
-    await Accounts.update(
-      { active: currentActive.active === 0 ? 1 : 0 },
-      {
-        where: { username: username },
-      }
-    );
-    res.json({
-      username: username,
-      active: currentActive.active === 0 ? 1 : 0,
-    });
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-});
+router.put(
+  "/update-account",
+  validateToken,
+  accountController.update_active_account
+);
 
 /**
  * Xóa tài khoản POC

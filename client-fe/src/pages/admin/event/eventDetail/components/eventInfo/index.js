@@ -14,6 +14,7 @@ import {
   pinEventId,
   newEventAction,
 } from "../../../../../../services/redux/actions/event/event";
+import dayjs from "dayjs";
 
 export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const [open, setOpen] = React.useState(false);
@@ -22,16 +23,19 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
 
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
+  const eventInfo = useSelector((state) => state.eventState.event);
 
-  React.useEffect(() => {
-    if (pinnedEventId) {
-      const eventInfo = listEvents.find(
-        (event) => event.eventId === pinnedEventId
-      );
-      console.log(eventInfo);
-      dispatch(newEventAction(eventInfo));
-    }
-  }, []);
+  const enableEdit = eventInfo.startTime <= dayjs();
+
+  // React.useEffect(() => {
+  //   if (pinnedEventId) {
+  //     const eventInfo = listEvents.find(
+  //       (event) => event.eventId === pinnedEventId
+  //     );
+  //     console.log(eventInfo);
+  //     dispatch(newEventAction(eventInfo));
+  //   }
+  // }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -159,17 +163,18 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
             <li>2000 Khách tham dự</li>
           </ul>
         </Grid>
-
-        <Grid item xs={6} align="right">
-          <Button variant="contained" onClick={() => handleEditEvent()}>
-            Sửa sự kiện
-          </Button>
-        </Grid>
-        <Grid item xs={6} align="left">
-          <Button variant="outlined" onClick={handleClickOpen} color="error">
-            Xóa sự kiện
-          </Button>
-        </Grid>
+        <div style={{ display: enableEdit ? "block" : "none" }}>
+          <Grid item xs={6} align="right">
+            <Button variant="contained" onClick={() => handleEditEvent()}>
+              Sửa sự kiện
+            </Button>
+          </Grid>
+          <Grid item xs={6} align="left">
+            <Button variant="outlined" onClick={handleClickOpen} color="error">
+              Xóa sự kiện
+            </Button>
+          </Grid>
+        </div>
       </Grid>
       <Dialog
         open={open}

@@ -55,9 +55,17 @@ export default function EventPocInfoForm() {
   const eventInfo = useSelector((state) => state.eventState.event);
 
   React.useEffect(() => {
-    eventInfo.tenantCode
-      ? dispatch(fetchListPocAccount(eventInfo.tenantCode))
-      : setOpenWarningNoTenant(true);
+    if (eventInfo.tenantCode) {
+      dispatch(
+        fetchListPocAccount("CREATE_EVENT", {
+          tenantCode: eventInfo.tenantCode,
+          startTime: eventInfo.startTime,
+          endTime: eventInfo.endTime,
+        })
+      );
+    } else {
+      setOpenWarningNoTenant(true);
+    }
   }, []);
 
   const listPocAccount = useSelector(
