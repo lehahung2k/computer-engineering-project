@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/transaction";
+const baseUrl = "https://checkin.love:27090/transaction";
 class CheckinAPI {
   addNewCheckinClient = (params, token) => {
     const url = baseUrl + "/add-transaction";

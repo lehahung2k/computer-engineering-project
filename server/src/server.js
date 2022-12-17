@@ -4,6 +4,8 @@ const cors = require("cors");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv");
+const https = require("https");
+const fs = require("fs");
 
 dotenv.config();
 const app = express();
@@ -58,7 +60,16 @@ const transactionController = require("./routes/TransactionController");
 app.use("/transaction", transactionController);
 
 db.sequelize.sync().then(() => {
-  app.listen(process.env.PORT || port, () => {
-    console.log("Hello NodeJS");
+  const httpsServer = https.createServer({
+    cert: fs.readFileSync(process.env.SSL_CRT_FILE),
+    key: fs.readFileSync(process.env.SSL_KEY_FILE),
+  },
+    app
+  );
+  httpsServer.listen(process.env.PORT, () => {
+    console.log(`Server running with SSL Cert on port https://xephang.online:${process.env.PORT}`);
   });
 });
+
+
+

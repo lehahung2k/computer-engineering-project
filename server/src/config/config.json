@@ -3,7 +3,7 @@
     "username": "eventmgnt",
     "password": "hung22hieu",
     "database": "eventmgnt",
-    "host": "mycel.app",
+    "host": "checkin.love",
     "dialect": "mysql"
   },
   "development": {

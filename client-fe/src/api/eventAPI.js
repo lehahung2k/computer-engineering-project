@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/events-management";
+const baseUrl = "https://checkin.love:27090/events-management";
 
 class EventApi {
   getAll = (token) => {

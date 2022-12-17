@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/tenant";
+const baseUrl = "https://checkin.love:27090/tenant";
 
 class TenantApi {
   getAll = (token) => {
