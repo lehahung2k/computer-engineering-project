@@ -44,16 +44,15 @@ export default function EventInfoForm() {
   const [code, setCode] = React.useState("");
 
   const dispatch = useDispatch();
-  let tenantName = "";
-  if (sessionStorage.getItem("role") === "admin") {
-    tenantName = "This is test";
-  }
-
   const eventInfo = useSelector((state) => state.eventState.event);
   const handleClickGenerateCode = () => {
     const today = new Date();
     const time = today.getTime().toString();
-    const newCode = eventCodeGenerator([tenantName, eventInfo.eventName, time]);
+    const newCode = eventCodeGenerator([
+      eventInfo.tenantName,
+      eventInfo.eventName,
+      time,
+    ]);
     dispatch(newCodeEventAction(newCode));
   };
 
@@ -120,7 +119,7 @@ export default function EventInfoForm() {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          {tenantName ? (
+          {eventInfo.tenantName ? (
             <TextField
               required
               id="tenantName"
@@ -129,9 +128,8 @@ export default function EventInfoForm() {
               fullWidth
               autoComplete="tenant-name"
               variant="standard"
-              value={tenantName}
+              value={eventInfo.tenantName}
               InputLabelProps={{ shrink: true }}
-              defaultValue={eventInfo.tenantCode}
             />
           ) : (
             <Autocomplete

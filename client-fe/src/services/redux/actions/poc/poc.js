@@ -47,6 +47,24 @@ export const AddNewPocAction = (poc) => {
   };
 };
 
+export const NewListPocAction = (listPoc) => {
+  return {
+    type: "POC/NEW_LIST_POC",
+    payload: listPoc,
+  };
+};
+
+export const RemovePocAction = (pointCode) => {
+  return { type: "POC/REMOVE_POC", payload: pointCode };
+};
+
+export const UpdatePocAction = (poc, field) => {
+  return {
+    type: "POC/UPDATE_POC",
+    payload: { poc: poc, field: field },
+  };
+};
+
 export const resetState = () => {
   return {
     type: "POC/RESET_STATE",

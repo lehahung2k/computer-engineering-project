@@ -46,7 +46,7 @@ export default function EditEvent() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const eventInfo = useSelector((state) => state.eventState.event);
-
+  const listPoc = useSelector((state) => state.pocState.listPoc);
   const breadcrumbs =
     sessionStorage.getItem("role") === "admin"
       ? [
@@ -63,7 +63,7 @@ export default function EditEvent() {
   const dispatch = useDispatch();
 
   const handleUpdateEvent = () => {
-    dispatch(updateEvent(eventInfo));
+    dispatch(updateEvent(eventInfo, listPoc));
   };
   const handleNext = () => {
     setActiveStep(activeStep + 1);

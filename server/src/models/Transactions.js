@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       note: {
         type: DataTypes.TEXT,
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
     {
       tableName: "Transactions",

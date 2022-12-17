@@ -37,6 +37,11 @@ module.exports = (sequelize, DataTypes) => {
           key: "username",
         },
       },
+
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
     {
       tableName: "PointOfCheckins",

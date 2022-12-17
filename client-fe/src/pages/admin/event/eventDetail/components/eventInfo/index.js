@@ -25,8 +25,8 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
   const eventInfo = useSelector((state) => state.eventState.event);
 
-  const enableEdit = eventInfo.startTime <= dayjs();
-
+  const enableEdit = dayjs(eventInfo.startTime) <= dayjs();
+  console.log(enableEdit, dayjs(eventInfo.startTime), dayjs());
   // React.useEffect(() => {
   //   if (pinnedEventId) {
   //     const eventInfo = listEvents.find(
@@ -163,7 +163,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
             <li>2000 Khách tham dự</li>
           </ul>
         </Grid>
-        <div style={{ display: enableEdit ? "block" : "none" }}>
+        <div style={{ display: enableEdit ? "none" : "block" }}>
           <Grid item xs={6} align="right">
             <Button variant="contained" onClick={() => handleEditEvent()}>
               Sửa sự kiện

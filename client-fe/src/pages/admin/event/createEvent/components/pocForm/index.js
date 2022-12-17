@@ -26,8 +26,12 @@ import NormalTable from "../../../../../../components/tables/normal";
 import { pocCodeGenerator } from "../../../../../../services/hashFunction";
 import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
 import { fetchListPocAccount } from "../../../../../../services/redux/actions/accounts/fetchListAccount";
+import CustomField from "../customField";
+import CheckTable from "../../../../../../components/tables/check";
 
 const headCells = [
+  { id: "id", label: "", sort: false },
+
   {
     id: "pointName",
     label: "Tên POC",
@@ -44,6 +48,7 @@ const headCells = [
     label: "Ghi chú",
     sort: false,
   },
+  { id: "delete", label: "", sort: false },
 ];
 
 export default function EventPocInfoForm() {
@@ -53,7 +58,8 @@ export default function EventPocInfoForm() {
   const listNewPoc = useSelector((state) => state.pocState.listPoc);
   const newPoc = useSelector((state) => state.pocState.poc);
   const eventInfo = useSelector((state) => state.eventState.event);
-
+  const [selectedPoc, setSelectedPoc] = React.useState([]);
+  console.log("Số mục đã chọn", selectedPoc.length);
   React.useEffect(() => {
     if (eventInfo.tenantCode) {
       dispatch(
@@ -145,9 +151,22 @@ export default function EventPocInfoForm() {
         </Grid>
         <Grid item xs={6}>
           <Box display="flex" justifyContent="flex-end">
+            {selectedPoc.length > 0 ? (
+              <Button
+                variant="outlined"
+                sx={{ textTransform: "none", m: 1 }}
+                onClick={handleClickOpen}
+                color="error"
+              >
+                Xóa mục đã chọn
+              </Button>
+            ) : (
+              <></>
+            )}
+
             <Button
               variant="contained"
-              sx={{ textTransform: "none" }}
+              sx={{ textTransform: "none", m: 1 }}
               onClick={handleClickOpen}
             >
               Thêm mới
@@ -156,7 +175,20 @@ export default function EventPocInfoForm() {
         </Grid>
 
         <Grid item xs={12}>
-          <NormalTable rows={listNewPoc} headCells={headCells} />
+          <CheckTable
+            id={"pointCode"}
+            rows={listNewPoc}
+            headCells={headCells}
+            setSelectedItem={setSelectedPoc}
+            customField={[
+              {
+                id: "delete",
+                component(row) {
+                  return <CustomField width="15%" field="delete" row={row} />;
+                },
+              },
+            ]}
+          />
         </Grid>
       </Grid>
       <Dialog

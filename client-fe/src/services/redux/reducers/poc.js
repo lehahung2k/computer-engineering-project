@@ -6,6 +6,7 @@ const initialPoc = {
     username: "",
     pointNote: "",
     eventCode: "",
+    enable: true,
   },
   loading: false,
   success: false,
@@ -82,12 +83,48 @@ const pocReducer = (state = initialPoc, action) => {
       return { ...state, listPoc: newList };
     }
 
+    case "POC/NEW_LIST_POC": {
+      const newList = action.payload;
+
+      return { ...state, listPoc: newList };
+    }
+
     case "POC/REMOVE_POC": {
-      return state;
+      const removeIndex = state.listPoc
+        .map((poc) => poc.pointCode)
+        .indexOf(action.payload);
+
+      if (removeIndex === -1) {
+        return state;
+      } else {
+        const newListPoc = [
+          ...state.listPoc.slice(0, removeIndex),
+          ...state.listPoc.slice(removeIndex + 1),
+        ];
+        return {
+          ...state,
+          listPoc: newListPoc,
+        };
+      }
     }
 
     case "POC/UPDATE_POC": {
-      return state;
+      const cloneListPoc = structuredClone(state.listPoc);
+      const updatePoc = action.payload.poc;
+      const updateIndex = cloneListPoc
+        .map((poc) => poc.pointCode)
+        .indexOf(updatePoc.pointCode);
+      if (updateIndex === -1) return state;
+      const newListPoc = [
+        ...cloneListPoc.slice(0, updateIndex),
+        updatePoc,
+        ...cloneListPoc.slice(updateIndex + 1),
+      ];
+      console.log("Clone list poc", newListPoc);
+      return {
+        ...state,
+        listPoc: newListPoc,
+      };
     }
 
     /**
@@ -180,6 +217,32 @@ const pocReducer = (state = initialPoc, action) => {
     case "POC/RESET_STATE": {
       return {
         ...initialPoc,
+      };
+    }
+
+    /**
+     * Update list poc
+     */
+    case "POC/UPDATE_LIST_POC": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "POC/UPDATE_LIST_POC_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "POC/UPDATE_LIST_POC_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
       };
     }
 

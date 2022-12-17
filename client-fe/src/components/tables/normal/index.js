@@ -1,29 +1,20 @@
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { visuallyHidden } from "@mui/utils";
-import PropTypes from "prop-types";
 import * as React from "react";
-import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 
+// Hàm so sánh các trường thông tin trong cột (orderTime để đánh dấu cột thông tin là thời gian - có cách so sánh riêng)
 function descendingComparator(a, b, orderBy, orderTime) {
   if (orderTime) {
-    // console.log("Sorting time");
-    // console.log(orderBy);
-    // console.log(
-    //   Date.parse(b[orderBy]),
-    //   Date.parse(a[orderBy]),
-    //   Date.parse(b[orderBy]) < Date.parse(a[orderBy])
-    // );
     if (Date.parse(b[orderBy]) < Date.parse(a[orderBy])) {
       return -1;
     }
@@ -41,22 +32,14 @@ function descendingComparator(a, b, orderBy, orderTime) {
   return 0;
 }
 
+// Hàm chọn kiểu so sánh vì hàm so sánh phía trên chỉ so sánh theo một chiều
 function getComparator(order, orderBy, orderTime) {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy, orderTime)
     : (a, b) => -descendingComparator(a, b, orderBy, orderTime);
 }
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    borderTopLeftRadius: "10px",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
 
+// Hàng tiêu đề trong bảng được hiệu chỉnh
 function EnhancedTableHead(props) {
   const { order, orderBy, onRequestSort, headCells } = props;
   const createSortHandler = (property, time) => (event) => {
@@ -64,10 +47,14 @@ function EnhancedTableHead(props) {
     console.log("OrderTime", time);
   };
 
+  // Cột thông tin có mã là "id" được dùng để phân biệt các dòng nhưng không hiển thị
+  // nên phải lọc cột này ra và giữ các cột còn lại
+  const filteredHeadCells = headCells.filter((cell) => cell.id !== "id");
+
   return (
     <TableHead>
       <TableRow>
-        {headCells.map((headCell, index) => (
+        {filteredHeadCells.map((headCell, index) => (
           <TableCell
             key={headCell.id}
             align={"center"}
@@ -80,6 +67,7 @@ function EnhancedTableHead(props) {
               borderTopRightRadius: index === headCells.length - 1 ? "5px" : "",
             }}
           >
+            {/* Nếu đây là tiêu đề cho cột thông tin có thể sắp xếp tăng giảm thì chèn thêm hiệu ứng mũi tên */}
             {headCell.sort ? (
               <TableSortLabel
                 active={orderBy === headCell.id}
@@ -109,7 +97,6 @@ export default function NormalTable({
   rows,
   headCells,
   numOfRowsPerPage = 8,
-  activeHandle = (f) => f,
   handleClickButtonField = (f) => f,
   customField = [],
 }) {
@@ -118,10 +105,15 @@ export default function NormalTable({
   const [orderTime, setOrderTime] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(numOfRowsPerPage);
-  const navigate = useNavigate();
 
+  // Cột thông tin có mã là "id" được dùng để phân biệt các dòng nhưng không hiển thị
+  // nên phải lọc cột này ra và giữ các cột còn lại
   const filteredHeadCells = headCells.filter((cell) => cell.id !== "id");
 
+  // Xử lý khi có yêu cầu sắp xếp (chọn vào tiêu đề cột thông tin)
+  // Hàm sẽ thiết lập các thông số gồm:
+  // 1. Trường nào được sắp xếp
+  // 2. Sắp xếp tăng hay giảm
   const handleRequestSort = (event, property, time) => {
     const isAsc = orderBy == property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -129,6 +121,7 @@ export default function NormalTable({
     setOrderTime(time);
   };
 
+  // Thay đổi trang của bảng (mỗi trang là có numOfRowsPerPage hàng, sang hàng sau đó tức sang trang)
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -161,7 +154,9 @@ export default function NormalTable({
                   return (
                     <TableRow hover tabIndex={-1} key={index}>
                       {filteredHeadCells.map((headCell, index) => {
+                        // Nếu cột thông tin là đường dẫn link
                         if (headCell.link) {
+                          // Nếu đường dẫn link ra trang web bên ngoài
                           if (headCell.external) {
                             return (
                               <TableCell
@@ -179,6 +174,8 @@ export default function NormalTable({
                               </TableCell>
                             );
                           }
+
+                          // Nếu đường dẫn link là chuyển trang trong ứng dụng (navigation)
                           return (
                             <TableCell
                               align="center"
@@ -200,6 +197,7 @@ export default function NormalTable({
                           );
                         }
 
+                        // Nếu trường thông tin này là trường được hiệu chỉnh (tức có component hiển thị riêng)
                         const checkCustomField = customField.filter(
                           (field) => field.id === headCell.id
                         );
@@ -207,6 +205,7 @@ export default function NormalTable({
                           return checkCustomField[0].component(row);
                         }
 
+                        // Các trường khác hiển thị bình thường
                         return (
                           <TableCell
                             align="center"
@@ -216,32 +215,6 @@ export default function NormalTable({
                             {row[headCell.id]}
                           </TableCell>
                         );
-
-                        // <TableCell align="center" width={headCell.width}>
-                        //   {headCell.link ? (
-                        //     headCell.external ? (
-                        //       <a
-                        //         href={"https://" + headCell.link}
-                        //         target="_blank"
-                        //         rel="noopener noreferrer"
-                        //       >
-                        //         {row[headCell.id]}
-                        //       </a>
-                        //     ) : (
-                        //       <Button
-                        //         style={{ textTransform: "none" }}
-                        //         variant="text"
-                        //         color="inherit"
-                        //         onClick={() => navigate(headCell.link)}
-                        //         sx={{ whiteSpace: "normal" }}
-                        //       >
-                        //         {row[headCell.id]}
-                        //       </Button>
-                        //     )
-                        //   ) : (
-                        //     row[headCell.id]
-                        //   )}
-                        // </TableCell>
                       })}
                     </TableRow>
                   );
@@ -258,6 +231,8 @@ export default function NormalTable({
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* Chuyển trang trong bảng */}
         <TablePagination
           rowsPerPageOptions={[]}
           component="div"

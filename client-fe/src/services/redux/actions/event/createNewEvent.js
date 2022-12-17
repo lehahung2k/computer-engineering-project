@@ -17,7 +17,7 @@ export const createNewEvent = (event, listPoc) => async (dispatch) => {
 
   response
     .then((res) => {
-      dispatch(createNewListPoc({ listPoc, eventCode: event.eventCode }));
+      dispatch(createNewListPoc(listPoc, event.eventCode));
       dispatch({ type: "EVENT/CREATE_NEW_EVENT_SUCCESS", payload: res.data });
       console.log("EVENT/CREATE_NEW_EVENT_SUCCESS", res.data);
     })

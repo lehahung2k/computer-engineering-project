@@ -17,10 +17,12 @@ import PeopleIcon from "@mui/icons-material/People";
 import { ListEvent, ListEventHeadNormal } from "../../../assets/fakeData";
 import NormalTable from "../../../components/tables/normal";
 import { FakeChart } from "../../../assets/fakeData/fakeChart";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminDashBoard() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
 
+  const listEvent = useSelector((state) => state.eventState.listEvents);
   const [fakeData, setFakeData] = useState({
     labels: FakeChart.map((data) => data.month),
     datasets: [
@@ -180,7 +182,7 @@ export default function AdminDashBoard() {
 
                       <Grid item xs={12}>
                         <NormalTable
-                          rows={ListEvent}
+                          rows={listEvent}
                           headCells={ListEventHeadNormal}
                           numOfRowsPerPage={3}
                         />

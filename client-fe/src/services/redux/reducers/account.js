@@ -1,4 +1,4 @@
-import { ListPocAccount } from "../../../assets/fakeData/index";
+import { ListPocAccount } from "../../../assets/fakeData/fakeAccount";
 const initialState = {
   listAccount: ListPocAccount,
   account: {

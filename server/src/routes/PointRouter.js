@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
+const pointController = require("../controller/PointController");
 
 // router.get("/:event_id", async (req, res) => {
 //   const id = req.params.event_id;
@@ -18,11 +19,16 @@ const { validateToken } = require("../middlewares/AuthMiddlewares");
 router.post(
   "/add-point",
   // validateToken,
-  async (req, res) => {
-    const post = req.body;
-    await PointOfCheckins.bulkCreate(post);
-    res.json(post);
-  }
+  pointController.add_point
+);
+
+/**
+ * Cập nhật danh sách các quầy hàng
+ */
+router.put(
+  "/update-list-poc",
+  // validateToken,
+  pointController.update_list_poc
 );
 
 // router.put("/:event_id/update-point/:point_id", async (req, res) => {
@@ -70,39 +76,16 @@ router.post(
 router.post(
   "/get-all-poc-by-event-code",
   // validateToken,
-  async (req, res) => {
-    const eventCode = req.body.eventCode;
-    console.log(req.body);
-    if (!eventCode) return res.sendStatus(400);
-    try {
-      const listPoc = await PointOfCheckins.findAll({
-        where: { eventCode: eventCode },
-        attributes: ["pointName", "username", "pointNote"],
-      });
-      return res.json(listPoc);
-    } catch (err) {
-      res.sendStatus(500);
-    }
-  }
+  pointController.get_all_poc_by_event_code
 );
 
 /**
  * Lấy danh sách Poc theo tài khoản Poc (danh sách Poc mà tài khoản phụ trách)
  */
-router.post("/get-poc-info-by-username", validateToken, async (req, res) => {
-  const username = req.user.username;
-  const eventCode = req.body.eventCode;
-  if (!username) res.status(401).send("Invalid token");
-  if (!eventCode) res.sendStatus(400);
+router.post(
+  "/get-poc-info-by-username",
+  validateToken,
+  pointController.get_poc_info_by_username
+);
 
-  try {
-    const pocInfo = await PointOfCheckins.findOne({
-      where: { username: username, eventCode: eventCode },
-    });
-    res.json(pocInfo);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-});
 module.exports = router;

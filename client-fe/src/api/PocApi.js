@@ -13,7 +13,7 @@ class PocApi {
     return axios.post(url, params, config);
   };
 
-  addNewList = (params, token) => {
+  addNewList = (params) => {
     const url = baseUrl + "/add-point";
     const config = {
       headers: {
@@ -22,17 +22,19 @@ class PocApi {
       },
     };
 
-    console.log("params addnewlistpoc", params);
-    const eventCode = params.eventCode;
-    const customizedParams = params.listPoc.map((poc) => ({
-      pointCode: poc.pointCode,
-      pointName: poc.pointName,
-      username: poc.username,
-      pointNote: poc.pointNote,
-      eventCode: eventCode,
-    }));
+    return axios.post(url, params, config);
+  };
 
-    return axios.post(url, customizedParams, config);
+  updateListPoc = (params) => {
+    const url = baseUrl + "/update-list-poc";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+
+    return axios.put(url, params, config);
   };
 
   findAllBasedEventId = (params, token) => {
