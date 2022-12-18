@@ -5,29 +5,51 @@ const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
 const tenantController = require("../controller/TenantController");
 /**
- * Lấy danh sách thông tin tất cả ban tổ chức (chỉ dành cho admin)
+ * Lấy danh sách thông tin ban tổ chức
+ * Nếu là admin trả về thông tin tất cả ban tổ chức
+ * Nếu là tenant thì chỉ trả về thông tin của tenant đó
  */
-router.get("/", validateToken, async (req, res) => {
-  if (req.user.userRole !== "admin") return res.sendStatus(401);
-  try {
-    const listTenant = await Tenants.findAll({ raw: true });
-    let listTenantInfoFull = [];
-    for (let tenant of listTenant) {
-      const username = await Accounts.findOne({
-        where: {
-          tenantCode: tenant.tenantCode,
-          role: "tenant",
-        },
+router.get("/get-list-tenant", validateToken, async (req, res) => {
+  if (req.user.userRole === "admin") {
+    try {
+      const listTenant = await Tenants.findAll({ raw: true });
+      let listTenantInfoFull = [];
+      for (let tenant of listTenant) {
+        const username = await Accounts.findOne({
+          where: {
+            tenantCode: tenant.tenantCode,
+            role: "tenant",
+          },
+          raw: true,
+        });
+
+        listTenantInfoFull.push({ ...tenant, ...username });
+      }
+      return res.json(listTenantInfoFull);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  } else if (req.user.userRole === "tenant") {
+    try {
+      const username = req.user.username;
+      const tenantCode = await Accounts.findOne({
+        where: { username: username },
+        attributes: ["tenantCode"],
         raw: true,
       });
+      const tenant = await Tenants.findOne({
+        where: { tenantCode: tenantCode.tenantCode },
+        raw: true,
+      });
+      let listTenantInfoFull = [{ ...tenant, username: username }];
 
-      listTenantInfoFull.push({ ...tenant, ...username });
+      return res.json(listTenantInfoFull);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
     }
-    return res.json(listTenantInfoFull);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
+  } else res.sendStatus(401);
 });
 
 /**

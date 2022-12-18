@@ -4,7 +4,7 @@ const baseUrl = "http://localhost:8080/tenant";
 
 class TenantApi {
   getAll = (token) => {
-    const url = baseUrl + "/";
+    const url = baseUrl + "/get-list-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),

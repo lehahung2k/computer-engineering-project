@@ -15,6 +15,7 @@ import {
   newEventAction,
 } from "../../../../../../services/redux/actions/event/event";
 import dayjs from "dayjs";
+import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
 
 export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const [open, setOpen] = React.useState(false);
@@ -54,6 +55,8 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   };
 
   const handleEditEvent = () => {
+    dispatch(fetchListPocByEventCode(eventInfo.eventCode));
+
     sessionStorage.getItem("role") === "admin"
       ? navigate("/admin/event/edit")
       : navigate("/event-admin/event/edit");
@@ -163,7 +166,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
             <li>2000 Khách tham dự</li>
           </ul>
         </Grid>
-        <div style={{ display: enableEdit ? "none" : "block" }}>
+        <div style={{ display: enableEdit ? "block" : "block" }}>
           <Grid item xs={6} align="right">
             <Button variant="contained" onClick={() => handleEditEvent()}>
               Sửa sự kiện

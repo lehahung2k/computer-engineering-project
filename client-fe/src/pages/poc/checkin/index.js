@@ -80,7 +80,7 @@ export default function Checkin() {
       guestCode: guestCode,
       createTime: moment().format(),
       note: note,
-      enable: enableImage,
+      enable: true,
       identityType: identityType,
     };
     console.log(params);

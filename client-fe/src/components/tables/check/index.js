@@ -220,7 +220,7 @@ export default function CheckTable({
                       key={index}
                       onClick={(event) => handleClick(event, row)}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell padding="checkbox" width={"5%"}>
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -274,11 +274,11 @@ export default function CheckTable({
                         }
 
                         // Nếu trường thông tin này là trường được hiệu chỉnh (tức có component hiển thị riêng)
-                        const checkCustomField = customField.filter(
+                        const checkCustomField = customField.find(
                           (field) => field.id === headCell.id
                         );
-                        if (checkCustomField.length > 0) {
-                          return checkCustomField[0].component(row, index);
+                        if (checkCustomField) {
+                          return checkCustomField.component(row, index);
                         }
 
                         // Nếu trường "id" thì chỉ dùng phân biệt và xử lý logic, không hiển thị

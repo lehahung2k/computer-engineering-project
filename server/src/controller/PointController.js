@@ -59,7 +59,6 @@ exports.get_all_poc_by_event_code = async (req, res) => {
   try {
     const listPoc = await PointOfCheckins.findAll({
       where: { eventCode: eventCode },
-      attributes: ["pointName", "username", "pointNote"],
     });
     return res.json(listPoc);
   } catch (err) {
@@ -93,24 +92,33 @@ exports.get_poc_info_by_username = async (req, res) => {
 };
 
 exports.delete_point = async (req, res) => {
-  const pointCode = req.body.pointCode;
-  if (!pointCode) return res.sendStatus(400);
+  const listPointCode = req.body.listPointCode;
+  if (!listPointCode) return res.sendStatus(400);
 
   try {
+    const updateRes = await Transactions.update(
+      { enable: false },
+      {
+        where: {
+          pointCode: listPointCode,
+        },
+      }
+    );
+    res.json({ update: "success" });
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
 };
 
-exports.check_delete_conditions = async (req, res) => {
-  const pointCode = req.body.pointCode;
-  if (!pointCode) return res.sendStatus(400);
-
+exports.check_delete_condition = async (req, res) => {
+  const listPointCode = req.body.listPointCode;
+  if (!listPointCode) return res.sendStatus(400);
+  console.log(listPointCode);
   try {
     const listTransactions = await Transactions.findAll({
       where: {
-        pointCode: pointCode,
+        pointCode: listPointCode,
       },
       raw: true,
     });

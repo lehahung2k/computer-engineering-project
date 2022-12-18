@@ -11,6 +11,7 @@ const initialPoc = {
   loading: false,
   success: false,
   failure: false,
+  enableDelete: false,
   message: "",
 };
 
@@ -89,6 +90,9 @@ const pocReducer = (state = initialPoc, action) => {
       return { ...state, listPoc: newList };
     }
 
+    /**
+     * Delete poc in state redux
+     */
     case "POC/REMOVE_POC": {
       const removeIndex = state.listPoc
         .map((poc) => poc.pointCode)
@@ -124,6 +128,34 @@ const pocReducer = (state = initialPoc, action) => {
       return {
         ...state,
         listPoc: newListPoc,
+      };
+    }
+
+    /**
+     * Delete poc in server
+     */
+    case "POC/CHECK_DELETE_CONDITION": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "POC/CHECK_DELETE_CONDITION_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        enableDelete: action.payload,
+      };
+    }
+
+    case "POC/CHECK_DELETE_CONDITION_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
       };
     }
 

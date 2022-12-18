@@ -98,7 +98,9 @@ export default function ListEvent() {
       );
       console.log(eventInfo);
       dispatch(newEventAction(eventInfo));
-      navigate("/admin/event/detail");
+      sessionStorage.getItem("role") === "admin"
+        ? navigate("/admin/event/detail")
+        : navigate("/event-admin/event/detail");
     }
     if (fieldName === "checkin") console.log("checkin");
   };

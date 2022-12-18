@@ -22,138 +22,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import NormalTable from "../../../components/tables/normal";
 
-function createData(name, id, time, note, image) {
-  return {
-    name,
-    id,
-    time,
-    note,
-    image,
-  };
-}
-
-const rows = [
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn B",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn C",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn D",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-  createData(
-    "Nguyễn Văn A",
-    "0123456",
-    "09:00 12/12/2022",
-    "Khách checkin không chụp ảnh",
-    ""
-  ),
-];
-
 const headCells = [
   {
     id: "name",
@@ -204,7 +72,10 @@ export default function PocListGuest() {
 
     responseFetchListTransaction
       .then((res) => {
-        setListTransactions((listTransactions) => [...res.data]);
+        const filteredListTransaction = res.data.filter(
+          (transaction) => transaction.enable === true
+        );
+        setListTransactions((listTransactions) => [...filteredListTransaction]);
         console.log(res.data);
       })
       .catch((err) => {

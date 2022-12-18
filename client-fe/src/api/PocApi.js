@@ -70,28 +70,50 @@ class PocApi {
     return axios.post(url, params, config);
   };
 
-  deletePoc = (params, token) => {
-    const url =
-      baseUrl + "/" + params.event_id + "/delete-point/" + params.point_id;
+  deleteListPoc = (params) => {
+    const url = baseUrl + "/delete-point";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
     };
-    return axios.delete(url, config);
+    return axios.delete(url, params, config);
   };
 
-  deleteAllPoc = (params, token) => {
-    const url = baseUrl + "/delete-all-poc/" + params.event_id;
+  checkDeleteCondition = (params) => {
+    const url = baseUrl + "/check-delete-condition";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
     };
-    return axios.delete(url, config);
+    return axios.post(url, params, config);
   };
+
+  // deletePoc = (params, token) => {
+  //   const url =
+  //     baseUrl + "/" + params.event_id + "/delete-point/" + params.point_id;
+  //   const config = {
+  //     headers: {
+  //       Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
+  //   return axios.delete(url, config);
+  // };
+
+  // deleteAllPoc = (params, token) => {
+  //   const url = baseUrl + "/delete-all-poc/" + params.event_id;
+  //   const config = {
+  //     headers: {
+  //       Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+  //       "Content-Type": "application/json",
+  //     },
+  //   };
+  //   return axios.delete(url, config);
+  // };
 }
 
 const pocApi = new PocApi();

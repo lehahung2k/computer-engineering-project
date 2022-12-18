@@ -13,47 +13,48 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import CheckTable from "../../../../../../components/tables/check";
-import CustomField from "../customField";
 
 const headCells = [
   {
-    id: "pointName",
-    label: "Tên POC",
+    id: "name",
+    label: "Họ và tên",
 
     sort: true,
-    width: "20%",
   },
   {
-    id: "username",
-    label: "Tài khoản phụ trách",
+    id: "guestCode",
+    label: "Mã định danh",
     sort: false,
-    width: "25%",
   },
   {
-    id: "pointNote",
+    id: "createTime",
+    label: "Thời điểm check-in",
+    sort: true,
+  },
+  {
+    id: "note",
     label: "Ghi chú",
     sort: false,
-    width: "30%",
   },
-  { id: "transaction", label: "Thông tin check-in", sort: false },
-  { id: "delete", label: "Xóa", sort: false },
+  {
+    id: "image",
+    label: "Hình ảnh check-in",
+    sort: false,
+  },
 ];
-
-export default function ListPoc({ setActiveStep = (f) => f }) {
+export default function ListTransaction({ setActiveStep = (f) => f }) {
   const handleClickBack = () => {
-    setActiveStep(0);
+    setActiveStep(1);
   };
-  const [selectedPoc, setSelectedPoc] = React.useState([]);
 
   const listPoc = useSelector((state) => state.pocState.listPoc);
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
   const loading = useSelector((state) => state.pocState.loading);
   const filteredListPoc = listPoc.filter((poc) => poc.enable === true);
   const dispatch = useDispatch();
-  React.useEffect(() => {
-    dispatch(fetchListPocByEventCode(eventCode));
-  }, []);
+  const listTransaction = useSelector(
+    (state) => state.transactionState.listTransaction
+  );
   return (
     <div>
       <Grid container spacing={3}>
@@ -73,42 +74,7 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
         </Grid>
 
         <Grid item xs={12}>
-          {/* <NormalTable rows={filteredListPoc} headCells={headCells} /> */}
-          <CheckTable
-            id={"pointCode"}
-            rows={filteredListPoc}
-            headCells={headCells}
-            setSelectedItem={setSelectedPoc}
-            customField={[
-              {
-                id: "delete",
-                component(row, index) {
-                  return (
-                    <CustomField
-                      width="10%"
-                      field="delete"
-                      row={row}
-                      key={index}
-                    />
-                  );
-                },
-              },
-              {
-                id: "transaction",
-                component(row, index) {
-                  return (
-                    <CustomField
-                      width="10%"
-                      field="transaction"
-                      row={row}
-                      key={index}
-                      clickHandler={setActiveStep}
-                    />
-                  );
-                },
-              },
-            ]}
-          />
+          <NormalTable rows={listTransaction} headCells={headCells} />
         </Grid>
       </Grid>
 

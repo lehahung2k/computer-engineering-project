@@ -88,4 +88,18 @@ router.post(
   pointController.get_poc_info_by_username
 );
 
+/**
+ * Xóa các quầy hàng Poc
+ */
+router.delete("/delete-point", validateToken, pointController.delete_point);
+
+/**
+ * Kiểm tra điều kiện xóa quầy hàng Poc
+ */
+router.post(
+  "/check-delete-condition",
+  validateToken,
+  pointController.check_delete_condition
+);
+
 module.exports = router;

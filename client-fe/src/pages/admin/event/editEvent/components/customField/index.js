@@ -14,6 +14,8 @@ import {
   RemovePocAction,
   UpdatePocAction,
 } from "../../../../../../services/redux/actions/poc/poc";
+import { checkDeleteCondition } from "../../../../../../services/redux/actions/poc/deletePoc";
+import { AlertDeletePoc } from "../popup/alert";
 
 export default function CustomField({ width, row, field, key }) {
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -27,11 +29,18 @@ export default function CustomField({ width, row, field, key }) {
     console.log(field);
     switch (field) {
       case "delete": {
+        // Xóa poc trong danh sách state listPoc trong redux store
         console.log(row);
         const clonePoc = structuredClone(row);
         clonePoc.enable = false;
         console.log("Updated poc", clonePoc);
-        dispatch(UpdatePocAction(clonePoc));
+        // dispatch(UpdatePocAction(clonePoc));
+
+        // Kiểm tra điều kiện xóa và gửi api xóa lên server
+        message.current = "Bạn có muốn xóa thông tin quầy hàng này không ?";
+        dispatch(checkDeleteCondition([clonePoc.pointCode]));
+        setOpenDialog(true);
+
         break;
       }
       default: {
@@ -54,6 +63,14 @@ export default function CustomField({ width, row, field, key }) {
           {"Xóa"}
         </Button>
       </TableCell>
+
+      <AlertDeletePoc
+        open={openDialog}
+        // selected={selected.current}
+        setOpen={setOpenDialog}
+        message={message.current}
+        usernameSelected={usernameSelected.current}
+      />
     </>
   );
 }
