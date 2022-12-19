@@ -14,7 +14,8 @@ import { fetchListPocByEventCode } from "../../../../../../services/redux/action
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckTable from "../../../../../../components/tables/check";
-import CustomField from "../customField";
+import { CustomFieldListPoc } from "../customField/listPoc";
+import Box from "@mui/material/Box";
 
 const headCells = [
   {
@@ -54,10 +55,15 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
   React.useEffect(() => {
     dispatch(fetchListPocByEventCode(eventCode));
   }, []);
+
+  const handleClickDeleteListPoc = () => {
+    console.log("Delete List", selectedPoc);
+  };
+
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item xs={12} align="left">
+        <Grid item xs={6} align="left">
           <Button
             variant="contained"
             startIcon={<KeyboardArrowLeftIcon />}
@@ -66,6 +72,23 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
           >
             Quay lại
           </Button>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Box display="flex" justifyContent="flex-end">
+            {selectedPoc.length > 0 ? (
+              <Button
+                variant="outlined"
+                sx={{ textTransform: "none", m: 1 }}
+                onClick={handleClickDeleteListPoc}
+                color="error"
+              >
+                Xóa mục đã chọn
+              </Button>
+            ) : (
+              <></>
+            )}
+          </Box>
         </Grid>
 
         <Grid item xs={12} align="left">
@@ -84,7 +107,7 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
                 id: "delete",
                 component(row, index) {
                   return (
-                    <CustomField
+                    <CustomFieldListPoc
                       width="10%"
                       field="delete"
                       row={row}
@@ -97,7 +120,7 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
                 id: "transaction",
                 component(row, index) {
                   return (
-                    <CustomField
+                    <CustomFieldListPoc
                       width="10%"
                       field="transaction"
                       row={row}

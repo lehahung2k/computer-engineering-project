@@ -18,7 +18,7 @@ import {
 // import { AlertDeletePoc } from "../popup/alert";
 import { fetchListTransaction } from "../../../../../../services/redux/actions/transaction/fetchListTransaction";
 
-export default function CustomField({
+export function CustomFieldListPoc({
   width,
   row,
   field,

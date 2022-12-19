@@ -13,8 +13,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import CheckTable from "../../../../../../components/tables/check";
+import { CustomFieldListTransaction } from "../customField/listTransaction";
+import Box from "@mui/material/Box";
 
 const headCells = [
+  { id: "id", label: "", sort: false },
   {
     id: "name",
     label: "Họ và tên",
@@ -41,12 +45,13 @@ const headCells = [
     label: "Hình ảnh check-in",
     sort: false,
   },
+  { id: "delete", label: "Xóa", sort: false },
 ];
 export default function ListTransaction({ setActiveStep = (f) => f }) {
   const handleClickBack = () => {
     setActiveStep(1);
   };
-
+  const [selectedTransaction, setSelectedTransaction] = React.useState([]);
   const listPoc = useSelector((state) => state.pocState.listPoc);
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
   const loading = useSelector((state) => state.pocState.loading);
@@ -55,10 +60,18 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
   const listTransaction = useSelector(
     (state) => state.transactionState.listTransaction
   );
+  const filteredListTransaction = listTransaction.filter(
+    (transaction) => transaction.enable === true
+  );
+
+  const handleClickDeleteListTransaction = () => {
+    console.log("delete list transaction", selectedTransaction);
+  };
+
   return (
     <div>
       <Grid container spacing={3}>
-        <Grid item xs={12} align="left">
+        <Grid item xs={6} align="left">
           <Button
             variant="contained"
             startIcon={<KeyboardArrowLeftIcon />}
@@ -68,13 +81,64 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
             Quay lại
           </Button>
         </Grid>
+        <Grid item xs={6}>
+          <Box display="flex" justifyContent="flex-end">
+            {selectedTransaction.length > 0 ? (
+              <Button
+                variant="outlined"
+                sx={{ textTransform: "none", m: 1 }}
+                onClick={handleClickDeleteListTransaction}
+                color="error"
+              >
+                Xóa mục đã chọn
+              </Button>
+            ) : (
+              <></>
+            )}
+          </Box>
+        </Grid>
 
         <Grid item xs={12} align="left">
           <Typography variant="h6">Danh sách POC</Typography>
         </Grid>
 
         <Grid item xs={12}>
-          <NormalTable rows={listTransaction} headCells={headCells} />
+          {/* <NormalTable rows={filteredListTransaction} headCells={headCells} /> */}
+          <CheckTable
+            id={"tranId"}
+            rows={filteredListTransaction}
+            headCells={headCells}
+            setSelectedItem={setSelectedTransaction}
+            customField={[
+              {
+                id: "delete",
+                component(row, index) {
+                  return (
+                    <CustomFieldListTransaction
+                      width="10%"
+                      field="delete"
+                      row={row}
+                      key={index}
+                    />
+                  );
+                },
+              },
+              {
+                id: "transaction",
+                component(row, index) {
+                  return (
+                    <CustomFieldListTransaction
+                      width="10%"
+                      field="transaction"
+                      row={row}
+                      key={index}
+                      clickHandler={setActiveStep}
+                    />
+                  );
+                },
+              },
+            ]}
+          />
         </Grid>
       </Grid>
 
