@@ -36,15 +36,15 @@ class EventApi {
     return axios.put(url, params, config);
   };
 
-  deleteEvent = (params, token) => {
-    const url = baseUrl + "/delete-event-by-id/" + params.id;
+  deleteEvent = (params) => {
+    const url = baseUrl + "/delete-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
     };
-    return axios.delete(url, config);
+    return axios.post(url, params, config);
   };
 
   checkDeleteCondition = (params) => {

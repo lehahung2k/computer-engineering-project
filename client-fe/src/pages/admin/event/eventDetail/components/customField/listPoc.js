@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { fetchListTransaction } from "../../../../../../services/redux/actions/transaction/fetchListTransaction";
 import { checkDeleteCondition } from "../../../../../../services/redux/actions/poc/deletePoc";
 import { AlertDeletePoc } from "../popup/alertListPoc";
-
+import { NewPocAction } from "../../../../../../services/redux/actions/poc/poc";
+import { resetApiState } from "../../../../../../services/redux/actions/poc/poc";
 /**
  * Component giao diện wrapper cho tableCell đã hiệu chỉnh theo trường thông tin trong bảng (theo column name)
  * như trường "Xóa" sẽ custom tablecell thành button Xóa, "Xem" thành button Xem,... kèm theo xử lý logic và các alert khi click
@@ -46,10 +47,8 @@ export function CustomFieldListPoc({
         clonePoc.enable = false;
         console.log("Updated poc", clonePoc);
         // dispatch(UpdatePocAction(clonePoc));
-
-        // Kiểm tra điều kiện xóa và gửi api xóa lên server
-        message.current = "Bạn có muốn xóa thông tin quầy hàng này không ?";
-        dispatch(checkDeleteCondition([row]));
+        dispatch(NewPocAction(row));
+        dispatch(resetApiState());
         setOpenDialog(true);
         setMessage("Bạn có muốn xóa thông tin quầy hàng này không ?");
         break;

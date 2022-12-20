@@ -8,17 +8,10 @@ import { updatePocAccount } from "../../../../../../services/redux/actions/accou
 import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import { checkDeleteCondition } from "../../../../../../services/redux/actions/poc/deletePoc";
 import { resetState } from "../../../../../../services/redux/actions/poc/poc";
 
-export function AlertDeletePoc({
-  open,
-  message,
-  setOpen = (f) => f,
-  usernameSelected,
-  selected = true,
-}) {
-  console.log("usernameSelected", usernameSelected);
+export function AlertDeletePoc({ open, message, setOpen = (f) => f }) {
   const [confirmQuestion, setConfirmQuestion] = React.useState(true);
 
   const dispatch = useDispatch();
@@ -27,12 +20,20 @@ export function AlertDeletePoc({
   const success = useSelector((state) => state.pocState.success);
   const failure = useSelector((state) => state.pocState.failure);
   const enableDelete = useSelector((state) => state.pocState.enableDelete);
+  const pocInfo = useSelector((state) => state.pocState.poc);
+
+  const handleConfirmDeletePoc = () => {
+    // Kiểm tra điều kiện xóa và gửi api xóa lên server
+    console.log("Delete list poc", [pocInfo]);
+    dispatch(checkDeleteCondition([pocInfo]));
+    setConfirmQuestion(false);
+  };
 
   return (
     <>
       <Dialog
         open={open && confirmQuestion}
-        onClose={() => setConfirmQuestion(false)}
+        onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -42,13 +43,7 @@ export function AlertDeletePoc({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              setConfirmQuestion(false);
-              //   dispatch(updatePocAccount(usernameSelected));
-            }}
-            autoFocus
-          >
+          <Button onClick={handleConfirmDeletePoc} autoFocus>
             OK
           </Button>
         </DialogActions>

@@ -8,19 +8,37 @@ import { updatePocAccount } from "../../../../../../services/redux/actions/accou
 import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import { checkDeleteCondition as checkDeleteEventCondition } from "../../../../../../services/redux/actions/event/deleteEvent";
 import { resetState } from "../../../../../../services/redux/actions/poc/poc";
+import { useNavigate } from "react-router-dom";
 
 export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
   const [confirmQuestion, setConfirmQuestion] = React.useState(true);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loading = useSelector((state) => state.eventState.loading);
   const success = useSelector((state) => state.eventState.success);
   const failure = useSelector((state) => state.eventState.failure);
   const enableDelete = useSelector((state) => state.eventState.enableDelete);
+  const eventInfo = useSelector((state) => state.eventState.event);
 
+  const handleCloseSuccessAlert = () => {
+    setOpen(false);
+    setConfirmQuestion(true);
+    navigate("/admin/event");
+  };
+
+  const handleCloseErrorAlert = () => {
+    setOpen(false);
+    setConfirmQuestion(true);
+  };
+
+  const handleConfirmDeleteEvent = () => {
+    dispatch(checkDeleteEventCondition(eventInfo));
+    setConfirmQuestion(false);
+  };
   return (
     <>
       <Dialog
@@ -35,13 +53,7 @@ export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              setConfirmQuestion(false);
-              //   dispatch(updatePocAccount(usernameSelected));
-            }}
-            autoFocus
-          >
+          <Button onClick={handleConfirmDeleteEvent} autoFocus>
             OK
           </Button>
         </DialogActions>
@@ -62,18 +74,11 @@ export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Thay đổi trạng thái xác minh của tài khoản không thành công
+            Xóa sự kiện không thành công
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              //   dispatch(resetApiState());
-              setOpen(false);
-              setConfirmQuestion(true);
-            }}
-            autoFocus
-          >
+          <Button onClick={handleCloseErrorAlert} autoFocus>
             OK{" "}
           </Button>
         </DialogActions>
@@ -95,14 +100,7 @@ export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              //   dispatch(resetApiState());
-              setOpen(false);
-              setConfirmQuestion(true);
-            }}
-            autoFocus
-          >
+          <Button onClick={handleCloseSuccessAlert} autoFocus>
             OK{" "}
           </Button>
         </DialogActions>

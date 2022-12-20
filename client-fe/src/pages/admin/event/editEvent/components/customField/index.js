@@ -38,7 +38,6 @@ export default function CustomField({ width, row, field, key }) {
 
         // Kiểm tra điều kiện xóa và gửi api xóa lên server
         message.current = "Bạn có muốn xóa thông tin quầy hàng này không ?";
-        dispatch(checkDeleteCondition([clonePoc.pointCode]));
         setOpenDialog(true);
 
         break;

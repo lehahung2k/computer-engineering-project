@@ -281,6 +281,16 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
+    case "POC/RESET_API_STATE": {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: false,
+        message: "",
+      };
+    }
+
     /**
      * Update list poc
      */

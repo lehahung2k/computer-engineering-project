@@ -133,14 +133,15 @@ const eventReducer = (state = initialState, action) => {
     /**
      * Delete event
      */
-    case "EVENT/DELETE_NEW_EVENT": {
+    case "EVENT/DELETE_EVENT": {
       return {
         ...state,
         loading: true,
+        enableDelete: true,
       };
     }
 
-    case "EVENT/DELETE_NEW_EVENT_SUCCESS": {
+    case "EVENT/DELETE_EVENT_SUCCESS": {
       return {
         ...state,
         loading: false,
@@ -148,11 +149,36 @@ const eventReducer = (state = initialState, action) => {
       };
     }
 
-    case "EVENT/DELETE_NEW_EVENT_FAIL": {
+    case "EVENT/DELETE_EVENT_FAIL": {
       return {
         ...state,
         loading: false,
         success: false,
+        message: action.message,
+      };
+    }
+
+    case "EVENT/CHECK_DELETE_CONDITION": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "EVENT/CHECK_DELETE_CONDITION_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        enableDelete: action.payload,
+      };
+    }
+
+    case "EVENT/CHECK_DELETE_CONDITION_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
         message: action.message,
       };
     }
