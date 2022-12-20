@@ -50,17 +50,26 @@ exports.add_transaction = async (req, res) => {
  */
 exports.delete_transaction = async (req, res) => {
   const listTransaction = req.body;
-  if (!listTransaction) return res.sendStatus(400);
-
+  if (!listTransaction || listTransaction.length === 0)
+    return res.sendStatus(400);
+  const listTransactionId = listTransaction.map(
+    (transaction) => transaction.tranId
+  );
   try {
-    const deletedListTransaction = await Transactions.bulkCreate(
-      listTransaction,
+    const deletedListTransaction = await Transactions.update(
+      { enable: false },
       {
-        updateOnDuplicate: ["enable"],
+        where: { tranId: listTransactionId },
       }
     );
 
-    res.json(deletedListTransaction);
+    const listTransactionRemain = await Transactions.findAll({
+      where: {
+        pointCode: listTransaction[0].pointCode,
+        enable: true,
+      },
+    });
+    res.json(listTransactionRemain);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

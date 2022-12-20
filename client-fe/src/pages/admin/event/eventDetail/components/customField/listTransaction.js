@@ -1,60 +1,42 @@
 import Button from "@mui/material/Button";
 import TableCell from "@mui/material/TableCell";
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updatePocAccount } from "../../../../../../services/redux/actions/accounts/updateAccount";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import { resetApiState } from "../../../../../../services/redux/actions/accounts/account";
-import {
-  RemovePocAction,
-  UpdatePocAction,
-} from "../../../../../../services/redux/actions/poc/poc";
-// import { checkDeleteCondition } from "../../../../../../services/redux/actions/poc/deletePoc";
-// import { AlertDeletePoc } from "../popup/alert";
-import { fetchListTransaction } from "../../../../../../services/redux/actions/transaction/fetchListTransaction";
-
+import { useDispatch } from "react-redux";
+import { AlertDeleteTransaction } from "../popup/alertListTransaction";
+import { setTransactionInfo } from "../../../../../../services/redux/actions/transaction/transaction";
+/**
+ * Component giao diện wrapper cho tableCell đã hiệu chỉnh theo trường thông tin trong bảng (theo column name)
+ * như trường "Xóa" sẽ custom tablecell thành button Xóa, "Xem" thành button Xem,... kèm theo xử lý logic và các alert khi click
+ *
+ * @param {Object} param {width: Kích thước tablecell, row: Thông tin hàng của tableCell (Object thông tin được render trong hàng)
+ *                        field: Tên column, key, clickHandler: Hàm xử lý khi click chọn (nếu có)}
+ * @returns JSX Component
+ */
 export function CustomFieldListTransaction({
   width,
   row,
   field,
   clickHandler = (f) => f,
+  setMessage = (f) => f,
+  setOpenDialog = (f) => f,
   key,
 }) {
-  const [openDialog, setOpenDialog] = React.useState(false);
-  const usernameSelected = React.useRef("");
   const selected = React.useRef(false);
   const dispatch = useDispatch();
 
-  let message = React.useRef();
+  /**
+   * Xử lý sự kiện khi click chọn vào button
+   * Vì trường custom này mục tiêu là tạo sự linh hoạt khi tạo các button với chức năng khác nhau
+   * theo từng trường thông tin, nên cần kiểm tra trường được chọn là gì để xác định logic xử lý tương ứng
+   */
   let fieldHandler = () => {
-    console.log(typeof field);
-    console.log(field);
     switch (field) {
-      //   case "delete": {
-      //     // Xóa poc trong danh sách state listPoc trong redux store
-      //     console.log(row);
-      //     const clonePoc = structuredClone(row);
-      //     clonePoc.enable = false;
-      //     console.log("Updated poc", clonePoc);
-      //     // dispatch(UpdatePocAction(clonePoc));
+      case "delete": {
+        dispatch(setTransactionInfo(row));
+        setMessage("Bạn có muốn xóa thông tin check-in này ?");
+        setOpenDialog(true);
 
-      //     // Kiểm tra điều kiện xóa và gửi api xóa lên server
-      //     message.current = "Bạn có muốn xóa thông tin quầy hàng này không ?";
-      //     dispatch(checkDeleteCondition([clonePoc.pointCode]));
-      //     setOpenDialog(true);
-
-      //     break;
-      //   }
-
-      case "transaction": {
-        console.log("transaction");
-        dispatch(fetchListTransaction(row.pointCode));
-        clickHandler(2);
+        console.log("Open dialog click");
         break;
       }
 
@@ -67,20 +49,10 @@ export function CustomFieldListTransaction({
 
   return (
     <>
-      {/* <TableCell align="center" width={width} key={key}>
-        <Button
-          style={{ textTransform: "none" }}
-          variant="outlined"
-          color={"error"}
-          onClick={() => fieldHandler()}
-          sx={{ whiteSpace: "normal", fontSize: "10px" }}
-        >
-          {"Xóa"}
-        </Button>
-      </TableCell> */}
       {customTableCell(width, key, field, fieldHandler)}
 
-      {/* <AlertDeletePoc
+      {/* Pop up hiển thị xác nhận xóa và thông báo trạng thái kết quả */}
+      {/* <AlertDeleteTransaction
         open={openDialog}
         // selected={selected.current}
         setOpen={setOpenDialog}
@@ -91,41 +63,30 @@ export function CustomFieldListTransaction({
   );
 }
 
+/**
+ * Component hiệu chỉnh lại tablecell để phù hợp từng loại trường thông tin
+ *
+ * @param {string} width Kích thước tablecell
+ * @param {string} key
+ * @param {string} type Tên trường thông tin của tablecell (column name)
+ * @param {function} clickHandler Hàm xử lý logic khi click chọn button (tablecell)
+ * @returns JSX component
+ */
 const customTableCell = (width, key, type, clickHandler = (f) => f) => {
   switch (type) {
     case "delete": {
       return (
-        <>
-          <TableCell align="center" width={width} key={key}>
-            <Button
-              style={{ textTransform: "none" }}
-              variant="outlined"
-              color={"error"}
-              onClick={() => clickHandler()}
-              sx={{ whiteSpace: "normal", fontSize: "10px" }}
-            >
-              {"Xóa"}
-            </Button>
-          </TableCell>
-        </>
-      );
-    }
-
-    case "transaction": {
-      return (
-        <>
-          <TableCell align="center" width={width} key={key}>
-            <Button
-              style={{ textTransform: "none" }}
-              variant="outlined"
-              color={"primary"}
-              onClick={() => clickHandler()}
-              sx={{ whiteSpace: "normal", fontSize: "10px" }}
-            >
-              {"Xem"}
-            </Button>
-          </TableCell>
-        </>
+        <TableCell align="center" width={width} key={key}>
+          <Button
+            style={{ textTransform: "none" }}
+            variant="outlined"
+            color={"error"}
+            onClick={() => clickHandler()}
+            sx={{ whiteSpace: "normal", fontSize: "10px" }}
+          >
+            {"Xóa"}
+          </Button>
+        </TableCell>
       );
     }
 

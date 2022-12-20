@@ -159,6 +159,35 @@ const pocReducer = (state = initialPoc, action) => {
       };
     }
 
+    case "POC/DELETE_LIST_POC": {
+      return {
+        ...state,
+        loading: true,
+        enableDelete: true,
+      };
+    }
+
+    case "POC/DELETE_LIST_POC_SUCCESS": {
+      const newListPoc = structuredClone(action.payload);
+      const newState = structuredClone(state);
+
+      return {
+        ...newState,
+        listPoc: newListPoc,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "POC/DELETE_LIST_POC_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
     /**
      * Fetching list poc
      */

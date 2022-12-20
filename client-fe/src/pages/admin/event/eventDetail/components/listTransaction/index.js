@@ -16,7 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CheckTable from "../../../../../../components/tables/check";
 import { CustomFieldListTransaction } from "../customField/listTransaction";
 import Box from "@mui/material/Box";
-
+import { AlertDeleteTransaction } from "../popup/alertListTransaction";
 const headCells = [
   { id: "id", label: "", sort: false },
   {
@@ -51,6 +51,9 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
   const handleClickBack = () => {
     setActiveStep(1);
   };
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  console.log("OpenDialog state", openDialog);
   const [selectedTransaction, setSelectedTransaction] = React.useState([]);
   const listPoc = useSelector((state) => state.pocState.listPoc);
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
@@ -119,6 +122,8 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
                       field="delete"
                       row={row}
                       key={index}
+                      setMessage={setMessage}
+                      setOpenDialog={setOpenDialog}
                     />
                   );
                 },
@@ -148,6 +153,14 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      {/* Pop up hiển thị xác nhận xóa và thông báo trạng thái kết quả */}
+      <AlertDeleteTransaction
+        open={openDialog}
+        key={openDialog}
+        setOpen={setOpenDialog}
+        message={message}
+      />
     </div>
   );
 }

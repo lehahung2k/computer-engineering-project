@@ -16,7 +16,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CheckTable from "../../../../../../components/tables/check";
 import { CustomFieldListPoc } from "../customField/listPoc";
 import Box from "@mui/material/Box";
-
+import { AlertDeletePoc } from "../popup/alertListPoc";
 const headCells = [
   {
     id: "pointName",
@@ -37,8 +37,8 @@ const headCells = [
     sort: false,
     width: "30%",
   },
-  { id: "transaction", label: "Thông tin check-in", sort: false },
-  { id: "delete", label: "Xóa", sort: false },
+  { id: "transaction", label: "Thông tin check-in", sort: false, width: "10%" },
+  { id: "delete", label: "Xóa", sort: false, width: "10%" },
 ];
 
 export default function ListPoc({ setActiveStep = (f) => f }) {
@@ -46,7 +46,8 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
     setActiveStep(0);
   };
   const [selectedPoc, setSelectedPoc] = React.useState([]);
-
+  const [message, setMessage] = React.useState("");
+  const [openDialog, setOpenDialog] = React.useState(false);
   const listPoc = useSelector((state) => state.pocState.listPoc);
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
   const loading = useSelector((state) => state.pocState.loading);
@@ -112,6 +113,8 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
                       field="delete"
                       row={row}
                       key={index}
+                      setMessage={setMessage}
+                      setOpenDialog={setOpenDialog}
                     />
                   );
                 },
@@ -141,6 +144,14 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      <AlertDeletePoc
+        open={openDialog}
+        // selected={selected.current}
+        setOpen={setOpenDialog}
+        message={message}
+        key={openDialog}
+      />
     </div>
   );
 }

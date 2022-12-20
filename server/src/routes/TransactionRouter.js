@@ -21,6 +21,6 @@ router.post("/add-transaction", transactionController.add_transaction);
 /**
  * Xóa giao dịch check-in
  */
-router.delete("/delete-transaction", transactionController.delete_transaction);
+router.post("/delete-transaction", transactionController.delete_transaction);
 
 module.exports = router;

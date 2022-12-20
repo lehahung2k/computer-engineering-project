@@ -78,7 +78,7 @@ class PocApi {
         "Content-Type": "application/json",
       },
     };
-    return axios.delete(url, params, config);
+    return axios.post(url, params, config);
   };
 
   checkDeleteCondition = (params) => {

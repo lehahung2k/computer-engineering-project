@@ -92,19 +92,25 @@ exports.get_poc_info_by_username = async (req, res) => {
 };
 
 exports.delete_point = async (req, res) => {
-  const listPointCode = req.body.listPointCode;
-  if (!listPointCode) return res.sendStatus(400);
-
+  const listPoc = req.body;
+  if (!listPoc || listPoc.length === 0) return res.sendStatus(400);
+  const listPocId = listPoc.map((poc) => poc.pointId);
   try {
-    const updateRes = await Transactions.update(
+    const updateRes = await PointOfCheckins.update(
       { enable: false },
       {
         where: {
-          pointCode: listPointCode,
+          pointId: listPocId,
         },
       }
     );
-    res.json({ update: "success" });
+    const listPocRemain = await PointOfCheckins.findAll({
+      where: {
+        eventCode: listPoc[0].eventCode,
+        enable: true,
+      },
+    });
+    res.json(listPocRemain);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
@@ -112,9 +118,9 @@ exports.delete_point = async (req, res) => {
 };
 
 exports.check_delete_condition = async (req, res) => {
-  const listPointCode = req.body.listPointCode;
-  if (!listPointCode) return res.sendStatus(400);
-  console.log(listPointCode);
+  const listPoc = req.body;
+  if (!listPoc) return res.sendStatus(400);
+  const listPointCode = listPoc.map((poc) => poc.pointCode);
   try {
     const listTransactions = await Transactions.findAll({
       where: {

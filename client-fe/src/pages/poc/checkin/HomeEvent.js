@@ -102,12 +102,12 @@
 //       note: clientDescription.value,
 //     };
 
-//     const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+//     const responseAddNewCheckin = checkinApi.addNewCheckin(
 //       params,
 //       sessionStorage.getItem("accessToken")
 //     );
 
-//     responseAddNewCheckinClient
+//     responseAddNewCheckin
 //       .then((response) => {
 //         alert("Khách checkin thành công");
 //         setNewCheckin(true);

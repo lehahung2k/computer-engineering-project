@@ -56,7 +56,7 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         {/* Cột trống được thêm để tạo khoảng cách cho ô chọn select - check */}
-        <TableCell padding="checkbox"></TableCell>
+        <TableCell padding="checkbox" width={"5%"}></TableCell>
         {filteredHeadCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -64,6 +64,7 @@ function EnhancedTableHead(props) {
             padding={"normal"}
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{ fontWeight: "700" }}
+            width={headCell.width}
           >
             {/* Nếu đây là tiêu đề cho cột thông tin có thể sắp xếp tăng giảm thì chèn thêm hiệu ứng mũi tên */}
             {headCell.sort ? (
@@ -211,15 +212,8 @@ export default function CheckTable({
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   const isItemSelected = isSelected(row[id]);
-                  console.log("isItemSelected: " + isItemSelected);
-                  console.log(row[id]);
                   return (
-                    <TableRow
-                      hover
-                      tabIndex={-1}
-                      key={index}
-                      onClick={(event) => handleClick(event, row)}
-                    >
+                    <TableRow hover tabIndex={-1} key={index}>
                       <TableCell padding="checkbox" width={"5%"}>
                         <Checkbox
                           color="primary"
@@ -227,6 +221,7 @@ export default function CheckTable({
                           inputProps={{
                             "aria-labelledby": labelId,
                           }}
+                          onClick={(event) => handleClick(event, row)}
                         />
                       </TableCell>
                       {filteredHeadCells.map((headCell, index) => {
@@ -277,6 +272,7 @@ export default function CheckTable({
                         const checkCustomField = customField.find(
                           (field) => field.id === headCell.id
                         );
+
                         if (checkCustomField) {
                           return checkCustomField.component(row, index);
                         }

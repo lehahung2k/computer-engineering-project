@@ -91,7 +91,7 @@ router.post(
 /**
  * Xóa các quầy hàng Poc
  */
-router.delete("/delete-point", validateToken, pointController.delete_point);
+router.post("/delete-point", validateToken, pointController.delete_point);
 
 /**
  * Kiểm tra điều kiện xóa quầy hàng Poc

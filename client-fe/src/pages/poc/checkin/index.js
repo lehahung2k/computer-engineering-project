@@ -85,12 +85,12 @@ export default function Checkin() {
     };
     console.log(params);
 
-    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+    const responseAddNewCheckin = checkinApi.addNewCheckin(
       params,
       sessionStorage.getItem("accessToken")
     );
 
-    responseAddNewCheckinClient
+    responseAddNewCheckin
       .then((response) => {
         alert("Khách checkin thành công");
         setImage1("");
