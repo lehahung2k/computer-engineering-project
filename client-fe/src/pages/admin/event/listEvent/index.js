@@ -24,7 +24,7 @@ import {
   pinEventId,
   newEventAction,
 } from "../../../../services/redux/actions/event/event";
-import { fetchListEventAdmin } from "../../../../services/redux/actions/event/fetchListEvent";
+import { fetchListEvent } from "../../../../services/redux/actions/event/fetchListEvent";
 import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
 import moment from "moment";
 import AlertResponse from "./components/alert";
@@ -79,7 +79,7 @@ export default function ListEvent() {
 
   React.useEffect(() => {
     // if (listEvents.length === 0)
-    dispatch(fetchListEventAdmin());
+    dispatch(fetchListEvent());
     // if (listTenant.length === 0)
     // dispatch(fetchListTenant());
   }, []);

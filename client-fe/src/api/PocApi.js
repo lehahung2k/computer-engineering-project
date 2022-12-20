@@ -91,29 +91,6 @@ class PocApi {
     };
     return axios.post(url, params, config);
   };
-
-  // deletePoc = (params, token) => {
-  //   const url =
-  //     baseUrl + "/" + params.event_id + "/delete-point/" + params.point_id;
-  //   const config = {
-  //     headers: {
-  //       Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-  //   return axios.delete(url, config);
-  // };
-
-  // deleteAllPoc = (params, token) => {
-  //   const url = baseUrl + "/delete-all-poc/" + params.event_id;
-  //   const config = {
-  //     headers: {
-  //       Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-  //   return axios.delete(url, config);
-  // };
 }
 
 const pocApi = new PocApi();

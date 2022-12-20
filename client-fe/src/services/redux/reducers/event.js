@@ -16,6 +16,7 @@ const initialState = {
   success: false,
   failure: false,
   message: "",
+  enableDelete: false,
 };
 
 const eventReducer = (state = initialState, action) => {

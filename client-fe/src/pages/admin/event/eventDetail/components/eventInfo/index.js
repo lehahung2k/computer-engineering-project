@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -16,9 +17,12 @@ import {
 } from "../../../../../../services/redux/actions/event/event";
 import dayjs from "dayjs";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
+import { AlertDeleteEvent } from "../popup/alertEvent";
 
 export default function EventInfo({ setActiveStep = (f) => f, event }) {
-  const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -28,23 +32,6 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
 
   const enableEdit = dayjs(eventInfo.startTime) <= dayjs();
   console.log(enableEdit, dayjs(eventInfo.startTime), dayjs());
-  // React.useEffect(() => {
-  //   if (pinnedEventId) {
-  //     const eventInfo = listEvents.find(
-  //       (event) => event.eventId === pinnedEventId
-  //     );
-  //     console.log(eventInfo);
-  //     dispatch(newEventAction(eventInfo));
-  //   }
-  // }, []);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleShowListPoc = () => {
     setActiveStep(1);
@@ -60,6 +47,11 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
     sessionStorage.getItem("role") === "admin"
       ? navigate("/admin/event/edit")
       : navigate("/event-admin/event/edit");
+  };
+
+  const handleDeleteEvent = () => {
+    setMessage("Bạn có muốn xóa sự kiện không ?");
+    setOpenDialog(true);
   };
   return (
     <div>
@@ -166,42 +158,33 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
             <li>2000 Khách tham dự</li>
           </ul>
         </Grid>
-        <div style={{ display: enableEdit ? "block" : "block" }}>
-          <Grid item xs={6} align="right">
-            <Button variant="contained" onClick={() => handleEditEvent()}>
-              Sửa sự kiện
-            </Button>
-          </Grid>
-          <Grid item xs={6} align="left">
-            <Button variant="outlined" onClick={handleClickOpen} color="error">
-              Xóa sự kiện
-            </Button>
-          </Grid>
-        </div>
+        <Grid item xs={12}>
+          <Box sx={{ display: enableEdit ? "block" : "none" }}>
+            <Grid container spacing={3}>
+              <Grid item xs={6} align="right">
+                <Button variant="contained" onClick={() => handleEditEvent()}>
+                  Sửa sự kiện
+                </Button>
+              </Grid>
+              <Grid item xs={6} align="left">
+                <Button
+                  variant="outlined"
+                  onClick={handleDeleteEvent}
+                  color="error"
+                >
+                  Xóa sự kiện
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
       </Grid>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Xác nhận xóa sự kiện"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Bạn có thực sự muốn xóa sự kiện này ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="error">
-            Xác nhận
-          </Button>
-          <Button onClick={handleClose} autoFocus>
-            Hủy bỏ
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AlertDeleteEvent
+        open={openDialog}
+        setOpen={setOpenDialog}
+        message={message}
+        key={openDialog}
+      />
     </div>
   );
 }

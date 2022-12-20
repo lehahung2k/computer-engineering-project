@@ -39,8 +39,8 @@ app.get("/", (req, res) => {
 });
 
 //Routes:
-const eventsController = require("./routes/EventController");
-app.use("/events-management", eventsController);
+const eventsRouter = require("./routes/EventRouter");
+app.use("/events-management", eventsRouter);
 
 const tenantRouter = require("./routes/TenantRouter");
 app.use("/tenant", tenantRouter);
