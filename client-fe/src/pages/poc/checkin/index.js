@@ -81,6 +81,8 @@ export default function Checkin() {
       createTime: moment().format(),
       note: note,
       enable: true,
+      checkinImg1: enableImage === "on" ? image1 : "",
+      checkinImg2: enableImage === "on" ? image2 : "",
       identityType: identityType,
     };
     console.log(params);

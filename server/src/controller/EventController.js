@@ -65,7 +65,10 @@ exports.get_list_event = async (req, res) => {
 };
 
 const getListEventsAdmin = async (username, res) => {
-  const listEvents = await EventsMng.findAll({ raw: true });
+  const listEvents = await EventsMng.findAll({
+    where: { enable: true },
+    raw: true,
+  });
   const listTenant = await Tenants.findAll({ raw: true });
 
   const formattedListEvent = listEvents.map((event) => {
@@ -103,6 +106,7 @@ const getListEventsTenant = async (username, res) => {
   const listEvents = await EventsMng.findAll({
     where: {
       tenantCode: tenantCode.tenantCode,
+      enable: true,
     },
     raw: true,
   });
@@ -128,7 +132,7 @@ const getListEventsPoc = async (username, res) => {
   for (let eventCode of listEventCode) {
     console.log(eventCode.dataValues.eventCode);
     let event = await EventsMng.findOne({
-      where: { eventCode: eventCode.dataValues.eventCode },
+      where: { eventCode: eventCode.dataValues.eventCode, enable: true },
       raw: true,
     });
     const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
@@ -191,6 +195,7 @@ exports.update_event = async (req, res) => {
  */
 exports.delete_event = async (req, res) => {
   const eventInfo = req.body;
+  console.log(eventInfo);
   if (!eventInfo || eventInfo === {}) return res.sendStatus(400);
   const eventId = eventInfo.eventId;
   try {
@@ -217,6 +222,7 @@ exports.check_delete_condition = async (req, res) => {
     const listPoc = await PointOfCheckins.findAll({
       where: {
         eventCode: eventInfo.eventCode,
+        enable: true,
       },
       raw: true,
     });

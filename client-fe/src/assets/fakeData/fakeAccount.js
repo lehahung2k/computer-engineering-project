@@ -23,7 +23,7 @@ function createPocAccount(
 export const ListPocAccount = [
   createPocAccount(
     "dinhangminh899",
-    "To7P-WYL^]Dd",
+    "dinhangminh899",
     "Đinh Ðăng Minh",
     "bkah",
     "Công ty TNHH Shinjo Việt Nam",
@@ -33,7 +33,7 @@ export const ListPocAccount = [
   ),
   createPocAccount(
     "nghiemhongthuy535",
-    "PWL4~p-0ul[i",
+    "nghiemhongthuy535",
     "Nghiêm Hồng Thủy",
     "bkah",
     "CÔNG TY TNHH CÔNG NGHIỆP NHỰA PIONEER",

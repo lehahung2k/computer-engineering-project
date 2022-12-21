@@ -3,7 +3,7 @@ import eventApi from "../../../../api/eventAPI";
 export const deleteEvent = (event) => async (dispatch) => {
   dispatch({ type: "EVENT/DELETE_EVENT" });
 
-  const response = eventApi.deleteEvent();
+  const response = eventApi.deleteEvent(event);
 
   response
     .then((res) => {

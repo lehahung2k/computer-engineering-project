@@ -7,6 +7,7 @@ import { checkDeleteCondition } from "../../../../../../services/redux/actions/p
 import { AlertDeletePoc } from "../popup/alertListPoc";
 import { NewPocAction } from "../../../../../../services/redux/actions/poc/poc";
 import { resetApiState } from "../../../../../../services/redux/actions/poc/poc";
+
 /**
  * Component giao diện wrapper cho tableCell đã hiệu chỉnh theo trường thông tin trong bảng (theo column name)
  * như trường "Xóa" sẽ custom tablecell thành button Xóa, "Xem" thành button Xem,... kèm theo xử lý logic và các alert khi click

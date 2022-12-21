@@ -84,60 +84,62 @@ export default function PocListGuest() {
   }, []);
   console.log(listTransactions);
   return (
-    <div className={style.body}>
-      <Grid container spacing={0}>
-        {openSidebar ? (
-          <Grid xs="auto">
-            <div>
-              <SideBar id="1" />
-            </div>
-          </Grid>
-        ) : (
-          <></>
-        )}
-        <Grid xs>
-          <Header
-            openSidebar={openSidebar}
-            handleOpenSidebar={setOpenSidebar}
-          />
-          <BreadCrumbs breadcrumbs={breadcrumbs} />
-          <Grid container spacing="0" id="container">
-            <div className={style.main}>
-              <div className={style.main__head}>
-                <div className={style.main__head__breadcrumb}></div>
-                <h3>Danh sách khách check-in</h3>
-              </div>
-
+    <div className={style.wrapper}>
+      <div className={style.body}>
+        <Grid container spacing={0}>
+          {openSidebar ? (
+            <Grid xs="auto">
               <div>
-                <NormalTable rows={listTransactions} headCells={headCells} />
+                <SideBar id="1" />
               </div>
-            </div>
+            </Grid>
+          ) : (
+            <></>
+          )}
+          <Grid xs>
+            <Header
+              openSidebar={openSidebar}
+              handleOpenSidebar={setOpenSidebar}
+            />
+            <BreadCrumbs breadcrumbs={breadcrumbs} />
+            <Grid container spacing="0" id="container">
+              <div className={style.main}>
+                <div className={style.main__head}>
+                  <div className={style.main__head__breadcrumb}></div>
+                  <h3>Danh sách khách check-in</h3>
+                </div>
+
+                <div>
+                  <NormalTable rows={listTransactions} headCells={headCells} />
+                </div>
+              </div>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
 
-      <Dialog
-        open={failure}
-        onClose={() => setFailure(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tải danh sách check-in không thành công, xin thử lại.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setFailure(false);
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog
+          open={failure}
+          onClose={() => setFailure(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Tải danh sách check-in không thành công, xin thử lại.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setFailure(false);
+              }}
+              autoFocus
+            >
+              OK{" "}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </div>
   );
 }

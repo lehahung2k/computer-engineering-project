@@ -27,7 +27,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { eventCodeGenerator } from "../../../../../../services/hashFunction";
 import {
   fetchListTenant,
-  fetchTenantInfoByAccount,
+  fetchTenantInfo,
 } from "../../../../../../services/redux/actions/tenant/fetchListTenant";
 
 export default function EventInfoForm() {

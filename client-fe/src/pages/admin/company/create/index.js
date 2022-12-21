@@ -24,12 +24,16 @@ import {
   newUsernameTenantAction,
   newWebsiteTenantAction,
 } from "../../../../services/redux/actions/tenant/tenant";
-import AlertResponseCreateTenant from "./component/alertResponse";
+import AlertResponseCreateTenant from "./components/popup/alertResponse";
 import style from "./style.module.css";
+import { AlertCheckCreateTenant } from "./components/popup/alertCheckCreate";
 
 export default function CreateNewCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
-
+  const [openCheckCreateEventDialog, setOpenCheckCreateEventDialog] =
+    React.useState(false);
+  const [messageCheckCreateEvent, setMessageCheckCreateEvent] =
+    React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
   const breadcrumbs = [
@@ -55,14 +59,23 @@ export default function CreateNewCompany() {
       tenantInfo.tenantName === "" ||
       tenantInfo.tenantAddress === "" ||
       tenantInfo.website === "" ||
-      tenantInfo.contactName === "" ||
-      tenantInfo.contactEmail === "" ||
-      tenantInfo.contactPhone === "" ||
-      tenantAccount.username === "" ||
-      tenantAccount.password === "" ||
       tenantInfo.tenantCode === ""
     ) {
-      return alert("Không để trống");
+      setMessageCheckCreateEvent("Thông tin tổ chức không được để trống");
+      setOpenCheckCreateEventDialog(true);
+      return;
+    } else if (
+      tenantInfo.contactName === "" ||
+      tenantInfo.contactEmail === "" ||
+      tenantInfo.contactPhone === ""
+    ) {
+      setMessageCheckCreateEvent("Thông tin liên hệ không được để trống");
+      setOpenCheckCreateEventDialog(true);
+      return;
+    } else if (tenantAccount.username === "" || tenantAccount.password === "") {
+      setMessageCheckCreateEvent("Thông tin tài khoản không được để trống");
+      setOpenCheckCreateEventDialog(true);
+      return;
     }
     dispatch(createNewTenant(tenantInfo, tenantAccount));
   };
@@ -271,6 +284,11 @@ export default function CreateNewCompany() {
         </Grid>
       </Grid>
       <AlertResponseCreateTenant />
+      <AlertCheckCreateTenant
+        open={openCheckCreateEventDialog}
+        setOpenDialog={setOpenCheckCreateEventDialog}
+        message={messageCheckCreateEvent}
+      />
     </div>
   );
 }

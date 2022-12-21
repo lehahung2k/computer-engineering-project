@@ -17,7 +17,10 @@ class TenantApi {
   addNew = (params, token) => {
     const url = baseUrl + "/add-tenant";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.post(url, params, config);
   };
@@ -41,8 +44,8 @@ class TenantApi {
     return axios.post(url, params, config);
   };
 
-  fetchTenantInfoByAccount = () => {
-    const url = baseUrl + "/get-tenant-info-by-account";
+  fetchTenantInfo = () => {
+    const url = baseUrl + "/get-tenant-info";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),

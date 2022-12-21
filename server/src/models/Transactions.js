@@ -31,6 +31,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: true,
       },
+      checkinImg1: {
+        type: DataTypes.BLOB("long"),
+      },
+      checkinImg2: {
+        type: DataTypes.BLOB("long"),
+      },
     },
     {
       tableName: "Transactions",

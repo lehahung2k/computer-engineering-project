@@ -5,8 +5,8 @@ const initialState = {
   event: {
     eventName: "",
     eventCode: "",
-    startTime: dayjs(),
-    endTime: dayjs(),
+    startTime: dayjs("01-01-2000 00:00:00", "DD:MM:YYYY HH:mm:ss"),
+    endTime: dayjs("01-01-2000 00:00:00", "DD:MM:YYYY HH:mm:ss"),
     eventDescription: "",
     eventImg: "",
     tenantCode: null,
@@ -153,7 +153,7 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
         message: action.message,
       };
     }

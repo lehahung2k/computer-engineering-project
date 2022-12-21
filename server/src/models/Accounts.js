@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       companyName: {
         type: DataTypes.STRING,
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     },
     {
       tableName: "Accounts",

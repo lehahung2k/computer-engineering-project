@@ -18,6 +18,57 @@ import {
 import dayjs from "dayjs";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
 import { AlertDeleteEvent } from "../popup/alertEvent";
+import moment from "moment";
+
+const checkEnableEditUI = (startTime) => {
+  return dayjs(startTime).isAfter(dayjs());
+};
+
+const checkEnableDeleteUI = (startTime, endTime) => {
+  return dayjs(startTime).isAfter(dayjs()) || dayjs(endTime).isBefore(dayjs());
+};
+
+const getUtilButtonUI = (startTime, endTime, handleEdit, handleDelete) => {
+  const enableEdit = checkEnableEditUI(startTime);
+  const enableDelete = checkEnableDeleteUI(startTime, endTime);
+
+  if (enableDelete) {
+    if (enableEdit) {
+      return (
+        <>
+          <Box>
+            <Grid container spacing={3}>
+              <Grid item xs={6} align="right">
+                <Button variant="contained" onClick={handleEdit}>
+                  Sửa sự kiện
+                </Button>
+              </Grid>
+              <Grid item xs={6} align="left">
+                <Button variant="outlined" onClick={handleDelete} color="error">
+                  Xóa sự kiện
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Box>
+            <Grid container spacing={3}>
+              <Grid item xs={12} align="center">
+                <Button variant="outlined" onClick={handleDelete} color="error">
+                  Xóa sự kiện
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </>
+      );
+    }
+  }
+};
 
 export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -30,8 +81,11 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
   const eventInfo = useSelector((state) => state.eventState.event);
 
-  const enableEdit = dayjs(eventInfo.startTime) <= dayjs();
-  console.log(enableEdit, dayjs(eventInfo.startTime), dayjs());
+  const enableEdit = checkEnableEditUI(eventInfo.startTime);
+  const enableDelete = checkEnableDeleteUI(
+    eventInfo.startTime,
+    eventInfo.endTime
+  );
 
   const handleShowListPoc = () => {
     setActiveStep(1);
@@ -87,7 +141,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          {event.startTime}
+          {moment(event.startTime).format("YYYY-MM-DD HH:mm:ss")}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -97,7 +151,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
         </Grid>
 
         <Grid item xs={4} align="left">
-          {event.endTime}{" "}
+          {moment(event.endTime).format("YYYY-MM-DD HH:mm:ss")}{" "}
         </Grid>
 
         <Grid item xs={2} align="right">
@@ -159,24 +213,12 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
           </ul>
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ display: enableEdit ? "block" : "none" }}>
-            <Grid container spacing={3}>
-              <Grid item xs={6} align="right">
-                <Button variant="contained" onClick={() => handleEditEvent()}>
-                  Sửa sự kiện
-                </Button>
-              </Grid>
-              <Grid item xs={6} align="left">
-                <Button
-                  variant="outlined"
-                  onClick={handleDeleteEvent}
-                  color="error"
-                >
-                  Xóa sự kiện
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+          {getUtilButtonUI(
+            eventInfo.startTime,
+            eventInfo.endTime,
+            handleEditEvent,
+            handleDeleteEvent
+          )}
         </Grid>
       </Grid>
       <AlertDeleteEvent

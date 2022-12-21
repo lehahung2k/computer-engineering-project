@@ -8,7 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { resetApiState } from "../../../../../services/redux/actions/tenant/tenant";
+import { resetApiState } from "../../../../../../services/redux/actions/tenant/tenant";
 
 export default function AlertResponseCreateTenant() {
   const loadingTenant = useSelector((state) => state.tenantState.loading);

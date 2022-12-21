@@ -34,6 +34,7 @@ import {
   fetchListTenant,
   fetchTenantInfoByTenantCode,
 } from "../../../../services/redux/actions/tenant/fetchListTenant";
+import { resetState } from "../../../../services/redux/actions/tenant/tenant";
 
 export default function ListCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
@@ -60,6 +61,7 @@ export default function ListCompany() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    dispatch(resetState());
     dispatch(fetchListTenant());
   }, []);
 

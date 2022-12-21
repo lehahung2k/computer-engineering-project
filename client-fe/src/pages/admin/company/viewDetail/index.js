@@ -8,7 +8,7 @@ import SideBar from "../../../../components/navigation";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTenantInfoByAccount } from "../../../../services/redux/actions/tenant/fetchListTenant";
+import { fetchTenantInfo } from "../../../../services/redux/actions/tenant/fetchListTenant";
 import { newTenantAction } from "../../../../services/redux/actions/tenant/tenant";
 
 export default function DetailInfoCompany() {
@@ -21,7 +21,7 @@ export default function DetailInfoCompany() {
 
   let tenantInfo = useSelector((state) => state.tenantState.tenant);
 
-  if (pinnedTenantId)
+  if (pinnedTenantId && !tenantInfo.tenantCode)
     tenantInfo = listTenant.find(
       (tenant) => tenant.tenantId === pinnedTenantId
     );
@@ -43,13 +43,17 @@ export default function DetailInfoCompany() {
 
   React.useEffect(() => {
     if (sessionStorage.getItem("role") === "tenant") {
-      dispatch(fetchTenantInfoByAccount());
+      dispatch(fetchTenantInfo());
     }
   }, []);
 
-  const handleCustomCompany = () => {
+  const handleCustomTenant = () => {
     dispatch(newTenantAction(tenantInfo));
     navigate("/admin/tenant/custom");
+  };
+
+  const handleDeleteTenant = () => {
+    console.log("Delete tenant");
   };
 
   return (
@@ -159,22 +163,33 @@ export default function DetailInfoCompany() {
                     </Grid>
 
                     <Grid item xs={4} align="left">
-                      {tenantInfo.username
+                      {tenantInfo.username || tenantAccount.username
                         ? tenantInfo.username
+                          ? tenantInfo.username
+                          : tenantAccount.username
                         : "Chưa có tài khoản đăng nhập"}
                     </Grid>
                   </>
                 )}
-
                 {sessionStorage.getItem("role") === "admin" ? (
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleCustomCompany()}
-                    >
-                      Sửa thông tin
-                    </Button>
-                  </Grid>
+                  <>
+                    <Grid container spacing={3}>
+                      <Grid item xs={6} align="right">
+                        <Button variant="outlined" onClick={handleCustomTenant}>
+                          Sửa thông tin
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} align="left">
+                        <Button
+                          variant="outlined"
+                          onClick={handleDeleteTenant}
+                          color="error"
+                        >
+                          Xóa ban tổ chức
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </>
                 ) : (
                   <></>
                 )}

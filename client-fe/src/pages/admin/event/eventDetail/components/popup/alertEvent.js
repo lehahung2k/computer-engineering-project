@@ -27,7 +27,11 @@ export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
   const handleCloseSuccessAlert = () => {
     setOpen(false);
     setConfirmQuestion(true);
-    navigate("/admin/event");
+    if (sessionStorage.getItem("role") === "admin") {
+      navigate("/admin/event");
+    } else if (sessionStorage.getItem("role") === "tenant") {
+      navigate("/event-admin/event");
+    }
   };
 
   const handleCloseErrorAlert = () => {
@@ -36,9 +40,11 @@ export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
   };
 
   const handleConfirmDeleteEvent = () => {
-    dispatch(checkDeleteEventCondition(eventInfo));
     setConfirmQuestion(false);
+    dispatch(checkDeleteEventCondition(eventInfo));
   };
+
+  console.log("confirm question open: ", confirmQuestion);
   return (
     <>
       <Dialog
