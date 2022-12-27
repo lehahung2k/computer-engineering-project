@@ -54,6 +54,28 @@ class TenantApi {
     };
     return axios.get(url, config);
   };
+
+  deleteTenant = (params) => {
+    const url = baseUrl + "/delete-tenant";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.post(url, params, config);
+  };
+
+  checkDeleteCondition = (params) => {
+    const url = baseUrl + "/check-delete-condition";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.post(url, params, config);
+  };
 }
 
 const tenantApi = new TenantApi();

@@ -35,7 +35,26 @@ exports.update_list_poc = async (req, res) => {
   console.log(post);
   if (!post) return res.sendStatus(400);
   try {
-    const updatedListPoc = await PointOfCheckins.bulkCreate(post, {
+    if (post.length === 0) return res.json([]);
+    const eventCode = post[0].eventCode;
+    const listPoc = await PointOfCheckins.findAll({
+      where: {
+        eventCode: eventCode,
+      },
+      raw: true,
+    });
+
+    let filteredListPoc = [];
+    for (let poc of post) {
+      const checkDuplicate = listPoc.find((e) => e.pointCode === poc.pointCode);
+      if (!checkDuplicate) {
+        if (poc.enable) {
+          filteredListPoc.push(poc);
+        } else continue;
+      }
+      filteredListPoc.push(poc);
+    }
+    const updatedListPoc = await PointOfCheckins.bulkCreate(filteredListPoc, {
       updateOnDuplicate: ["enable"],
     });
     res.json(updatedListPoc);
@@ -125,6 +144,7 @@ exports.check_delete_condition = async (req, res) => {
     const listTransactions = await Transactions.findAll({
       where: {
         pointCode: listPointCode,
+        enable: true,
       },
       raw: true,
     });

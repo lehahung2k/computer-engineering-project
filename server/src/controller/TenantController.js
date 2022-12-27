@@ -1,5 +1,4 @@
-const { Tenants } = require("../models");
-const { Accounts } = require("../models");
+const { Tenants, EventsMng, Accounts } = require("../models");
 
 /**
  * Lấy danh sách thông tin ban tổ chức
@@ -13,7 +12,10 @@ const { Accounts } = require("../models");
 exports.get_list_tenant = async (req, res) => {
   if (req.user.userRole === "admin") {
     try {
-      const listTenant = await Tenants.findAll({ raw: true });
+      const listTenant = await Tenants.findAll({
+        where: { enable: true },
+        raw: true,
+      });
       let listTenantInfoFull = [];
       for (let tenant of listTenant) {
         const username = await Accounts.findOne({
@@ -163,6 +165,55 @@ exports.add_tenant = async (req, res) => {
   try {
     const newTenant = await Tenants.create(post);
     return res.json(newTenant);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+
+exports.check_delete_condition = async (req, res) => {
+  const listTenant = req.body;
+  if (!listTenant || listTenant.length === 0) return res.sendStatus(400);
+  const listTenantCode = listTenant.map((tenant) => tenant.tenantCode);
+
+  try {
+    const listEvent = await EventsMng.findAll({
+      where: {
+        enable: true,
+        tenantCode: listTenantCode,
+      },
+    });
+    if (listEvent.length > 0) {
+      return res.json({ check: false });
+    } else {
+      return res.json({ check: true });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+
+exports.delete_tenant = async (req, res) => {
+  const listTenant = req.body;
+  if (!listTenant || listTenant.length === 0) return res.sendStatus(400);
+  const listTenantId = listTenant.map((tenant) => tenant.tenantId);
+
+  try {
+    const updateResult = await Tenants.update(
+      { enable: false },
+      {
+        where: {
+          tenantId: listTenantId,
+        },
+      }
+    );
+    const listTenantRemain = await Tenants.findAll({
+      where: {
+        enable: true,
+      },
+    });
+    return res.json(listTenantRemain);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

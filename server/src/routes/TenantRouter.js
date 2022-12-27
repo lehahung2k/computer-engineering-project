@@ -35,4 +35,18 @@ router.post(
  */
 router.get("/get-tenant-info", validateToken, tenantController.get_tenant_info);
 
+/**
+ * Kiểm tra điều kiện xóa của tenant
+ */
+router.post(
+  "/check-delete-condition",
+  validateToken,
+  tenantController.check_delete_condition
+);
+
+/**
+ * Xóa tenant
+ */
+router.post("/delete-tenant", validateToken, tenantController.delete_tenant);
+
 module.exports = router;

@@ -9,9 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { checkDeleteCondition } from "../../../../../../services/redux/actions/poc/deletePoc";
-import { resetState } from "../../../../../../services/redux/actions/poc/poc";
+import { resetApiState as resetPocApiState } from "../../../../../../services/redux/actions/poc/poc";
 
-export function AlertDeletePoc({ open, message, setOpen = (f) => f }) {
+export function AlertDeletePoc({
+  open,
+  message,
+  deleteList,
+  setDeleteList = (f) => f,
+  selectedListPoc,
+  setSelectedListPoc = (f) => f,
+  setOpen = (f) => f,
+}) {
   const [confirmQuestion, setConfirmQuestion] = React.useState(true);
 
   const dispatch = useDispatch();
@@ -22,10 +30,27 @@ export function AlertDeletePoc({ open, message, setOpen = (f) => f }) {
   const enableDelete = useSelector((state) => state.pocState.enableDelete);
   const pocInfo = useSelector((state) => state.pocState.poc);
 
+  const handleCloseAlertResult = () => {
+    if (success) {
+      setDeleteList(false);
+      setSelectedListPoc([]);
+    } else if (failure) {
+      setDeleteList(false);
+    }
+    dispatch(resetPocApiState());
+    setConfirmQuestion(true);
+    setOpen(false);
+  };
+
   const handleConfirmDeletePoc = () => {
     // Kiểm tra điều kiện xóa và gửi api xóa lên server
-    console.log("Delete list poc", [pocInfo]);
-    dispatch(checkDeleteCondition([pocInfo]));
+    if (deleteList) {
+      console.log("Delete list poc", selectedListPoc);
+      dispatch(checkDeleteCondition(selectedListPoc));
+    } else {
+      console.log("Delete poc", [pocInfo]);
+      dispatch(checkDeleteCondition([pocInfo]));
+    }
     setConfirmQuestion(false);
   };
 
@@ -58,24 +83,17 @@ export function AlertDeletePoc({ open, message, setOpen = (f) => f }) {
 
       <Dialog
         open={open && !confirmQuestion && failure}
-        onClose={() => {}}
+        onClose={handleCloseAlertResult}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Thay đổi trạng thái xác minh của tài khoản không thành công
+            Xóa gian hàng poc không thành công
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              //   dispatch(resetApiState());
-              setOpen(false);
-              setConfirmQuestion(true);
-            }}
-            autoFocus
-          >
+          <Button onClick={handleCloseAlertResult} autoFocus>
             OK{" "}
           </Button>
         </DialogActions>
@@ -83,9 +101,7 @@ export function AlertDeletePoc({ open, message, setOpen = (f) => f }) {
 
       <Dialog
         open={open && !confirmQuestion && success}
-        onClose={() => {
-          // dispatch(resetApiState())
-        }}
+        onClose={handleCloseAlertResult}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -97,14 +113,7 @@ export function AlertDeletePoc({ open, message, setOpen = (f) => f }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => {
-              //   dispatch(resetApiState());
-              setOpen(false);
-              setConfirmQuestion(true);
-            }}
-            autoFocus
-          >
+          <Button onClick={handleCloseAlertResult} autoFocus>
             OK{" "}
           </Button>
         </DialogActions>

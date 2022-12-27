@@ -1,30 +1,11 @@
 import accountApi from "../../../../api/AccountApi";
 import { fetchTenantInfoByTenantCode } from "../tenant/fetchListTenant";
-export const fetchListPocAccount = (type, payload) => async (dispatch) => {
+
+export const fetchListPocAccount = (payload) => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT" });
 
-  let params = {};
-  let response = accountApi.fetchListPocAccount();
-
-  switch (type) {
-    case "COMMON": {
-      break;
-    }
-
-    case "CREATE_EVENT": {
-      params = {
-        tenantCode: payload.tenantCode,
-        startTime: payload.startTime,
-        endTime: payload.endTime,
-      };
-      response = accountApi.fetchListPocAccountForCreateEvent(params);
-      break;
-    }
-
-    default: {
-      break;
-    }
-  }
+  let params = payload;
+  let response = accountApi.fetchListPocAccountAvailable(params);
 
   response
     .then((res) => {
@@ -36,6 +17,32 @@ export const fetchListPocAccount = (type, payload) => async (dispatch) => {
     .catch((err) => {
       dispatch({
         type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_FAIL",
+        message: err.message,
+      });
+    });
+};
+
+export const fetchListPocAccountAvailable = (payload) => async (dispatch) => {
+  dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE" });
+
+  const params = {
+    tenantCode: payload.tenantCode,
+    startTime: payload.startTime,
+    endTime: payload.endTime,
+    time: true,
+  };
+  const response = accountApi.fetchListPocAccountAvailable(params);
+
+  response
+    .then((res) => {
+      dispatch({
+        type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE_SUCCESS",
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE_FAIL",
         message: err.message,
       });
     });

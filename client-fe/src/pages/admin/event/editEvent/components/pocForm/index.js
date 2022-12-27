@@ -24,7 +24,10 @@ import {
 } from "../../../../../../services/redux/actions/poc/poc";
 import NormalTable from "../../../../../../components/tables/normal";
 import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
-import { fetchListPocAccount } from "../../../../../../services/redux/actions/accounts/fetchListAccount";
+import {
+  fetchListPocAccount,
+  fetchListPocAccountAvailable,
+} from "../../../../../../services/redux/actions/accounts/fetchListAccount";
 import { pocCodeGenerator } from "../../../../../../services/hashFunction";
 import CustomField from "../customField";
 import CheckTable from "../../../../../../components/tables/check";
@@ -62,10 +65,19 @@ export default function EventPocInfoForm() {
   React.useEffect(() => {
     if (eventInfo.tenantCode) {
       dispatch(
-        fetchListPocAccount("CREATE_EVENT", {
+        fetchListPocAccountAvailable({
           tenantCode: eventInfo.tenantCode,
           startTime: eventInfo.startTime,
           endTime: eventInfo.endTime,
+          time: true,
+        })
+      );
+      dispatch(
+        fetchListPocAccount({
+          tenantCode: eventInfo.tenantCode,
+          startTime: eventInfo.startTime,
+          endTime: eventInfo.endTime,
+          time: false,
         })
       );
     } else {
@@ -74,7 +86,7 @@ export default function EventPocInfoForm() {
   }, []);
 
   const listPocAccount = useSelector(
-    (state) => state.accountState.listPocAccount
+    (state) => state.accountState.listPocAccountAvailable
   );
 
   const listPocAccountSelect = listPocAccount.map((account) => ({
@@ -251,23 +263,6 @@ export default function EventPocInfoForm() {
                 }}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <Autocomplete
-                disablePortal
-                noOptionsText={"Không tìm thấy doanh nghiệp"}
-                id="combo-box-demo"
-                options={rowsCompany}
-                sx={{ width: 300 }}
-                ListboxProps={{ style: { maxHeight: 150 } }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Doanh nghiệp phụ trách"
-                    variant="standard"
-                  />
-                )}
-              />
-            </Grid> */}
 
             <Grid item xs={12} sm={6}>
               <Autocomplete

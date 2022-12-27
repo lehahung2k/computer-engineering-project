@@ -4,80 +4,54 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
-import { updatePocAccount } from "../../../../../../services/redux/actions/accounts/updateAccount";
-import { useDispatch, useSelector } from "react-redux";
-import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  resetApiState as eventResetApiState,
+  resetState as eventResetState,
+} from "../../../../../../services/redux/actions/event/event";
+import { useNavigate } from "react-router-dom";
 
-import { resetState } from "../../../../../../services/redux/actions/poc/poc";
+export function AlertResultUpdateEvent() {
+  const loadingCreateEvent = useSelector((state) => state.eventState.loading);
+  const loadingCreateListPoc = useSelector((state) => state.pocState.loading);
 
-export function AlertDeletePoc({
-  open,
-  message,
-  setOpen = (f) => f,
-  usernameSelected,
-  selected = true,
-}) {
-  console.log("usernameSelected", usernameSelected);
-  const [confirmQuestion, setConfirmQuestion] = React.useState(true);
+  const loading = loadingCreateEvent || loadingCreateListPoc;
 
+  const successEvent = useSelector((state) => state.eventState.success);
+  const successPoc = useSelector((state) => state.pocState.success);
+
+  const failureEvent = useSelector((state) => state.eventState.failure);
+  const failurePoc = useSelector((state) => state.pocState.failure);
   const dispatch = useDispatch();
-
-  const loading = useSelector((state) => state.pocState.loading);
-  const success = useSelector((state) => state.pocState.success);
-  const failure = useSelector((state) => state.pocState.failure);
-  const enableDelete = useSelector((state) => state.pocState.enableDelete);
+  const navigate = useNavigate();
 
   return (
     <>
-      <Dialog
-        open={open && confirmQuestion}
-        onClose={() => setConfirmQuestion(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {message}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setConfirmQuestion(false);
-              //   dispatch(updatePocAccount(usernameSelected));
-            }}
-            autoFocus
-          >
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open && !confirmQuestion && loading}
+        open={loading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
 
       <Dialog
-        open={open && !confirmQuestion && failure}
-        onClose={() => {}}
+        open={failureEvent}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Thay đổi trạng thái xác minh của tài khoản không thành công
+            Không thể cập nhật sự kiện, xin hãy thử lại
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              //   dispatch(resetApiState());
-              setOpen(false);
-              setConfirmQuestion(true);
+              dispatch(eventResetApiState());
+              // navigate("/admin/event");
             }}
             autoFocus
           >
@@ -87,26 +61,46 @@ export function AlertDeletePoc({
       </Dialog>
 
       <Dialog
-        open={open && !confirmQuestion && success}
-        onClose={() => {
-          // dispatch(resetApiState())
-        }}
+        open={successEvent && failurePoc === true}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {enableDelete
-              ? "Bạn đã xóa thành công gian hàng"
-              : "Bạn không thể xóa gian hàng vì còn thông tin check-in chưa được xóa"}
+            Cập nhật sự kiện thành công nhưng chưa thể cập nhật danh sách Poc,
+            xin hãy cập nhật danh sách Poc sau.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              //   dispatch(resetApiState());
-              setOpen(false);
-              setConfirmQuestion(true);
+              dispatch(eventResetApiState());
+              navigate("/admin/event");
+            }}
+            autoFocus
+          >
+            OK{" "}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={successEvent && successPoc === true}
+        onClose={() => dispatch(eventResetApiState())}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Cập nhật sự kiện thành công.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(eventResetApiState());
+              navigate("/admin/event/detail");
             }}
             autoFocus
           >

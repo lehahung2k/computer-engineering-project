@@ -101,8 +101,8 @@ export function AlertDeleteEvent({ open, message, setOpen = (f) => f }) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {enableDelete
-              ? "Bạn đã xóa thành công gian hàng"
-              : "Bạn không thể xóa gian hàng vì còn thông tin check-in chưa được xóa"}
+              ? "Bạn đã xóa thành công sự kiện"
+              : "Bạn không thể xóa sự kiện vì còn thông tin check-in và gian hàng poc chưa được xóa"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

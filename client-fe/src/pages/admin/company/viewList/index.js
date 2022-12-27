@@ -76,6 +76,7 @@ export default function ListCompany() {
       const pinnedTenantInfo = listTenant.find(
         (tenant) => tenant.tenantId === row.tenantId
       );
+      dispatch(newTenantAction(pinnedTenantInfo));
       // dispatch(fetchTenantInfoByTenantCode(pinnedTenantInfo.tenantCode));
       navigate("/admin/tenant/detail");
     }

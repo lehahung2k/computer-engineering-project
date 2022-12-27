@@ -54,8 +54,8 @@ export const NewListPocAction = (listPoc) => {
   };
 };
 
-export const RemovePocAction = (pointCode) => {
-  return { type: "POC/REMOVE_POC", payload: pointCode };
+export const RemovePocAction = (poc) => {
+  return { type: "POC/REMOVE_POC", payload: poc };
 };
 
 export const UpdatePocAction = (poc, field) => {

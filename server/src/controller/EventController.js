@@ -178,8 +178,15 @@ exports.update_event = async (req, res) => {
     if (!updateResult) throw Error("Update failed!");
     const updatedEvent = await EventsMng.findOne({
       where: { eventId: eventId },
+      raw: true,
     });
-    return res.json(updatedEvent);
+
+    const formattedEventImage = Buffer.from(updatedEvent.eventImg).toString(
+      "utf8"
+    );
+    const formattedEvent = { ...updatedEvent, eventImg: formattedEventImage };
+
+    return res.json(formattedEvent);
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

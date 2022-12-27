@@ -9,7 +9,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import { resetApiState } from "../../../../../../services/redux/actions/accounts/account";
+import {
+  resetApiState,
+  releaseAccountForPocAction,
+} from "../../../../../../services/redux/actions/accounts/account";
 import {
   RemovePocAction,
   UpdatePocAction,
@@ -28,7 +31,8 @@ export default function CustomField({ width, row, field }) {
     switch (field) {
       case "delete": {
         console.log(row);
-        dispatch(RemovePocAction(row.pointCode));
+        dispatch(RemovePocAction(row));
+        dispatch(releaseAccountForPocAction(row.username));
         break;
       }
       default: {

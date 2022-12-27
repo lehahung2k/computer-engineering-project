@@ -23,12 +23,12 @@ router.get(
 );
 
 /**
- * Lấy danh sách các tài khoản Poc theo mã ban tổ chức (tenant)
+ * Lấy danh sách tài khoản thuộc quản lý của tenant (ban tổ chức) còn có thể gán cho poc
  */
 router.post(
-  "/get_list_account_for_create_event",
+  "/get_list_account_available",
   validateToken,
-  accountController.get_list_account_for_create_event
+  accountController.get_list_account_available
 );
 
 /**

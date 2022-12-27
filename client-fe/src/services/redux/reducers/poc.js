@@ -96,7 +96,7 @@ const pocReducer = (state = initialPoc, action) => {
     case "POC/REMOVE_POC": {
       const removeIndex = state.listPoc
         .map((poc) => poc.pointCode)
-        .indexOf(action.payload);
+        .indexOf(action.payload.pointCode);
 
       if (removeIndex === -1) {
         return state;

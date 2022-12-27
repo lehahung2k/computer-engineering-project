@@ -107,6 +107,7 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
     setMessage("Bạn có muốn xóa sự kiện không ?");
     setOpenDialog(true);
   };
+
   return (
     <div>
       <Typography variant="h6" align="left" sx={{ marginBottom: "10px" }}>

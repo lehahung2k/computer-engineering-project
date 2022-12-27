@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   pinEventId,
   newEventAction,
+  resetApiState as resetEventApiState,
 } from "../../../../services/redux/actions/event/event";
 import { fetchListEvent } from "../../../../services/redux/actions/event/fetchListEvent";
 import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
@@ -48,26 +49,6 @@ export default function ListEvent() {
   const customListEvents = listEvents.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
     let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
-    // let tenant = listTenant.filter(
-    //   (tenant) => tenant.tenantCode === event.tenantCode
-    // );
-
-    // if (tenant.length > 0) {
-    //   return {
-    //     ...event,
-    //     startTime: startTime,
-    //     endTime: endTime,
-    //     tenantName: tenant[0].tenantName,
-    //   };
-    // } else {
-    //   return {
-    //     ...event,
-    //     startTime: startTime,
-    //     endTime: endTime,
-    //     tenantName: "",
-    //   };
-    // }
-
     return {
       ...event,
       startTime: startTime,
@@ -98,6 +79,7 @@ export default function ListEvent() {
       );
       console.log(eventInfo);
       dispatch(newEventAction(eventInfo));
+      dispatch(resetEventApiState());
       sessionStorage.getItem("role") === "admin"
         ? navigate("/admin/event/detail")
         : navigate("/event-admin/event/detail");

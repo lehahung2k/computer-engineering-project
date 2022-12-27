@@ -18,6 +18,7 @@ const initialState = {
   loading: false,
   success: false,
   failure: false,
+  enableDelete: false,
   message: "",
 };
 
@@ -261,6 +262,55 @@ const tenantReducer = (state = initialState, action) => {
     /**
      * Delete tenant
      */
+    case "TENANT/DELETE_TENANT": {
+      return {
+        ...state,
+        loading: true,
+        enableDelete: true,
+      };
+    }
+
+    case "TENANT/DELETE_TENANT_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "TENANT/DELETE_TENANT_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "TENANT/CHECK_DELETE_CONDITION": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "TENANT/CHECK_DELETE_CONDITION_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        enableDelete: action.payload,
+      };
+    }
+
+    case "TENANT/CHECK_DELETE_CONDITION_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
 
     /**
      * Update tenant

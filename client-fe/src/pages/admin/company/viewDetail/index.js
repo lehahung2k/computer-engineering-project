@@ -10,9 +10,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTenantInfo } from "../../../../services/redux/actions/tenant/fetchListTenant";
 import { newTenantAction } from "../../../../services/redux/actions/tenant/tenant";
+import { AlertDeleteTenant } from "./components/popup/alert";
 
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+
   const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
   const pinnedTenantId = useSelector(
     (state) => state.tenantState.pinnedTenantId
@@ -54,6 +58,8 @@ export default function DetailInfoCompany() {
 
   const handleDeleteTenant = () => {
     console.log("Delete tenant");
+    setMessage("Bạn có muốn xóa sự kiện không ?");
+    setOpenDialog(true);
   };
 
   return (
@@ -198,6 +204,12 @@ export default function DetailInfoCompany() {
           </Grid>
         </Grid>
       </Grid>
+      <AlertDeleteTenant
+        open={openDialog}
+        setOpen={setOpenDialog}
+        message={message}
+        key={openDialog}
+      />
     </div>
   );
 }

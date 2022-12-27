@@ -17,6 +17,9 @@ import CheckTable from "../../../../../../components/tables/check";
 import { CustomFieldListTransaction } from "../customField/listTransaction";
 import Box from "@mui/material/Box";
 import { AlertDeleteTransaction } from "../popup/alertListTransaction";
+import { deleteListTransaction } from "../../../../../../services/redux/actions/transaction/deleteTransaction";
+import moment from "moment";
+
 const headCells = [
   { id: "id", label: "", sort: false },
   {
@@ -55,6 +58,8 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
   const [message, setMessage] = React.useState("");
   console.log("OpenDialog state", openDialog);
   const [selectedTransaction, setSelectedTransaction] = React.useState([]);
+  const [deleteListTransaction, setDeleteListTransaction] =
+    React.useState(false);
   const listPoc = useSelector((state) => state.pocState.listPoc);
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
   const loading = useSelector((state) => state.pocState.loading);
@@ -63,12 +68,18 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
   const listTransaction = useSelector(
     (state) => state.transactionState.listTransaction
   );
-  const filteredListTransaction = listTransaction.filter(
-    (transaction) => transaction.enable === true
-  );
+  const filteredListTransaction = listTransaction
+    .filter((transaction) => transaction.enable === true)
+    .map((transaction) => ({
+      ...transaction,
+      createTime: moment(transaction.createTime).format("YYYY-MM-DD HH:mm:ss"),
+    }));
 
   const handleClickDeleteListTransaction = () => {
     console.log("delete list transaction", selectedTransaction);
+    setMessage("Bạn có muốn xóa các giao dịch check-in này không ?");
+    setDeleteListTransaction(true);
+    setOpenDialog(true);
   };
 
   return (
@@ -108,6 +119,7 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
         <Grid item xs={12}>
           {/* <NormalTable rows={filteredListTransaction} headCells={headCells} /> */}
           <CheckTable
+            key={filteredListTransaction}
             id={"tranId"}
             rows={filteredListTransaction}
             headCells={headCells}
@@ -160,6 +172,10 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
         key={openDialog}
         setOpen={setOpenDialog}
         message={message}
+        deleteList={deleteListTransaction}
+        setDeleteList={setDeleteListTransaction}
+        setSelectedListTransaction={setSelectedTransaction}
+        selectedListTransaction={selectedTransaction}
       />
     </div>
   );

@@ -12,7 +12,15 @@ import { resetApiState as resetTransactionApiState } from "../../../../../../ser
 import { resetState } from "../../../../../../services/redux/actions/poc/poc";
 import { deleteListTransaction } from "../../../../../../services/redux/actions/transaction/deleteTransaction";
 
-export function AlertDeleteTransaction({ open, message, setOpen = (f) => f }) {
+export function AlertDeleteTransaction({
+  open,
+  message,
+  deleteList,
+  setDeleteList = (f) => f,
+  selectedListTransaction,
+  setSelectedListTransaction = (f) => f,
+  setOpen = (f) => f,
+}) {
   /**
    * State để hiển thị câu hỏi xác nhận (true: hiển thị câu hỏi, false: ngược lại)
    * Khi click chọn xóa, popup sẽ mở lên và hiển thị câu hỏi xác nhận đầu tiên => confirmQuestion = true
@@ -31,14 +39,26 @@ export function AlertDeleteTransaction({ open, message, setOpen = (f) => f }) {
   );
 
   const handleCloseAlertResult = () => {
+    if (success) {
+      setDeleteList(false);
+      setSelectedListTransaction([]);
+    } else if (failure) {
+      setDeleteList(false);
+    }
     dispatch(resetTransactionApiState());
     setConfirmQuestion(true);
     setOpen(false);
   };
 
   const handleConfirmDeleteTransaction = () => {
-    dispatch(deleteListTransaction([transaction]));
-    console.log(transaction);
+    if (deleteList) {
+      dispatch(deleteListTransaction(selectedListTransaction));
+      console.log("Delete list transaction: ", selectedListTransaction);
+    } else {
+      dispatch(deleteListTransaction([transaction]));
+      console.log("Delete transaction: ", transaction);
+    }
+
     setConfirmQuestion(false);
   };
   return (

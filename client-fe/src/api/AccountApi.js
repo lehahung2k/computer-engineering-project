@@ -14,8 +14,8 @@ class AccountApi {
     return axios.get(url, config);
   };
 
-  fetchListPocAccountForCreateEvent = (params, token) => {
-    const url = baseUrl + "/get_list_account_for_create_event";
+  fetchListPocAccountAvailable = (params, token) => {
+    const url = baseUrl + "/get_list_account_available";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),

@@ -48,6 +48,7 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
   const [selectedPoc, setSelectedPoc] = React.useState([]);
   const [message, setMessage] = React.useState("");
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [deleteList, setDeleteList] = React.useState(false);
   const listPoc = useSelector((state) => state.pocState.listPoc);
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
   const loading = useSelector((state) => state.pocState.loading);
@@ -59,6 +60,9 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
 
   const handleClickDeleteListPoc = () => {
     console.log("Delete List", selectedPoc);
+    setMessage("Bạn có muốn xóa các gian hàng poc này không ?");
+    setDeleteList(true);
+    setOpenDialog(true);
   };
 
   return (
@@ -100,6 +104,7 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
           {/* <NormalTable rows={filteredListPoc} headCells={headCells} /> */}
           <CheckTable
             id={"pointCode"}
+            key={filteredListPoc}
             rows={filteredListPoc}
             headCells={headCells}
             setSelectedItem={setSelectedPoc}
@@ -151,6 +156,10 @@ export default function ListPoc({ setActiveStep = (f) => f }) {
         setOpen={setOpenDialog}
         message={message}
         key={openDialog}
+        deleteList={deleteList}
+        setDeleteList={setDeleteList}
+        selectedListPoc={selectedPoc}
+        setSelectedListPoc={setSelectedPoc}
       />
     </div>
   );

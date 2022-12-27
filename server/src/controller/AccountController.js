@@ -187,86 +187,110 @@ exports.get_list_account = async (req, res) => {
 };
 
 /**
- * Lấy danh sách tài khoản thuộc quản lý của tenant (ban tổ chức)
+ * Lấy danh sách tài khoản thuộc quản lý của tenant (ban tổ chức) còn có thể gán cho poc
  *
  * @param {Object} req {body{tenantCode}}
  * @param {Object} res
  */
-exports.get_list_account_for_create_event = async (req, res) => {
+exports.get_list_account_available = async (req, res) => {
   const tenantCode = req.body.tenantCode;
   const startTime = req.body.startTime;
   const endTime = req.body.endTime;
-  if (!tenantCode) return res.sendStatus(400);
-
+  const time = req.body.time;
+  if (!tenantCode || time === undefined) return res.sendStatus(400);
+  if (time) {
+    if (!startTime || !endTime) return res.sendStatus(400);
+  }
   try {
-    const listEventCode = await EventsMng.findAll({
-      where: {
-        [Op.or]: [
-          {
-            startTime: {
-              [Op.gte]: startTime,
-              [Op.lte]: endTime,
-            },
-          },
-          {
-            endTime: {
-              [Op.gte]: startTime,
-              [Op.lte]: endTime,
-            },
-          },
-          {
-            endTime: {
-              [Op.gte]: endTime,
-            },
-            startTime: {
-              [Op.lte]: startTime,
-            },
-          },
-        ],
-      },
-      attributes: ["eventCode"],
-      raw: true,
-    });
-
-    let listAccountUsed = [];
-    for (let event of listEventCode) {
-      const tmpListAccountUsed = await PointOfCheckins.findAll({
+    if (time) {
+      const listEventCode = await EventsMng.findAll({
         where: {
-          eventCode: event.eventCode,
+          [Op.or]: [
+            {
+              startTime: {
+                [Op.gte]: startTime,
+                [Op.lte]: endTime,
+              },
+            },
+            {
+              endTime: {
+                [Op.gte]: startTime,
+                [Op.lte]: endTime,
+              },
+            },
+            {
+              endTime: {
+                [Op.gte]: endTime,
+              },
+              startTime: {
+                [Op.lte]: startTime,
+              },
+            },
+          ],
         },
+        attributes: ["eventCode"],
         raw: true,
-        attributes: ["username"],
       });
 
-      for (let account of tmpListAccountUsed) {
-        let check = listAccountUsed.find(
-          (item) => item.username === account.username
-        );
-        if (!check) {
-          listAccountUsed.push(account);
+      let listAccountUsed = [];
+      for (let event of listEventCode) {
+        const tmpListAccountUsed = await PointOfCheckins.findAll({
+          where: {
+            eventCode: event.eventCode,
+          },
+          raw: true,
+          attributes: ["username"],
+        });
+
+        for (let account of tmpListAccountUsed) {
+          let check = listAccountUsed.find(
+            (item) => item.username === account.username
+          );
+          if (!check) {
+            listAccountUsed.push(account);
+          }
         }
       }
-    }
-    const listUsernameUsed = listAccountUsed.map((account) => account.username);
-    const listAccount = await Accounts.findAll({
-      where: {
-        role: "poc",
-        tenantCode: tenantCode,
-        username: {
-          [Op.not]: listUsernameUsed,
+      const listUsernameUsed = listAccountUsed.map(
+        (account) => account.username
+      );
+      const listAccount = await Accounts.findAll({
+        where: {
+          role: "poc",
+          tenantCode: tenantCode,
+          username: {
+            [Op.not]: listUsernameUsed,
+          },
         },
-      },
-      attributes: [
-        "username",
-        "fullName",
-        "phoneNumber",
-        "companyName",
-        "active",
-        "tenantCode",
-      ],
-      raw: true,
-    });
-    return res.json(listAccount);
+        attributes: [
+          "username",
+          "fullName",
+          "phoneNumber",
+          "companyName",
+          "active",
+          "tenantCode",
+        ],
+        raw: true,
+      });
+      return res.json(listAccount);
+    } else {
+      const listAccount = await Accounts.findAll({
+        where: {
+          role: "poc",
+          tenantCode: tenantCode,
+        },
+        attributes: [
+          "username",
+          "fullName",
+          "phoneNumber",
+          "companyName",
+          "active",
+          "tenantCode",
+        ],
+        raw: true,
+      });
+      return res.json(listAccount);
+    }
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

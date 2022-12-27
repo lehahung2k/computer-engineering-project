@@ -19,6 +19,7 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { updateEvent } from "../../../../services/redux/actions/event/updateEvent";
+import { AlertResultUpdateEvent } from "./components/popup/alert";
 
 const steps = [
   "Thông tin sự kiện",
@@ -154,6 +155,7 @@ export default function EditEvent() {
           </Grid>
         </Grid>
       </Grid>
+      <AlertResultUpdateEvent />
     </div>
   );
 }

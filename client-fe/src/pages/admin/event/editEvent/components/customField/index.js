@@ -9,13 +9,16 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import { resetApiState } from "../../../../../../services/redux/actions/accounts/account";
+import {
+  resetApiState,
+  releaseAccountForPocAction,
+} from "../../../../../../services/redux/actions/accounts/account";
 import {
   RemovePocAction,
   UpdatePocAction,
 } from "../../../../../../services/redux/actions/poc/poc";
 import { checkDeleteCondition } from "../../../../../../services/redux/actions/poc/deletePoc";
-import { AlertDeletePoc } from "../popup/alert";
+// import { AlertDeletePoc } from "../popup/alert";
 
 export default function CustomField({ width, row, field, key }) {
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -34,11 +37,8 @@ export default function CustomField({ width, row, field, key }) {
         const clonePoc = structuredClone(row);
         clonePoc.enable = false;
         console.log("Updated poc", clonePoc);
-        // dispatch(UpdatePocAction(clonePoc));
-
-        // Kiểm tra điều kiện xóa và gửi api xóa lên server
-        message.current = "Bạn có muốn xóa thông tin quầy hàng này không ?";
-        setOpenDialog(true);
+        dispatch(UpdatePocAction(clonePoc));
+        dispatch(releaseAccountForPocAction(row.username));
 
         break;
       }
@@ -63,13 +63,13 @@ export default function CustomField({ width, row, field, key }) {
         </Button>
       </TableCell>
 
-      <AlertDeletePoc
+      {/* <AlertDeletePoc
         open={openDialog}
         // selected={selected.current}
         setOpen={setOpenDialog}
         message={message.current}
         usernameSelected={usernameSelected.current}
-      />
+      /> */}
     </>
   );
 }
