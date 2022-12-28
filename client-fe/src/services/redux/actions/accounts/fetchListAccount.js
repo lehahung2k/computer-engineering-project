@@ -1,9 +1,11 @@
 import accountApi from "../../../../api/AccountApi";
 import { fetchTenantInfoByTenantCode } from "../tenant/fetchListTenant";
-export const fetchListPocAccount = (tenantCode) => async (dispatch) => {
+
+export const fetchListPocAccount = (payload) => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT" });
-  const params = { tenantCode: tenantCode };
-  const response = accountApi.fetchListPocAccount(params);
+
+  let params = payload;
+  let response = accountApi.fetchListPocAccountAvailable(params);
 
   response
     .then((res) => {
@@ -20,6 +22,32 @@ export const fetchListPocAccount = (tenantCode) => async (dispatch) => {
     });
 };
 
+export const fetchListPocAccountAvailable = (payload) => async (dispatch) => {
+  dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE" });
+
+  const params = {
+    tenantCode: payload.tenantCode,
+    startTime: payload.startTime,
+    endTime: payload.endTime,
+    time: true,
+  };
+  const response = accountApi.fetchListPocAccountAvailable(params);
+
+  response
+    .then((res) => {
+      dispatch({
+        type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE_SUCCESS",
+        payload: res.data,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE_FAIL",
+        message: err.message,
+      });
+    });
+};
+
 export const fetchPocAccountInfo = () => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO" });
 
@@ -27,8 +55,7 @@ export const fetchPocAccountInfo = () => async (dispatch) => {
 
   response
     .then((response) => {
-      const params = { tenantCode: response.data.tenantCode };
-      dispatch(fetchTenantInfoByTenantCode(params));
+      dispatch(fetchTenantInfoByTenantCode(response.data.tenantCode));
       dispatch({
         type: "ACCOUNT/FETCH_POC_ACCOUNT_INFO_SUCCESS",
         payload: response.data,

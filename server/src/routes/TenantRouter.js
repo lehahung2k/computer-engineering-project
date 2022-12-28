@@ -1,54 +1,52 @@
 const express = require("express");
 const router = express.Router();
-const { Tenants } = require("../models");
+const { Tenants, Accounts } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
+const tenantController = require("../controller/TenantController");
+/**
+ * Lấy danh sách thông tin ban tổ chức
+ * Nếu là admin trả về thông tin tất cả ban tổ chức
+ * Nếu là tenant thì chỉ trả về thông tin của tenant đó
+ */
+router.get("/get-list-tenant", validateToken, tenantController.get_list_tenant);
 
-router.get("/", async (req, res) => {
-  const listTenants = await Tenants.findAll();
-  res.json(listTenants);
-});
+/**
+ * Thêm mới ban tổ chức (chỉ dành cho admin)
+ */
+router.post("/add-tenant", validateToken, tenantController.add_tenant);
 
-router.post("/add-tenant", async (req, res) => {
-  const post = req.body;
-  const newTenant = await Tenants.create(post);
-  res.json(newTenant.toJSON());
-});
+/**
+ * Cập nhật thông tin ban tổ chức (chỉ dành cho admin)
+ */
+router.put("/update-tenant", validateToken, tenantController.update_tenant);
 
-router.put("/update-tenant", async (req, res) => {
-  const post = req.body;
-  const updatedTenant = await Tenants.update(post, {
-    where: { tenantId: post.id },
-  });
-  res.json(updatedTenant);
-});
-
+/**
+ * Lấy thông tin của ban tổ chức theo mã (dành cho tài khoản poc)
+ */
 router.post(
   "/get-tenant-info-by-tenant-code",
   validateToken,
-  async (req, res) => {
-    if (!req.user.userRole) return res.status(401).send("Invalid token");
-    const tenantCode = req.body.tenantCode;
-    if (!tenantCode) return res.sendStatus(400);
-
-    try {
-      const tenantInfo = await Tenants.findOne({
-        where: { tenantCode: tenantCode },
-        attributes: [
-          "tenantName",
-          "tenantAddress",
-          "contactName",
-          "contactEmail",
-          "contactPhone",
-          "tenantCode",
-        ],
-      });
-      res.json(tenantInfo);
-    } catch (err) {
-      console.log(err);
-      res.sendStatus(500);
-    }
-  }
+  tenantController.get_tenant_info_by_tenantCode
 );
+
+/**
+ * Lấy thông tin tenant thông qua tài khoản ban tổ chức (dành cho tài khoản tenant)
+ */
+router.get("/get-tenant-info", validateToken, tenantController.get_tenant_info);
+
+/**
+ * Kiểm tra điều kiện xóa của tenant
+ */
+router.post(
+  "/check-delete-condition",
+  validateToken,
+  tenantController.check_delete_condition
+);
+
+/**
+ * Xóa tenant
+ */
+router.post("/delete-tenant", validateToken, tenantController.delete_tenant);
 
 module.exports = router;

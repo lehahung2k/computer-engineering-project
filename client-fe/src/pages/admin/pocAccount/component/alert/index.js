@@ -66,7 +66,7 @@ export default function AlertPocAccount({
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Kích hoạt tài khoản không thành công
+            Thay đổi trạng thái xác minh của tài khoản không thành công
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -89,7 +89,7 @@ export default function AlertPocAccount({
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Kích hoạt tài khoản thành công
+            Thay đổi trạng thái xác minh của tài khoản thành công
           </DialogContentText>
         </DialogContent>
         <DialogActions>

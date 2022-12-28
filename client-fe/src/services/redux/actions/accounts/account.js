@@ -5,8 +5,20 @@ export const selectAccountForPocAction = (username) => {
   };
 };
 
+export const releaseAccountForPocAction = (username) => {
+  return {
+    type: "ACCOUNT/RELEASE_ACCOUNT_FOR_POC",
+    payload: username,
+  };
+};
 export const resetApiState = () => {
   return {
     type: "ACCOUNT/RESET_API_STATE",
+  };
+};
+
+export const resetState = () => {
+  return {
+    type: "ACCOUNT/RESET_STATE",
   };
 };

@@ -5,23 +5,10 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
 import EventInfo from "./components/eventInfo";
-import ListCompany from "./components/listCompany";
+import ListTransaction from "./components/listTransaction";
 import ListPoc from "./components/listPOC";
 import style from "./style.module.css";
 import { useSelector, useDispatch } from "react-redux";
-
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/event", label: "Sự kiện" },
-        { link: "#", label: "Chi tiết sự kiện" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "/event-admin/event", label: "Sự kiện" },
-        { link: "#", label: "Chi tiết sự kiện" },
-      ];
 
 export default function DetailEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
@@ -30,6 +17,20 @@ export default function DetailEvent() {
   const listEvents = useSelector((state) => state.eventState.listEvents);
 
   const eventInfo = useSelector((state) => state.eventState.event);
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/event", label: "Sự kiện" },
+          { link: "#", label: "Chi tiết sự kiện" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "/event-admin/event", label: "Sự kiện" },
+          { link: "#", label: "Chi tiết sự kiện" },
+        ];
+
   console.log("Xem chi tiết sự kiện", eventInfo);
   function getStepContent(step, setStep) {
     switch (step) {
@@ -38,7 +39,7 @@ export default function DetailEvent() {
       case 1:
         return <ListPoc setActiveStep={setStep} />;
       case 2:
-        return <ListCompany setActiveStep={setStep} />;
+        return <ListTransaction setActiveStep={setStep} />;
 
       default:
         throw new Error("Unknown step");

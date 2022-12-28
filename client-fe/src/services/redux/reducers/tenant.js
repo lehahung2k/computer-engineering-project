@@ -18,6 +18,7 @@ const initialState = {
   loading: false,
   success: false,
   failure: false,
+  enableDelete: false,
   message: "",
 };
 
@@ -189,6 +190,34 @@ const tenantReducer = (state = initialState, action) => {
     }
 
     /**
+     * Fetching tenant account info
+     */
+    case "TENANT/FETCH_TENANT_ACCOUNT": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "TENANT/FETCH_TENANT_ACCOUNT_SUCCESS": {
+      return {
+        ...state,
+        tenantAccount: action.payload,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "TENANT/FETCH_TENANT_ACCOUNT_FAIL": {
+      return {
+        ...state,
+        message: action.message,
+        loading: false,
+        failure: true,
+      };
+    }
+
+    /**
      * Posting create new tenant
      */
     case "TENANT/CREATE_NEW_TENANT": {
@@ -233,6 +262,55 @@ const tenantReducer = (state = initialState, action) => {
     /**
      * Delete tenant
      */
+    case "TENANT/DELETE_TENANT": {
+      return {
+        ...state,
+        loading: true,
+        enableDelete: true,
+      };
+    }
+
+    case "TENANT/DELETE_TENANT_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "TENANT/DELETE_TENANT_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "TENANT/CHECK_DELETE_CONDITION": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "TENANT/CHECK_DELETE_CONDITION_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        enableDelete: action.payload,
+      };
+    }
+
+    case "TENANT/CHECK_DELETE_CONDITION_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
 
     /**
      * Update tenant
@@ -271,6 +349,16 @@ const tenantReducer = (state = initialState, action) => {
         pinnedTenantId: action.payload,
       };
     }
+
+    /**
+     * Reset state
+     */
+    case "TENANT/RESET_STATE": {
+      return {
+        ...initialState,
+      };
+    }
+
     default:
       return state;
   }

@@ -18,19 +18,8 @@ import { createNewEvent } from "../../../../services/redux/actions/event/createN
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/event", label: "Sự kiện" },
-        { link: "#", label: "Sửa thông tin sự kiện" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "/event-admin/event", label: "Sự kiện" },
-        { link: "#", label: "Sửa thông tin sự kiện" },
-      ];
+import { updateEvent } from "../../../../services/redux/actions/event/updateEvent";
+import { AlertResultUpdateEvent } from "./components/popup/alert";
 
 const steps = [
   "Thông tin sự kiện",
@@ -56,16 +45,26 @@ function getStepContent(step) {
 export default function EditEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [loadingCreateEvent, setLoadingCreateEvent] = React.useState(false);
 
-  const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
-  const listEvents = useSelector((state) => state.eventState.listEvents);
+  const eventInfo = useSelector((state) => state.eventState.event);
+  const listPoc = useSelector((state) => state.pocState.listPoc);
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/event", label: "Sự kiện" },
+          { link: "#", label: "Sửa thông tin sự kiện" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "/event-admin/event", label: "Sự kiện" },
+          { link: "#", label: "Sửa thông tin sự kiện" },
+        ];
 
-  const eventInfo = listEvents.find((event) => event.id === pinnedEventId);
   const dispatch = useDispatch();
 
   const handleUpdateEvent = () => {
-    dispatch();
+    dispatch(updateEvent(eventInfo, listPoc));
   };
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -78,17 +77,7 @@ export default function EditEvent() {
   const handleStep = (step) => {
     setActiveStep(step);
   };
-  if (!pinnedEventId)
-    return (
-      <>
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={true}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      </>
-    );
+
   return (
     <div className={style.body}>
       <Grid container spacing={0}>
@@ -166,6 +155,7 @@ export default function EditEvent() {
           </Grid>
         </Grid>
       </Grid>
+      <AlertResultUpdateEvent />
     </div>
   );
 }

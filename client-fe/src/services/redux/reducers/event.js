@@ -5,8 +5,8 @@ const initialState = {
   event: {
     eventName: "",
     eventCode: "",
-    startTime: dayjs(),
-    endTime: dayjs(),
+    startTime: dayjs("01-01-2000 00:00:00", "DD:MM:YYYY HH:mm:ss"),
+    endTime: dayjs("01-01-2000 00:00:00", "DD:MM:YYYY HH:mm:ss"),
     eventDescription: "",
     eventImg: "",
     tenantCode: null,
@@ -16,6 +16,7 @@ const initialState = {
   success: false,
   failure: false,
   message: "",
+  enableDelete: false,
 };
 
 const eventReducer = (state = initialState, action) => {
@@ -132,14 +133,15 @@ const eventReducer = (state = initialState, action) => {
     /**
      * Delete event
      */
-    case "EVENT/DELETE_NEW_EVENT": {
+    case "EVENT/DELETE_EVENT": {
       return {
         ...state,
         loading: true,
+        enableDelete: true,
       };
     }
 
-    case "EVENT/DELETE_NEW_EVENT_SUCCESS": {
+    case "EVENT/DELETE_EVENT_SUCCESS": {
       return {
         ...state,
         loading: false,
@@ -147,11 +149,36 @@ const eventReducer = (state = initialState, action) => {
       };
     }
 
-    case "EVENT/DELETE_NEW_EVENT_FAIL": {
+    case "EVENT/DELETE_EVENT_FAIL": {
       return {
         ...state,
         loading: false,
-        success: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "EVENT/CHECK_DELETE_CONDITION": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "EVENT/CHECK_DELETE_CONDITION_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        enableDelete: action.payload,
+      };
+    }
+
+    case "EVENT/CHECK_DELETE_CONDITION_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
         message: action.message,
       };
     }

@@ -34,6 +34,11 @@ module.exports = (sequelize, DataTypes) => {
       contactEmail: {
         type: DataTypes.STRING,
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     },
     {
       tableName: "Tenants",

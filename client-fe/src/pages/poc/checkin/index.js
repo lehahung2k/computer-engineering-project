@@ -13,7 +13,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchListEventByUsername } from "../../../services/redux/actions/event/fetchListEvent";
-import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
+import { fetchPocInfo } from "../../../services/redux/actions/poc/fetchListPoc";
+import { newEventAction } from "../../../services/redux/actions/event/event";
 import pocApi from "../../../api/PocApi";
 
 export default function Checkin() {
@@ -31,6 +32,8 @@ export default function Checkin() {
   const childRef1 = React.useRef();
   const childRef2 = React.useRef();
 
+  const eventInfo = useSelector((state) => state.eventState.event);
+  const pocInfo = useSelector((state) => state.pocState.poc);
   const tenant = useSelector((state) => state.tenantState.tenant);
   const listEvent = useSelector((state) => state.eventState.listEvents);
 
@@ -53,11 +56,12 @@ export default function Checkin() {
         }
         return false;
       };
-      const currentEvent = listEvent.filter((event) =>
+      const currentEvent = listEvent.find((event) =>
         compareTime(event.startTime, event.endTime)
       );
-      if (currentEvent.length > 0) {
-        pocApi.fetchPocInfoByUsername(currentEvent[0].eventCode);
+      if (currentEvent) {
+        dispatch(newEventAction(currentEvent));
+        dispatch(fetchPocInfo(currentEvent.eventCode));
       } else {
         alert("Không có sự kiện nào đang diễn ra");
         // navigate("/poc/event");
@@ -72,21 +76,23 @@ export default function Checkin() {
 
   const handleSubmitForm = (e) => {
     const params = {
-      pointCode: "nT8q",
+      pointCode: pocInfo.pointCode,
       guestCode: guestCode,
       createTime: moment().format(),
       note: note,
-      enable: enableImage,
+      enable: true,
+      checkinImg1: enableImage === "on" ? image1 : "",
+      checkinImg2: enableImage === "on" ? image2 : "",
       identityType: identityType,
     };
     console.log(params);
 
-    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+    const responseAddNewCheckin = checkinApi.addNewCheckin(
       params,
       sessionStorage.getItem("accessToken")
     );
 
-    responseAddNewCheckinClient
+    responseAddNewCheckin
       .then((response) => {
         alert("Khách checkin thành công");
         setImage1("");
@@ -113,7 +119,9 @@ export default function Checkin() {
               </Grid>
 
               <Grid item xs={8} lg={8}>
-                <div id="event-name-value">Tên sự kiện</div>
+                <div id="event-name-value">
+                  {eventInfo ? eventInfo.eventName : "Tên sự kiện"}
+                </div>
               </Grid>
             </Grid>
 
@@ -123,7 +131,9 @@ export default function Checkin() {
               </Grid>
 
               <Grid item xs={8} lg={8}>
-                <div id="poc-name-value">Tên quầy</div>{" "}
+                <div id="poc-name-value">
+                  {pocInfo ? pocInfo.pointName : "Tên quầy"}
+                </div>{" "}
               </Grid>
             </Grid>
           </div>

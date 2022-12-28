@@ -25,17 +25,18 @@ import {
 import style from "./style.module.css";
 import Autocomplete from "@mui/material/Autocomplete";
 import { eventCodeGenerator } from "../../../../../../services/hashFunction";
-import { fetchListTenant } from "../../../../../../services/redux/actions/tenant/fetchListTenant";
+import {
+  fetchListTenant,
+  fetchTenantInfo,
+} from "../../../../../../services/redux/actions/tenant/fetchListTenant";
 
 export default function EventInfoForm() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     dispatch(fetchListTenant());
-    // dispatch(eventResetState());
-    // setKey((key) => key + 1);
   }, []);
-
+  const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
   const listSelectTenant = listTenant.map((tenant) => ({
     label: tenant.tenantName,
@@ -140,19 +141,6 @@ export default function EventInfoForm() {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          {/* {tenantName ? (
-            <TextField
-              required
-              id="tenantName"
-              name="tenantName"
-              label="Ban tổ chức"
-              fullWidth
-              autoComplete="tenant-name"
-              variant="standard"
-              value={tenantName}
-              InputLabelProps={{ shrink: true }}
-            />
-          ) : ( */}
           <Autocomplete
             disablePortal
             noOptionsText={"Không tìm thấy tổ chức"}
@@ -220,7 +208,10 @@ export default function EventInfoForm() {
             <DateTimePicker
               label="Thời gian bắt đầu"
               value={startTime}
-              onChange={(newValue) => dispatch(newStartEventAction(newValue))}
+              onChange={(newValue) => {
+                // console.log("new start", newValue);
+                dispatch(newStartEventAction(newValue));
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}

@@ -80,3 +80,9 @@ export const resetApiState = () => {
     type: "TENANT/RESET_API_STATE",
   };
 };
+
+export const resetState = () => {
+  return {
+    type: "TENANT/RESET_STATE",
+  };
+};

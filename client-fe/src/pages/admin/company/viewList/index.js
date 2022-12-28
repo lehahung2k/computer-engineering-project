@@ -30,12 +30,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
-import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
-
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "#", label: "Ban tổ chức" },
-];
+import {
+  fetchListTenant,
+  fetchTenantInfoByTenantCode,
+} from "../../../../services/redux/actions/tenant/fetchListTenant";
+import { resetState } from "../../../../services/redux/actions/tenant/tenant";
 
 export default function ListCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
@@ -52,10 +51,17 @@ export default function ListCompany() {
   const loading = useSelector((state) => state.tenantState.loading);
   const success = useSelector((state) => state.tenantState.success);
   const failure = useSelector((state) => state.tenantState.failure);
+
+  const breadcrumbs = [
+    { link: "/admin", label: "Trang chủ" },
+    { link: "#", label: "Ban tổ chức" },
+  ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    dispatch(resetState());
     dispatch(fetchListTenant());
   }, []);
 
@@ -71,6 +77,7 @@ export default function ListCompany() {
         (tenant) => tenant.tenantId === row.tenantId
       );
       dispatch(newTenantAction(pinnedTenantInfo));
+      // dispatch(fetchTenantInfoByTenantCode(pinnedTenantInfo.tenantCode));
       navigate("/admin/tenant/detail");
     }
   };

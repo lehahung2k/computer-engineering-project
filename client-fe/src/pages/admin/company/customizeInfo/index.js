@@ -28,12 +28,6 @@ import {
 } from "../../../../services/redux/actions/tenant/tenant";
 import { updateTenant } from "../../../../services/redux/actions/tenant/updateTenant";
 
-const breadcrumbs = [
-  { link: "/admin", label: "Trang chủ" },
-  { link: "/admin/tenant", label: "Ban tổ chức" },
-  { link: "#", label: "Sửa đổi thông tin ban tổ chức" },
-];
-
 const company = {
   name: "Công ty TNHH A",
   address: "123 Ngụy Như Kon Tum, Thanh Xuân, Hà Nội",
@@ -52,7 +46,11 @@ export default function CustomInfoCompany() {
     (state) => state.tenantState.pinnedTenantId
   );
   const dispatch = useDispatch();
-
+  const breadcrumbs = [
+    { link: "/admin", label: "Trang chủ" },
+    { link: "/admin/tenant", label: "Ban tổ chức" },
+    { link: "#", label: "Sửa đổi thông tin ban tổ chức" },
+  ];
   const handleClickGenerateCode = () => {
     let today = new Date();
     let time = today.getTime().toString();

@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { ListPocAccountHeadNormal } from "../../../assets/fakeData";
+import { ListPocAccountHeadNormal } from "../../../assets/fakeData/fakeAccount";
 import BreadCrumbs from "../../../components/breadCrumbs";
 import Header from "../../../components/header";
 import SideBar from "../../../components/navigation";
@@ -33,6 +33,18 @@ export default function PocAccount() {
   const listPocAccount = useSelector(
     (state) => state.accountState.listPocAccount
   );
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "#", label: "Tài khoản POC" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "#", label: "Tài khoản POC" },
+        ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

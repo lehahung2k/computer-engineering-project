@@ -22,10 +22,8 @@ import {
   newEventAction,
 } from "../../../services/redux/actions/event/event";
 import { useNavigate } from "react-router-dom";
-import { fetchPocInfoByUsername } from "../../../services/redux/actions/poc/fetchListPoc";
+import { fetchPocInfo } from "../../../services/redux/actions/poc/fetchListPoc";
 import { fetchPocAccountInfo } from "../../../services/redux/actions/accounts/fetchListAccount";
-
-const breadcrumbs = [{ link: "#", label: "Danh sách sự kiện" }];
 
 export default function PocManageEvent() {
   const [filterName, setFilterName] = useState("");
@@ -35,6 +33,8 @@ export default function PocManageEvent() {
   const tenantName = useSelector(
     (state) => state.tenantState.tenant.tenantName
   );
+
+  const breadcrumbs = [{ link: "#", label: "Danh sách sự kiện" }];
 
   const formatListEvent = listEvent.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
@@ -76,7 +76,7 @@ export default function PocManageEvent() {
         (event) => event.eventId === row["eventId"]
       );
       dispatch(newEventAction(eventInfo));
-      dispatch(fetchPocInfoByUsername(eventInfo.eventCode));
+      dispatch(fetchPocInfo(eventInfo.eventCode));
       navigate("/poc/event/detail");
     }
     if (fieldName === "checkin") console.log("checkin");

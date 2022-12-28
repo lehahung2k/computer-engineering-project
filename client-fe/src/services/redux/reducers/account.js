@@ -1,13 +1,14 @@
-import { ListPocAccount } from "../../../assets/fakeData/index";
+import { ListPocAccount } from "../../../assets/fakeData/fakeAccount";
 const initialState = {
-  listAccount: ListPocAccount,
+  listAccount: [],
   account: {
     username: "",
     password: "",
     tenantCode: "",
     role: "",
   },
-  listPocAccount: ListPocAccount,
+  listPocAccount: [],
+  listPocAccountAvailable: [],
   loading: false,
   success: false,
   failure: false,
@@ -20,16 +21,30 @@ const accountReducer = (state = initialState, action) => {
      * Filing poc form
      */
     case "ACCOUNT/SELECT_ACCOUNT_FOR_POC": {
-      const listPocAccountRemained = state.listPocAccount.filter(
+      const listPocAccountRemained = state.listPocAccountAvailable.filter(
         (account) => account.username !== action.payload
       );
 
       return {
         ...state,
-        listPocAccount: listPocAccountRemained,
+        listPocAccountAvailable: listPocAccountRemained,
       };
     }
 
+    case "ACCOUNT/RELEASE_ACCOUNT_FOR_POC": {
+      const accountReleased = state.listPocAccount.find(
+        (account) => account.username === action.payload
+      );
+      const listPocAccountRemained = [
+        ...state.listPocAccountAvailable,
+        accountReleased,
+      ];
+
+      return {
+        ...state,
+        listPocAccountAvailable: listPocAccountRemained,
+      };
+    }
     /**
      * Posting create new account
      */
@@ -90,8 +105,34 @@ const accountReducer = (state = initialState, action) => {
         message: action.message,
       };
     }
+
+    case "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE_SUCCESS": {
+      const listAccount = action.payload;
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        listPocAccountAvailable: listAccount,
+      };
+    }
+
+    case "ACCOUNT/FETCH_LIST_POC_ACCOUNT_AVAILABLE_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
     /**
-     * Fetching account info
+     * Fetching poc account info
      */
     case "ACCOUNT/FETCH_POC_ACCOUNT_INFO": {
       return {
@@ -133,7 +174,7 @@ const accountReducer = (state = initialState, action) => {
         if (account.username === action.payload.username)
           return {
             ...account,
-            active: 1,
+            active: action.payload.active,
           };
         return account;
       });
@@ -162,6 +203,15 @@ const accountReducer = (state = initialState, action) => {
         success: false,
         message: "",
         failure: false,
+      };
+    }
+
+    /**
+     * Reset state
+     */
+    case "ACCOUNT/RESET_STATE": {
+      return {
+        ...initialState,
       };
     }
 

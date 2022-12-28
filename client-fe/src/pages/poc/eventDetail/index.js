@@ -10,15 +10,16 @@ import { useNavigate } from "react-router-dom";
 import BreadCrumbs from "../../../components/breadCrumbs";
 import { useSelector, useDispatch } from "react-redux";
 
-const breadcrumbs = [
-  { link: "/poc/event", label: "Danh sách sự kiện" },
-  { link: "#", label: "Chi tiết sự kiện" },
-];
-
 export default function PocEventDetail() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const eventInfo = useSelector((state) => state.eventState.event);
   const pocInfo = useSelector((state) => state.pocState.poc);
+
+  const breadcrumbs = [
+    { link: "/poc/event", label: "Danh sách sự kiện" },
+    { link: "#", label: "Chi tiết sự kiện" },
+  ];
+
   const navigate = useNavigate();
 
   const handleShowListGuest = () => {
@@ -84,14 +85,14 @@ export default function PocEventDetail() {
                   <div className={style.poc__name__label}>Tên POC:</div>
 
                   <div className={style.poc__name__value}>
-                    <div className={style.info__value}>{pocInfo.name}</div>
+                    <div className={style.info__value}>{pocInfo.pointName}</div>
                   </div>
 
                   <div className={style.poc__code__label}>Mã POC:</div>
 
                   <div className={style.poc__code__value}>
                     {" "}
-                    <div className={style.info__value}>{pocInfo.code}</div>
+                    <div className={style.info__value}>{pocInfo.pointCode}</div>
                   </div>
 
                   <div className={style.poc__account__label}>
@@ -100,7 +101,7 @@ export default function PocEventDetail() {
 
                   <div className={style.poc__account__value}>
                     {" "}
-                    <div className={style.info__value}>{pocInfo.account}</div>
+                    <div className={style.info__value}>{pocInfo.username}</div>
                   </div>
                 </div>
 

@@ -3,18 +3,24 @@ import axios from "axios";
 const baseUrl = "http://localhost:8080/auth";
 
 class AccountApi {
-  fetchListPocAccount = (params, token) => {
-    const url = baseUrl + "/poc-account";
+  fetchListPocAccount = (token) => {
+    const url = baseUrl + "/get-list-poc-account";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
-    return axios.post(url, params, config);
+    return axios.get(url, config);
   };
 
-  fetchListPocAccountAdmin = (params, token) => {
-    const url = baseUrl + "/poc-account";
+  fetchListPocAccountAvailable = (params, token) => {
+    const url = baseUrl + "/get_list_account_available";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.post(url, params, config);
   };
@@ -34,7 +40,10 @@ class AccountApi {
   updatePocAccount = (params, token) => {
     const url = baseUrl + "/update-account";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.put(url, params, config);
   };

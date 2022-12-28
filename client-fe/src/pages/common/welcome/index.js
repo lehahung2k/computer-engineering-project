@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@material-ui/core/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Box from "@mui/material/Box";
 
 export default function Welcome() {
   const matches = useMediaQuery("(min-width:800px)");
@@ -24,31 +25,33 @@ export default function Welcome() {
       <div className={style.body__row}>
         <Grid
           container
-          spacing={2}
+          // spacing={3}
           alignItems="center"
-          justify="center"
+          justifyContent="center"
           direction={matches ? "row" : "column"}
         >
-          <Grid container item xs={4} alignItems="center" justify="center">
-            <Card sx={{ maxWidth: 345 }}>
-              <CardMedia
-                component="img"
-                sx={{ height: 300 }}
-                image={require("../../../assets/welcome_item_01.jpg")}
-                alt="Welcome"
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Linh hoạt
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Hỗ trợ quản lý nhiều sự kiện với quy mô nhỏ và vừa
-                </Typography>
-              </CardContent>
-            </Card>
+          <Grid container xs={4} alignItems="center" justifyContent="center">
+            <Box>
+              <Card sx={{ maxWidth: 345 }}>
+                <CardMedia
+                  component="img"
+                  sx={{ height: 300 }}
+                  image={require("../../../assets/welcome_item_01.jpg")}
+                  alt="Welcome"
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Linh hoạt
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Hỗ trợ quản lý nhiều sự kiện với quy mô nhỏ và vừa
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
           </Grid>
 
-          <Grid container item xs={4} alignItems="center" justify="center">
+          <Grid container xs={4} alignItems="center" justifyContent="center">
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"
@@ -67,7 +70,7 @@ export default function Welcome() {
             </Card>
           </Grid>
 
-          <Grid container item xs={4} alignItems="center" justify="center">
+          <Grid container xs={4} alignItems="center" justifyContent="center">
             <Card sx={{ maxWidth: 345 }}>
               <CardMedia
                 component="img"

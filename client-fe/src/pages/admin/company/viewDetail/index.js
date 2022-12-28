@@ -8,29 +8,60 @@ import SideBar from "../../../../components/navigation";
 import style from "./style.module.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
-const breadcrumbs =
-  sessionStorage.getItem("role") === "admin"
-    ? [
-        { link: "/admin", label: "Trang chủ" },
-        { link: "/admin/tenant", label: "Ban tổ chức" },
-        { link: "#", label: "Chi tiết ban tổ chức" },
-      ]
-    : [
-        { link: "/event-admin", label: "Trang chủ" },
-        { link: "#", label: "Thông tin ban tổ chức" },
-      ];
+import { fetchTenantInfo } from "../../../../services/redux/actions/tenant/fetchListTenant";
+import { newTenantAction } from "../../../../services/redux/actions/tenant/tenant";
+import { AlertDeleteTenant } from "./components/popup/alert";
 
 export default function DetailInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
-  const tenantInfo = useSelector((state) => state.tenantState.tenant);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+
   const tenantAccount = useSelector((state) => state.tenantState.tenantAccount);
+  const pinnedTenantId = useSelector(
+    (state) => state.tenantState.pinnedTenantId
+  );
+  const listTenant = useSelector((state) => state.tenantState.listTenant);
+
+  let tenantInfo = useSelector((state) => state.tenantState.tenant);
+
+  if (pinnedTenantId && !tenantInfo.tenantCode)
+    tenantInfo = listTenant.find(
+      (tenant) => tenant.tenantId === pinnedTenantId
+    );
+
+  const breadcrumbs =
+    sessionStorage.getItem("role") === "admin"
+      ? [
+          { link: "/admin", label: "Trang chủ" },
+          { link: "/admin/tenant", label: "Ban tổ chức" },
+          { link: "#", label: "Chi tiết ban tổ chức" },
+        ]
+      : [
+          { link: "/event-admin", label: "Trang chủ" },
+          { link: "#", label: "Thông tin ban tổ chức" },
+        ];
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleCustomCompany = () => {
+  React.useEffect(() => {
+    if (sessionStorage.getItem("role") === "tenant") {
+      dispatch(fetchTenantInfo());
+    }
+  }, []);
+
+  const handleCustomTenant = () => {
+    dispatch(newTenantAction(tenantInfo));
     navigate("/admin/tenant/custom");
   };
+
+  const handleDeleteTenant = () => {
+    console.log("Delete tenant");
+    setMessage("Bạn có muốn xóa sự kiện không ?");
+    setOpenDialog(true);
+  };
+
   return (
     <div className={style.body}>
       <Grid container spacing={0}>
@@ -127,28 +158,44 @@ export default function DetailInfoCompany() {
                 <Grid item xs={4} align="left">
                   {tenantInfo.tenantCode}
                 </Grid>
+                {sessionStorage.getItem("role") === "tenant" ? (
+                  <></>
+                ) : (
+                  <>
+                    <Grid item xs={2}>
+                      <Typography variant="body1" align="right">
+                        Tài khoản đăng nhập:
+                      </Typography>
+                    </Grid>
 
-                <Grid item xs={2}>
-                  <Typography variant="body1" align="right">
-                    Tài khoản đăng nhập:
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={4} align="left">
-                  {tenantAccount.username
-                    ? "Đã tạo tài khoản"
-                    : "Chưa có tài khoản đăng nhập"}
-                </Grid>
-
+                    <Grid item xs={4} align="left">
+                      {tenantInfo.username || tenantAccount.username
+                        ? tenantInfo.username
+                          ? tenantInfo.username
+                          : tenantAccount.username
+                        : "Chưa có tài khoản đăng nhập"}
+                    </Grid>
+                  </>
+                )}
                 {sessionStorage.getItem("role") === "admin" ? (
-                  <Grid item xs={12}>
-                    <Button
-                      variant="contained"
-                      onClick={() => handleCustomCompany()}
-                    >
-                      Sửa thông tin
-                    </Button>
-                  </Grid>
+                  <>
+                    <Grid container spacing={3}>
+                      <Grid item xs={6} align="right">
+                        <Button variant="outlined" onClick={handleCustomTenant}>
+                          Sửa thông tin
+                        </Button>
+                      </Grid>
+                      <Grid item xs={6} align="left">
+                        <Button
+                          variant="outlined"
+                          onClick={handleDeleteTenant}
+                          color="error"
+                        >
+                          Xóa ban tổ chức
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </>
                 ) : (
                   <></>
                 )}
@@ -157,6 +204,12 @@ export default function DetailInfoCompany() {
           </Grid>
         </Grid>
       </Grid>
+      <AlertDeleteTenant
+        open={openDialog}
+        setOpen={setOpenDialog}
+        message={message}
+        key={openDialog}
+      />
     </div>
   );
 }

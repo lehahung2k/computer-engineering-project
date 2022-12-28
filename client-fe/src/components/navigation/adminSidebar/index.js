@@ -12,11 +12,26 @@ import ListItemButton from "@mui/material/ListItemButton";
 import React from "react";
 import style from "./style.module.css";
 import { Link } from "react-router-dom";
+import { resetState as eventResetState } from "../../../services/redux/actions/event/event";
+import { resetState as pocResetState } from "../../../services/redux/actions/poc/poc";
+import { resetState as accountResetState } from "../../../services/redux/actions/accounts/account";
+import { resetState as tenantResetState } from "../../../services/redux/actions/tenant/tenant";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminSidebar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const logout = () => {
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("role");
+    sessionStorage.clear();
+    // dispatch(eventResetState());
+    // dispatch(pocResetState());
+    // dispatch(accountResetState());
+    // dispatch(tenantResetState());
+    // window.location.reload();
+    // navigate("/login");
   };
   return (
     <>
@@ -97,12 +112,12 @@ export default function AdminSidebar() {
           </Link>
         </ListItem>
         <ListItem>
-          <Link to="/" className={style.logout}>
+          <a href="/" className={style.logout}>
             <ListItemButton onClick={logout}>
               <FontAwesomeIcon icon={faSignOutAlt} className="iconPage" />
               Đăng xuất
             </ListItemButton>
-          </Link>
+          </a>
         </ListItem>
         {/* </>
         )} */}

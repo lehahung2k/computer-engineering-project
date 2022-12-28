@@ -1,32 +1,34 @@
-import Backdrop from "@mui/material/Backdrop";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  resetApiState as eventResetApiState,
+  resetState as eventResetState,
+} from "../../../../../../services/redux/actions/event/event";
 import { useNavigate } from "react-router-dom";
-import { resetApiState } from "../../../../../services/redux/actions/tenant/tenant";
 
-export default function AlertResponseCreateTenant() {
-  const loadingTenant = useSelector((state) => state.tenantState.loading);
-  const loadingAccount = useSelector((state) => state.accountState.loading);
+export function AlertResultUpdateEvent() {
+  const loadingCreateEvent = useSelector((state) => state.eventState.loading);
+  const loadingCreateListPoc = useSelector((state) => state.pocState.loading);
 
-  const loading = loadingTenant || loadingAccount;
+  const loading = loadingCreateEvent || loadingCreateListPoc;
 
-  const successTenant = useSelector((state) => state.tenantState.success);
-  const failureTenant = useSelector((state) => state.tenantState.failure);
+  const successEvent = useSelector((state) => state.eventState.success);
+  const successPoc = useSelector((state) => state.pocState.success);
 
-  const successAccount = useSelector((state) => state.accountState.success);
-  const failureAccount = useSelector((state) => state.accountState.failure);
-
-  const navigate = useNavigate();
+  const failureEvent = useSelector((state) => state.eventState.failure);
+  const failurePoc = useSelector((state) => state.pocState.failure);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   return (
-    <div>
+    <>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -35,21 +37,21 @@ export default function AlertResponseCreateTenant() {
       </Backdrop>
 
       <Dialog
-        open={failureTenant}
-        onClose={() => dispatch(resetApiState())}
+        open={failureEvent}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant không thành công, xin hãy thử lại
+            Không thể cập nhật sự kiện, xin hãy thử lại
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant");
+              dispatch(eventResetApiState());
+              // navigate("/admin/event");
             }}
             autoFocus
           >
@@ -59,22 +61,22 @@ export default function AlertResponseCreateTenant() {
       </Dialog>
 
       <Dialog
-        open={successTenant && failureAccount === true}
-        onClose={() => dispatch(resetApiState())}
+        open={successEvent && failurePoc === true}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công nhưng chưa thể tạo tài khoản đăng nhập,
-            xin hãy thêm tài khoản đăng nhập sau.
+            Cập nhật sự kiện thành công nhưng chưa thể cập nhật danh sách Poc,
+            xin hãy cập nhật danh sách Poc sau.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant");
+              dispatch(eventResetApiState());
+              navigate("/admin/event");
             }}
             autoFocus
           >
@@ -84,21 +86,21 @@ export default function AlertResponseCreateTenant() {
       </Dialog>
 
       <Dialog
-        open={successTenant && successAccount === true}
-        onClose={() => dispatch(resetApiState())}
+        open={successEvent && successPoc === true}
+        onClose={() => dispatch(eventResetApiState())}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Tạo mới tenant thành công.
+            Cập nhật sự kiện thành công.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch(resetApiState());
-              navigate("/admin/tenant/detail");
+              dispatch(eventResetApiState());
+              navigate("/admin/event/detail");
             }}
             autoFocus
           >
@@ -106,6 +108,6 @@ export default function AlertResponseCreateTenant() {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 }
