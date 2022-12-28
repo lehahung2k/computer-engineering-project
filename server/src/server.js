@@ -57,6 +57,9 @@ app.use("/auth", accountRouter);
 const transactionRouter = require("./routes/TransactionRouter");
 app.use("/transaction", transactionRouter);
 
+const guestRouter = require("./routes/GuestRouter");
+app.use("/guest", guestRouter);
+
 db.sequelize.sync().then(() => {
   app.listen(process.env.PORT || port, () => {
     console.log("Hello NodeJS");

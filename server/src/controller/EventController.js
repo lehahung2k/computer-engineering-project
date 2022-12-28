@@ -243,3 +243,40 @@ exports.check_delete_condition = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
+exports.number_of_event = async (req, res) => {
+  try {
+    if (req.user.userRole === "admin") {
+      const numberOfEvent = await EventsMng.count({
+        distinct: true,
+        col: "eventCode",
+        where: {
+          enable: true,
+        },
+      });
+
+      res.json({ numberOfEvent: numberOfEvent });
+    } else if (req.user.userRole === "tenant") {
+      const tenantCode = await Accounts.findOne({
+        where: {
+          username: req.user.username,
+        },
+        attributes: ["tenantCode"],
+      });
+
+      const numberOfEvent = await EventsMng.count({
+        distinct: true,
+        col: "eventCode",
+        where: {
+          enable: true,
+          tenantCode: tenantCode.tenantCode,
+        },
+      });
+
+      res.json({ numberOfEvent: numberOfEvent });
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};

@@ -72,4 +72,9 @@ router.get(
   eventController.get_list_event
 );
 
+/**
+ * Thống kê số lượng sự kiện
+ */
+router.get("/number-of-event", validateToken, eventController.number_of_event);
+
 module.exports = router;
