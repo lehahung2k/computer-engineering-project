@@ -17,6 +17,7 @@ Issues
         SSL_CRT_FILE="/home/dev/cert/checkin.love/fullchain.pem"  
         SSL_KEY_FILE="/home/dev/cert/chckin.love/private.pem"
         NODE_ENV=development        
+        PORT=90
       ```
    - Trong file server.js, thay thế đối tượng http, bằng đối tượng https và liên với với đối tượng app như sau
       ```javascript
