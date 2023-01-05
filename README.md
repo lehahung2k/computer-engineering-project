@@ -13,8 +13,10 @@ Issues
 4. Không có bảo mật với https
    Giải pháp: Chuyển sang https với chứng chỉ số đã có sẵn ở thư mục /home/dev/cert/checkin.love/
    - Tạo file .env với 2 tham số 
-        SSL_CRT_FILE="/home/dev/cert/checkin.love/certificate.crt"  
-        SSL_KEY_FILE="/home/dev/cert/chckin.love/private.key"
+      ```shell
+        SSL_CRT_FILE="/home/dev/cert/checkin.love/fullchain.pem"  
+        SSL_KEY_FILE="/home/dev/cert/chckin.love/private.pem"
+      ```
    - Trong file server.js, thay thế đối tượng http, bằng đối tượng https và liên với với đối tượng app như sau
       ```javascript
         const fs = require("fs");
