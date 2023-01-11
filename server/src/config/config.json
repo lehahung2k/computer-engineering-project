@@ -1,12 +1,12 @@
 {
-  "development": {
+  "development01": {
     "username": "eventmgnt",
     "password": "hung22hieu",
     "database": "eventmgnt",
     "host": "mycel.app",
     "dialect": "mysql"
   },
-  "development01": {
+  "development": {
     "username": "root",
     "password": "vudinhhieu0102",
     "database": "test_project_checkin",

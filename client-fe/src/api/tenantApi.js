@@ -76,6 +76,20 @@ class TenantApi {
     };
     return axios.post(url, params, config);
   };
+
+  /**
+   * Statistic
+   */
+  getNumberOfTenant = () => {
+    const url = baseUrl + "/statistic/number-of-tenant";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
 }
 
 const tenantApi = new TenantApi();

@@ -1,4 +1,4 @@
-const { PointOfCheckins, Transactions } = require("../models");
+const { PointOfCheckins, Accounts, Transactions } = require("../models");
 
 /**
  * Thêm mới quầy hàng POC
@@ -156,5 +156,94 @@ exports.check_delete_condition = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
+  }
+};
+
+/**
+ * Thống kê số lượng poc
+ * Nếu tenant = số lượng poc của tất cả sự kiện
+ * Nếu admin = số lượng poc của tất cả tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng gian hàng poc
+ */
+exports.number_of_poc = async (req, res) => {
+  const role = req.user.userRole;
+  const username = req.user.userName;
+  try {
+    if (role === "admin") {
+      const numberOfPoc = await PointOfCheckins.count({
+        distinct: true,
+        col: "pointCode",
+        where: {
+          enable: true,
+        },
+      });
+
+      return res.json({ numberOfPoc: numberOfPoc });
+    } else if (role === "tenant") {
+      const tenantCode = await Accounts.findOne({
+        where: {
+          username: username,
+        },
+        attributes: ["tenantCode"],
+        raw: true,
+      });
+
+      const listEvent = await Events.findAll({
+        where: {
+          tenantCode: tenantCode.tenantCode,
+          enable: true,
+        },
+        attributes: ["eventCode"],
+        raw: true,
+      });
+
+      const listEventCode = listEvent.map((event) => event.eventCode);
+
+      const numberOfPoc = await PointOfCheckins.count({
+        distinct: true,
+        col: "pointCode",
+        where: {
+          enable: true,
+          eventCode: listEventCode,
+        },
+      });
+
+      return res.json({ numberOfPoc: numberOfPoc });
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
+/**
+ * Thống kê số lượng gian hàng poc của một sự kiện cụ thể
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng gian hàng poc của sự kiện cụ thể
+ */
+exports.number_of_poc_event = async (req, res) => {
+  const eventCode = req.body.eventCode;
+  if (!eventCode) {
+    return res.sendStatus(400);
+  }
+  try {
+    const numberOfPoc = await PointOfCheckins.count({
+      distinct: true,
+      col: "pointCode",
+      where: {
+        enable: true,
+        eventCode: eventCode,
+      },
+    });
+
+    return res.json({ numberOfPoc: numberOfPoc });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
   }
 };

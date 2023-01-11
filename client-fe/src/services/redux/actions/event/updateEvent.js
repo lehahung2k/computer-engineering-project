@@ -1,4 +1,4 @@
-import eventApi from "../../../../api/eventAPI";
+import eventApi from "../../../../api/EventApi";
 import { updateListPoc } from "../poc/updatePoc";
 
 export const updateEvent = (event, listPoc) => async (dispatch) => {

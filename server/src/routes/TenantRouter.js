@@ -4,6 +4,7 @@ const { Tenants, Accounts } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
 const tenantController = require("../controller/TenantController");
+const { route } = require("./AccountRouter");
 /**
  * Lấy danh sách thông tin ban tổ chức
  * Nếu là admin trả về thông tin tất cả ban tổ chức
@@ -48,5 +49,15 @@ router.post(
  * Xóa tenant
  */
 router.post("/delete-tenant", validateToken, tenantController.delete_tenant);
+
+/**
+ * Thống kê số lượng tenant
+ */
+router.get(
+  "/statistic/number-of-tenant",
+  validateToken,
+  authPermission(["admin"]),
+  tenantController.number_of_tenant
+);
 
 module.exports = router;

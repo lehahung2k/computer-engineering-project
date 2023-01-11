@@ -1,4 +1,4 @@
-import eventApi from "../../../../api/eventAPI";
+import eventApi from "../../../../api/EventApi";
 import { createNewListPoc } from "../poc/createListPoc";
 export const createNewEvent = (event, listPoc) => async (dispatch) => {
   dispatch({ type: "EVENT/CREATE_NEW_EVENT" });

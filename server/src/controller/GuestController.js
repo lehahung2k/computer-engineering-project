@@ -1,5 +1,19 @@
-const { Guests, Transactions, Accounts } = require("../models");
+const {
+  Guests,
+  Transactions,
+  Accounts,
+  PointOfCheckins,
+} = require("../models");
 
+/**
+ * Thống kê số lượng khách tham gia đã check-in qua hệ thống
+ * Nếu tenant => Số lượng khách tham gia của tất cả sự kiện mình tổ chức
+ * Nếu admin => Tổng số lượng khách tham gia của tất cả tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng khách tham dự tất cả sự kiện
+ */
 exports.number_of_guest = async (req, res) => {
   try {
     if (req.user.userRole === "admin") {
@@ -31,7 +45,7 @@ exports.number_of_guest = async (req, res) => {
 
       const listEventCode = listEvent.map((event) => event.eventCode);
 
-      const listPoc = await Events.findAll({
+      const listPoc = await PointOfCheckins.findAll({
         where: {
           enable: true,
           eventCode: listEventCode,
@@ -58,13 +72,20 @@ exports.number_of_guest = async (req, res) => {
   }
 };
 
+/**
+ * Thống kê số lượng khách tham gia một sự kiện cụ thể nào đó
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng khách tham dự của một sự kiện cụ thể
+ */
 exports.number_of_guest_each_event = async (req, res) => {
   const eventCode = req.body.eventCode;
   if (!eventCode) {
     res.sendStatus(400);
   }
   try {
-    const listPoc = await Events.findAll({
+    const listPoc = await PointOfCheckins.findAll({
       where: {
         enable: true,
         eventCode: eventCode,

@@ -75,6 +75,11 @@ router.get(
 /**
  * Thống kê số lượng sự kiện
  */
-router.get("/number-of-event", validateToken, eventController.number_of_event);
+router.get(
+  "/statistic/number-of-event",
+  validateToken,
+  authPermission(["admin"]),
+  eventController.number_of_event
+);
 
 module.exports = router;

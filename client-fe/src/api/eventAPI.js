@@ -57,6 +57,20 @@ class EventApi {
     };
     return axios.post(url, params, config);
   };
+
+  /**
+   * Statistic
+   */
+  getNumberOfEvent = () => {
+    const url = baseUrl + "/statistic/number-of-event";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
 }
 
 const eventApi = new EventApi();

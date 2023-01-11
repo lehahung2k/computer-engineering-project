@@ -91,6 +91,33 @@ class PocApi {
     };
     return axios.post(url, params, config);
   };
+
+  /**
+   * Statistic
+   */
+  getNumberOfPocAll = () => {
+    const url = baseUrl + "/statistic/number-of-poc";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+
+    return axios.get(url, config);
+  };
+
+  getNumberOfPocEvent = (params) => {
+    const url = baseUrl + "/statistic/number-of-poc-event";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+
+    return axios.post(url, params, config);
+  };
 }
 
 const pocApi = new PocApi();
