@@ -3,9 +3,7 @@ import { pocReducer, listPocReducer } from "./poc";
 import eventReducer from "./event";
 import tenantReducer from "./tenant";
 import accountReducer from "./account";
-import { updateEventReducer } from "./event/updateEvent";
-import { createEventReducer } from "./event/createEvent";
-import { deleteEventReducer } from "./event/deleteEvent";
+import transactionReducer from "./transaction";
 
 const rootReducer = combineReducers({
   /**
@@ -27,6 +25,11 @@ const rootReducer = combineReducers({
    * Account
    */
   accountState: accountReducer,
+
+  /**
+   * Transaction check-in
+   */
+  transactionState: transactionReducer,
 });
 
 export default rootReducer;

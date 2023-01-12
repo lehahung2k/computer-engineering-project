@@ -4,51 +4,23 @@ const { Tenants, Accounts } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const { authPermission } = require("../middlewares/AuthPermission");
 const tenantController = require("../controller/TenantController");
+const { route } = require("./AccountRouter");
 /**
- * Lấy danh sách thông tin tất cả ban tổ chức (chỉ dành cho admin)
+ * Lấy danh sách thông tin ban tổ chức
+ * Nếu là admin trả về thông tin tất cả ban tổ chức
+ * Nếu là tenant thì chỉ trả về thông tin của tenant đó
  */
-router.get("/", validateToken, async (req, res) => {
-  if (req.user.userRole !== "admin") return res.sendStatus(401);
-  try {
-    const listTenant = await Tenants.findAll({ raw: true });
-    let listTenantInfoFull = [];
-    for (let tenant of listTenant) {
-      const username = await Accounts.findOne({
-        where: {
-          tenantCode: tenant.tenantCode,
-          role: "tenant",
-        },
-        raw: true,
-      });
-
-      listTenantInfoFull.push({ ...tenant, ...username });
-    }
-    return res.json(listTenantInfoFull);
-  } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
-  }
-});
+router.get("/get-list-tenant", validateToken, tenantController.get_list_tenant);
 
 /**
  * Thêm mới ban tổ chức (chỉ dành cho admin)
  */
-router.post("/add-tenant", async (req, res) => {
-  const post = req.body;
-  const newTenant = await Tenants.create(post);
-  res.json(newTenant.toJSON());
-});
+router.post("/add-tenant", validateToken, tenantController.add_tenant);
 
 /**
  * Cập nhật thông tin ban tổ chức (chỉ dành cho admin)
  */
-router.put("/update-tenant", async (req, res) => {
-  const post = req.body;
-  const updatedTenant = await Tenants.update(post, {
-    where: { tenantId: post.id },
-  });
-  res.json(updatedTenant);
-});
+router.put("/update-tenant", validateToken, tenantController.update_tenant);
 
 /**
  * Lấy thông tin của ban tổ chức theo mã (dành cho tài khoản poc)
@@ -56,50 +28,36 @@ router.put("/update-tenant", async (req, res) => {
 router.post(
   "/get-tenant-info-by-tenant-code",
   validateToken,
-  async (req, res) => {
-    if (!req.user.userRole) return res.status(401).send("Invalid token");
-    const tenantCode = req.body.tenantCode;
-    if (!tenantCode) return res.sendStatus(400);
-    console.log(tenantCode);
-    try {
-      const tenantInfo = await Tenants.findOne({
-        where: { tenantCode: tenantCode },
-        attributes: [
-          "tenantName",
-          "tenantAddress",
-          "contactName",
-          "contactEmail",
-          "contactPhone",
-          "tenantCode",
-        ],
-        raw: true,
-      });
-
-      const username = await Accounts.findOne({
-        where: {
-          tenantCode: tenantCode,
-          role: "tenant",
-        },
-        raw: true,
-      });
-
-      const customTenantInfo = { ...tenantInfo, ...username };
-      if (req.user.userRole === "poc") return res.json(tenantInfo);
-      if (req.user.userRole === "admin" || req.user.userRole === "tenant")
-        return res.json(customTenantInfo);
-    } catch (err) {
-      console.log(err);
-      res.sendStatus(500);
-    }
-  }
+  tenantController.get_tenant_info_by_tenantCode
 );
 
 /**
- * Lấy thông tin tenant thông qua tài khoản ban tổ chức
+ * Lấy thông tin tenant thông qua tài khoản ban tổ chức (dành cho tài khoản tenant)
+ */
+router.get("/get-tenant-info", validateToken, tenantController.get_tenant_info);
+
+/**
+ * Kiểm tra điều kiện xóa của tenant
+ */
+router.post(
+  "/check-delete-condition",
+  validateToken,
+  tenantController.check_delete_condition
+);
+
+/**
+ * Xóa tenant
+ */
+router.post("/delete-tenant", validateToken, tenantController.delete_tenant);
+
+/**
+ * Thống kê số lượng tenant
  */
 router.get(
-  "/get-tenant-info-by-account",
+  "/statistic/number-of-tenant",
   validateToken,
-  tenantController.get_tenant_info_by_tenant_account
+  authPermission(["admin"]),
+  tenantController.number_of_tenant
 );
+
 module.exports = router;

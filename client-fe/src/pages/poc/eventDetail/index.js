@@ -85,14 +85,14 @@ export default function PocEventDetail() {
                   <div className={style.poc__name__label}>Tên POC:</div>
 
                   <div className={style.poc__name__value}>
-                    <div className={style.info__value}>{pocInfo.name}</div>
+                    <div className={style.info__value}>{pocInfo.pointName}</div>
                   </div>
 
                   <div className={style.poc__code__label}>Mã POC:</div>
 
                   <div className={style.poc__code__value}>
                     {" "}
-                    <div className={style.info__value}>{pocInfo.code}</div>
+                    <div className={style.info__value}>{pocInfo.pointCode}</div>
                   </div>
 
                   <div className={style.poc__account__label}>
@@ -101,7 +101,7 @@ export default function PocEventDetail() {
 
                   <div className={style.poc__account__value}>
                     {" "}
-                    <div className={style.info__value}>{pocInfo.account}</div>
+                    <div className={style.info__value}>{pocInfo.username}</div>
                   </div>
                 </div>
 

@@ -14,22 +14,6 @@ class EventApi {
     return axios.get(url, config);
   };
 
-  fetchListEventByUsername = () => {
-    const url = baseUrl + "/list-event-by-account";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-    return axios.get(url, config);
-  };
-
-  searchByCode = (params) => {
-    const url = baseUrl + "/find-event-by-code/" + params["event_code"];
-    return axios.get(url);
-  };
-
   addNew = (params, token) => {
     const url = baseUrl + "/add-event";
     const config = {
@@ -39,17 +23,6 @@ class EventApi {
       },
     };
     return axios.post(url, params, config);
-  };
-
-  fetchEventInfo = (params, token) => {
-    const url = baseUrl + "/find-event-by-id/" + params.id;
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-    return axios.get(url, config);
   };
 
   updateEventInfo = (params, token) => {
@@ -63,15 +36,40 @@ class EventApi {
     return axios.put(url, params, config);
   };
 
-  deleteEvent = (params, token) => {
-    const url = baseUrl + "/delete-event-by-id/" + params.id;
+  deleteEvent = (params) => {
+    const url = baseUrl + "/delete-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
     };
-    return axios.delete(url, config);
+    return axios.post(url, params, config);
+  };
+
+  checkDeleteCondition = (params) => {
+    const url = baseUrl + "/check-delete-condition";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.post(url, params, config);
+  };
+
+  /**
+   * Statistic
+   */
+  getNumberOfEvent = () => {
+    const url = baseUrl + "/statistic/number-of-event";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
   };
 }
 

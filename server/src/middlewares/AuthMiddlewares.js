@@ -9,6 +9,9 @@ const validateToken = (req, res, next) => {
     const token = userToken.split(" ")[1];
     const validToken = verify(token, process.env.SECRET_KEY);
     req.user = validToken;
+    if (!req.user || !req.user.username || !req.user.userRole) {
+      return res.status(401).send("Invalid token");
+    }
     console.log(req.user);
     // if (validToken) {
     return next();

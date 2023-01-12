@@ -1,4 +1,4 @@
-import tenantApi from "../../../../api/tenantApi";
+import tenantApi from "../../../../api/TenantApi";
 
 export const fetchListTenant = () => async (dispatch) => {
   dispatch({ type: "TENANT/FETCH_LIST_TENANT" });
@@ -35,10 +35,10 @@ export const fetchTenantInfoByTenantCode = (tenantCode) => async (dispatch) => {
     });
 };
 
-export const fetchTenantInfoByAccount = () => async (dispatch) => {
+export const fetchTenantInfo = () => async (dispatch) => {
   dispatch({ type: "TENANT/FETCH_TENANT_INFO" });
 
-  const response = tenantApi.fetchTenantInfoByAccount();
+  const response = tenantApi.fetchTenantInfo();
 
   response
     .then((response) => {

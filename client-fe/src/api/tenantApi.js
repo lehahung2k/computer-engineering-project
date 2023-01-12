@@ -4,7 +4,7 @@ const baseUrl = "https://checkin.love:27090/tenant";
 
 class TenantApi {
   getAll = (token) => {
-    const url = baseUrl + "/";
+    const url = baseUrl + "/get-list-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -17,7 +17,10 @@ class TenantApi {
   addNew = (params, token) => {
     const url = baseUrl + "/add-tenant";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.post(url, params, config);
   };
@@ -41,8 +44,44 @@ class TenantApi {
     return axios.post(url, params, config);
   };
 
-  fetchTenantInfoByAccount = () => {
-    const url = baseUrl + "/get-tenant-info-by-account";
+  fetchTenantInfo = () => {
+    const url = baseUrl + "/get-tenant-info";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
+
+  deleteTenant = (params) => {
+    const url = baseUrl + "/delete-tenant";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.post(url, params, config);
+  };
+
+  checkDeleteCondition = (params) => {
+    const url = baseUrl + "/check-delete-condition";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.post(url, params, config);
+  };
+
+  /**
+   * Statistic
+   */
+  getNumberOfTenant = () => {
+    const url = baseUrl + "/statistic/number-of-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),

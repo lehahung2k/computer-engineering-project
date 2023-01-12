@@ -26,6 +26,17 @@ module.exports = (sequelize, DataTypes) => {
       note: {
         type: DataTypes.TEXT,
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      checkinImg1: {
+        type: DataTypes.BLOB("long"),
+      },
+      checkinImg2: {
+        type: DataTypes.BLOB("long"),
+      },
     },
     {
       tableName: "Transactions",

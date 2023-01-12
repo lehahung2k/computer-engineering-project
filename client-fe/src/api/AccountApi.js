@@ -14,8 +14,8 @@ class AccountApi {
     return axios.get(url, config);
   };
 
-  fetchListPocAccountAdmin = (params, token) => {
-    const url = baseUrl + "/poc-account";
+  fetchListPocAccountAvailable = (params, token) => {
+    const url = baseUrl + "/get_list_account_available";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -46,6 +46,17 @@ class AccountApi {
       },
     };
     return axios.put(url, params, config);
+  };
+
+  getNumberOfPocAccount = () => {
+    const url = baseUrl + "/statistic/number-of-poc-account";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
   };
 }
 

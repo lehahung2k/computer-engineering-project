@@ -3,10 +3,18 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPocAccountInfo } from "../../../../../services/redux/actions/accounts/fetchListAccount";
+import Backdrop from "@mui/material/Backdrop";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+
 export default function PocInfo() {
   const accountInfo = useSelector((state) => state.accountState.account);
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const dispatch = useDispatch();
+  const loadingAccountInfo = useSelector((state) => state.accountState.loading);
+  const loadingTenantInfo = useSelector((state) => state.tenantState.loading);
+
+  const loading = loadingAccountInfo || loadingTenantInfo;
   React.useEffect(() => {
     dispatch(fetchPocAccountInfo());
   }, []);
@@ -93,6 +101,13 @@ export default function PocInfo() {
             tenantInfo.contactEmail}
         </Grid>
       </Grid>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }

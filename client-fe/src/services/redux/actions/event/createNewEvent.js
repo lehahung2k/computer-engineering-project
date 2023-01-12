@@ -1,4 +1,4 @@
-import eventApi from "../../../../api/eventAPI";
+import eventApi from "../../../../api/EventApi";
 import { createNewListPoc } from "../poc/createListPoc";
 export const createNewEvent = (event, listPoc) => async (dispatch) => {
   dispatch({ type: "EVENT/CREATE_NEW_EVENT" });
@@ -17,7 +17,7 @@ export const createNewEvent = (event, listPoc) => async (dispatch) => {
 
   response
     .then((res) => {
-      dispatch(createNewListPoc({ listPoc, eventCode: event.eventCode }));
+      dispatch(createNewListPoc(listPoc, event.eventCode));
       dispatch({ type: "EVENT/CREATE_NEW_EVENT_SUCCESS", payload: res.data });
       console.log("EVENT/CREATE_NEW_EVENT_SUCCESS", res.data);
     })

@@ -25,9 +25,16 @@ import {
 import NormalTable from "../../../../../../components/tables/normal";
 import { pocCodeGenerator } from "../../../../../../services/hashFunction";
 import { selectAccountForPocAction } from "../../../../../../services/redux/actions/accounts/account";
-import { fetchListPocAccount } from "../../../../../../services/redux/actions/accounts/fetchListAccount";
+import {
+  fetchListPocAccount,
+  fetchListPocAccountAvailable,
+} from "../../../../../../services/redux/actions/accounts/fetchListAccount";
+import CustomField from "../customField";
+import CheckTable from "../../../../../../components/tables/check";
 
 const headCells = [
+  { id: "id", label: "", sort: false },
+
   {
     id: "pointName",
     label: "Tên POC",
@@ -44,6 +51,7 @@ const headCells = [
     label: "Ghi chú",
     sort: false,
   },
+  { id: "delete", label: "", sort: false },
 ];
 
 export default function EventPocInfoForm() {
@@ -53,15 +61,33 @@ export default function EventPocInfoForm() {
   const listNewPoc = useSelector((state) => state.pocState.listPoc);
   const newPoc = useSelector((state) => state.pocState.poc);
   const eventInfo = useSelector((state) => state.eventState.event);
-
+  const [selectedPoc, setSelectedPoc] = React.useState([]);
+  console.log("Số mục đã chọn", selectedPoc.length);
   React.useEffect(() => {
-    eventInfo.tenantCode
-      ? dispatch(fetchListPocAccount(eventInfo.tenantCode))
-      : setOpenWarningNoTenant(true);
+    if (eventInfo.tenantCode) {
+      dispatch(
+        fetchListPocAccountAvailable({
+          tenantCode: eventInfo.tenantCode,
+          startTime: eventInfo.startTime,
+          endTime: eventInfo.endTime,
+          time: true,
+        })
+      );
+      dispatch(
+        fetchListPocAccount({
+          tenantCode: eventInfo.tenantCode,
+          startTime: eventInfo.startTime,
+          endTime: eventInfo.endTime,
+          time: false,
+        })
+      );
+    } else {
+      setOpenWarningNoTenant(true);
+    }
   }, []);
 
   const listPocAccount = useSelector(
-    (state) => state.accountState.listPocAccount
+    (state) => state.accountState.listPocAccountAvailable
   );
 
   const listPocAccountSelect = listPocAccount.map((account) => ({
@@ -137,9 +163,22 @@ export default function EventPocInfoForm() {
         </Grid>
         <Grid item xs={6}>
           <Box display="flex" justifyContent="flex-end">
+            {selectedPoc.length > 0 ? (
+              <Button
+                variant="outlined"
+                sx={{ textTransform: "none", m: 1 }}
+                onClick={handleClickOpen}
+                color="error"
+              >
+                Xóa mục đã chọn
+              </Button>
+            ) : (
+              <></>
+            )}
+
             <Button
               variant="contained"
-              sx={{ textTransform: "none" }}
+              sx={{ textTransform: "none", m: 1 }}
               onClick={handleClickOpen}
             >
               Thêm mới
@@ -148,7 +187,20 @@ export default function EventPocInfoForm() {
         </Grid>
 
         <Grid item xs={12}>
-          <NormalTable rows={listNewPoc} headCells={headCells} />
+          <CheckTable
+            id={"pointCode"}
+            rows={listNewPoc}
+            headCells={headCells}
+            setSelectedItem={setSelectedPoc}
+            customField={[
+              {
+                id: "delete",
+                component(row) {
+                  return <CustomField width="15%" field="delete" row={row} />;
+                },
+              },
+            ]}
+          />
         </Grid>
       </Grid>
       <Dialog
@@ -218,23 +270,6 @@ export default function EventPocInfoForm() {
                 }}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
-              <Autocomplete
-                disablePortal
-                noOptionsText={"Không tìm thấy doanh nghiệp"}
-                id="combo-box-demo"
-                options={rowsCompany}
-                sx={{ width: 300 }}
-                ListboxProps={{ style: { maxHeight: 150 } }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Doanh nghiệp phụ trách"
-                    variant="standard"
-                  />
-                )}
-              />
-            </Grid> */}
 
             <Grid item xs={12} sm={6}>
               <Autocomplete

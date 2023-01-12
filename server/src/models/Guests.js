@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       identityType: {
         type: DataTypes.STRING,
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     },
     {
       tableName: "Guests",

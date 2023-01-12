@@ -5,7 +5,7 @@ import BreadCrumbs from "../../../../components/breadCrumbs";
 import Header from "../../../../components/header";
 import SideBar from "../../../../components/navigation";
 import EventInfo from "./components/eventInfo";
-import ListCompany from "./components/listCompany";
+import ListTransaction from "./components/listTransaction";
 import ListPoc from "./components/listPOC";
 import style from "./style.module.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -39,7 +39,7 @@ export default function DetailEvent() {
       case 1:
         return <ListPoc setActiveStep={setStep} />;
       case 2:
-        return <ListCompany setActiveStep={setStep} />;
+        return <ListTransaction setActiveStep={setStep} />;
 
       default:
         throw new Error("Unknown step");

@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       eventImg: {
         type: DataTypes.BLOB("long"),
       },
+      enable: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
     },
     {
       tableName: "EventsMng",

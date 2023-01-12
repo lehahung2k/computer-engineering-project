@@ -19,6 +19,7 @@ import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import { updateEvent } from "../../../../services/redux/actions/event/updateEvent";
+import { AlertResultUpdateEvent } from "./components/popup/alert";
 
 const steps = [
   "Thông tin sự kiện",
@@ -46,7 +47,7 @@ export default function EditEvent() {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const eventInfo = useSelector((state) => state.eventState.event);
-
+  const listPoc = useSelector((state) => state.pocState.listPoc);
   const breadcrumbs =
     sessionStorage.getItem("role") === "admin"
       ? [
@@ -63,7 +64,7 @@ export default function EditEvent() {
   const dispatch = useDispatch();
 
   const handleUpdateEvent = () => {
-    dispatch(updateEvent(eventInfo));
+    dispatch(updateEvent(eventInfo, listPoc));
   };
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -154,6 +155,7 @@ export default function EditEvent() {
           </Grid>
         </Grid>
       </Grid>
+      <AlertResultUpdateEvent />
     </div>
   );
 }

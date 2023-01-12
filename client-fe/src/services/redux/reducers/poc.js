@@ -6,10 +6,12 @@ const initialPoc = {
     username: "",
     pointNote: "",
     eventCode: "",
+    enable: true,
   },
   loading: false,
   success: false,
   failure: false,
+  enableDelete: false,
   message: "",
 };
 
@@ -82,12 +84,108 @@ const pocReducer = (state = initialPoc, action) => {
       return { ...state, listPoc: newList };
     }
 
+    case "POC/NEW_LIST_POC": {
+      const newList = action.payload;
+
+      return { ...state, listPoc: newList };
+    }
+
+    /**
+     * Delete poc in state redux
+     */
     case "POC/REMOVE_POC": {
-      return state;
+      const removeIndex = state.listPoc
+        .map((poc) => poc.pointCode)
+        .indexOf(action.payload.pointCode);
+
+      if (removeIndex === -1) {
+        return state;
+      } else {
+        const newListPoc = [
+          ...state.listPoc.slice(0, removeIndex),
+          ...state.listPoc.slice(removeIndex + 1),
+        ];
+        return {
+          ...state,
+          listPoc: newListPoc,
+        };
+      }
     }
 
     case "POC/UPDATE_POC": {
-      return state;
+      const cloneListPoc = structuredClone(state.listPoc);
+      const updatePoc = action.payload.poc;
+      const updateIndex = cloneListPoc
+        .map((poc) => poc.pointCode)
+        .indexOf(updatePoc.pointCode);
+      if (updateIndex === -1) return state;
+      const newListPoc = [
+        ...cloneListPoc.slice(0, updateIndex),
+        updatePoc,
+        ...cloneListPoc.slice(updateIndex + 1),
+      ];
+      console.log("Clone list poc", newListPoc);
+      return {
+        ...state,
+        listPoc: newListPoc,
+      };
+    }
+
+    /**
+     * Delete poc in server
+     */
+    case "POC/CHECK_DELETE_CONDITION": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "POC/CHECK_DELETE_CONDITION_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        enableDelete: action.payload,
+      };
+    }
+
+    case "POC/CHECK_DELETE_CONDITION_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "POC/DELETE_LIST_POC": {
+      return {
+        ...state,
+        loading: true,
+        enableDelete: true,
+      };
+    }
+
+    case "POC/DELETE_LIST_POC_SUCCESS": {
+      const newListPoc = structuredClone(action.payload);
+      const newState = structuredClone(state);
+
+      return {
+        ...newState,
+        listPoc: newListPoc,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "POC/DELETE_LIST_POC_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
     }
 
     /**
@@ -180,6 +278,42 @@ const pocReducer = (state = initialPoc, action) => {
     case "POC/RESET_STATE": {
       return {
         ...initialPoc,
+      };
+    }
+
+    case "POC/RESET_API_STATE": {
+      return {
+        ...state,
+        loading: false,
+        success: false,
+        failure: false,
+        message: "",
+      };
+    }
+
+    /**
+     * Update list poc
+     */
+    case "POC/UPDATE_LIST_POC": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "POC/UPDATE_LIST_POC_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        success: true,
+      };
+    }
+
+    case "POC/UPDATE_LIST_POC_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
       };
     }
 

@@ -80,17 +80,19 @@ export default function Checkin() {
       guestCode: guestCode,
       createTime: moment().format(),
       note: note,
-      enable: enableImage,
+      enable: true,
+      checkinImg1: enableImage === "on" ? image1 : "",
+      checkinImg2: enableImage === "on" ? image2 : "",
       identityType: identityType,
     };
     console.log(params);
 
-    const responseAddNewCheckinClient = checkinApi.addNewCheckinClient(
+    const responseAddNewCheckin = checkinApi.addNewCheckin(
       params,
       sessionStorage.getItem("accessToken")
     );
 
-    responseAddNewCheckinClient
+    responseAddNewCheckin
       .then((response) => {
         alert("Khách checkin thành công");
         setImage1("");

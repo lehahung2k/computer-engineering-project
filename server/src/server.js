@@ -41,23 +41,26 @@ app.get("/", (req, res) => {
 });
 
 //Routes:
-const eventsController = require("./routes/EventController");
-app.use("/events-management", eventsController);
+const eventsRouter = require("./routes/EventRouter");
+app.use("/events-management", eventsRouter);
 
 const tenantRouter = require("./routes/TenantRouter");
 app.use("/tenant", tenantRouter);
 
-const pointCheckin = require("./routes/PointController");
-app.use("/point-of-checkin", pointCheckin);
+const pointRouter = require("./routes/PointRouter");
+app.use("/point-of-checkin", pointRouter);
 
 const clientController = require("./routes/ClientController");
 app.use("/client", clientController);
 
-const accountController = require("./routes/AccountController");
-app.use("/auth", accountController);
+const accountRouter = require("./routes/AccountRouter");
+app.use("/auth", accountRouter);
 
-const transactionController = require("./routes/TransactionController");
-app.use("/transaction", transactionController);
+const transactionRouter = require("./routes/TransactionRouter");
+app.use("/transaction", transactionRouter);
+
+const guestRouter = require("./routes/GuestRouter");
+app.use("/guest", guestRouter);
 
 db.sequelize.sync().then(() => {
   const httpsServer = https.createServer({

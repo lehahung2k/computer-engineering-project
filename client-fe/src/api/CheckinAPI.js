@@ -2,20 +2,29 @@ import axios from "axios";
 
 const baseUrl = "https://checkin.love:27090/transaction";
 class CheckinAPI {
-  addNewCheckinClient = (params, token) => {
+  /**
+   * Thêm transaction check-in
+   *
+   * @param {Object} params {transactionObject: Object chứa thông tin transaction}
+   * @returns Axios post promise
+   */
+  addNewCheckin = (params) => {
     const url = baseUrl + "/add-transaction";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.post(url, params, config);
   };
 
-  // getALLCheckinClient=()=>{
-  //     const url= baseUrl + "/1";
-
-  //     return axios.get(url);
-  // }
-
+  /**
+   * Lấy tất các các giao dịch check-in theo mã poc (thông tin check-in cho từng quầy)
+   *
+   * @param {Object} params {pointCode}
+   * @returns Axios post promise
+   */
   getAllTransactionByPointCode = (params) => {
     const url = baseUrl + "/get-all-by-point-code";
     const config = {
@@ -27,12 +36,21 @@ class CheckinAPI {
     return axios.post(url, params, config);
   };
 
-  deleteCheckinInfo = (params, token) => {
-    const url = baseUrl + "/delete-transaction/" + params.event_id;
+  /**
+   * Xóa các giao dịch check-in
+   *
+   * @param {list} params [danh sách các transaction cần xóa]
+   * @returns Axios post promise
+   */
+  deleteCheckinInfo = (params) => {
+    const url = baseUrl + "/delete-transaction";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
-    return axios.delete(url, config);
+    return axios.post(url, params, config);
   };
 }
 

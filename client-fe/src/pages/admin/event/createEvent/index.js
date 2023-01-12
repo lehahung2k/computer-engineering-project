@@ -26,6 +26,11 @@ import { resetState as pocResetState } from "../../../../services/redux/actions/
 import EventInfoForm from "./components/eventInfoForm";
 import EventPocInfoForm from "./components/pocForm";
 import style from "./style.module.css";
+import {
+  AlertCheckCreateEvent,
+  AlertResultCreateEvent,
+} from "./components/popup/alert";
+import dayjs from "dayjs";
 
 const steps = [
   "Thêm thông tin sự kiện tạo mới",
@@ -52,19 +57,12 @@ export default function CreateEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [key, setKey] = React.useState(0);
-
+  const [openCheckCreateEventDialog, setOpenCheckCreateEventDialog] =
+    React.useState(false);
+  const [messageCheckCreateEvent, setMessageCheckCreateEvent] =
+    React.useState("");
   const newEventInfo = useSelector((state) => state.eventState.event);
   const newListPoc = useSelector((state) => state.pocState.listPoc);
-  const loadingCreateEvent = useSelector((state) => state.eventState.loading);
-  const loadingCreateListPoc = useSelector((state) => state.pocState.loading);
-
-  const loading = loadingCreateEvent || loadingCreateListPoc;
-
-  const successEvent = useSelector((state) => state.eventState.success);
-  const successPoc = useSelector((state) => state.pocState.success);
-
-  const failureEvent = useSelector((state) => state.eventState.failure);
-  const failurePoc = useSelector((state) => state.pocState.failure);
 
   const breadcrumbs =
     sessionStorage.getItem("role") === "admin"
@@ -90,6 +88,31 @@ export default function CreateEvent() {
   }, []);
 
   const handleCreateNewEvent = () => {
+    if (!newEventInfo.eventName) {
+      setOpenCheckCreateEventDialog(true);
+      setMessageCheckCreateEvent("Bạn chưa nhập tên sự kiện");
+      return;
+    } else if (!newEventInfo.eventCode) {
+      setOpenCheckCreateEventDialog(true);
+      setMessageCheckCreateEvent("Bạn chưa nhập mã sự kiện");
+      return;
+    } else if (!newEventInfo.tenantCode) {
+      setOpenCheckCreateEventDialog(true);
+      setMessageCheckCreateEvent("Bạn chưa chọn ban tổ chức");
+      return;
+    } else if (
+      newEventInfo.startTime.isSame(
+        dayjs("01-01-2000 00:00:00", "DD:MM:YYYY HH:mm:ss")
+      ) ||
+      newEventInfo.endTime.isSame(
+        dayjs("01-01-2000 00:00:00", "DD:MM:YYYY HH:mm:ss")
+      )
+    ) {
+      setOpenCheckCreateEventDialog(true);
+      setMessageCheckCreateEvent("Bạn chưa chọn thời gian cho sự kiện");
+      return;
+    }
+
     dispatch(createNewEvent(newEventInfo, newListPoc));
   };
   const handleNext = () => {
@@ -181,85 +204,12 @@ export default function CreateEvent() {
           </Grid>
         </Grid>
       </Grid>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-
-      <Dialog
-        open={failureEvent}
-        onClose={() => dispatch(eventResetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Không thể tạo mới sự kiện, xin hãy thử lại
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(eventResetApiState());
-              // navigate("/admin/event");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={successEvent && failurePoc === true}
-        onClose={() => dispatch(eventResetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới sự kiện thành công nhưng chưa thể tạo danh sách Poc, xin hãy
-            thêm danh sách Poc sau.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(eventResetApiState());
-              navigate("/admin/event");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={successEvent && successPoc === true}
-        onClose={() => dispatch(eventResetApiState())}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Tạo mới sự kiện thành công.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(eventResetApiState());
-              navigate("/admin/event/detail");
-            }}
-            autoFocus
-          >
-            OK{" "}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AlertResultCreateEvent />
+      <AlertCheckCreateEvent
+        open={openCheckCreateEventDialog}
+        setOpenDialog={setOpenCheckCreateEventDialog}
+        message={messageCheckCreateEvent}
+      />
     </div>
   );
 }

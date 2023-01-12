@@ -23,14 +23,16 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   pinEventId,
   newEventAction,
+  resetApiState as resetEventApiState,
 } from "../../../../services/redux/actions/event/event";
-import { fetchListEventAdmin } from "../../../../services/redux/actions/event/fetchListEvent";
+import { fetchListEvent } from "../../../../services/redux/actions/event/fetchListEvent";
 import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetchListTenant";
 import moment from "moment";
 import AlertResponse from "./components/alert";
 
 export default function ListEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const [filterName, setFilterName] = React.useState("");
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
 
@@ -48,26 +50,6 @@ export default function ListEvent() {
   const customListEvents = listEvents.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
     let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
-    // let tenant = listTenant.filter(
-    //   (tenant) => tenant.tenantCode === event.tenantCode
-    // );
-
-    // if (tenant.length > 0) {
-    //   return {
-    //     ...event,
-    //     startTime: startTime,
-    //     endTime: endTime,
-    //     tenantName: tenant[0].tenantName,
-    //   };
-    // } else {
-    //   return {
-    //     ...event,
-    //     startTime: startTime,
-    //     endTime: endTime,
-    //     tenantName: "",
-    //   };
-    // }
-
     return {
       ...event,
       startTime: startTime,
@@ -79,7 +61,7 @@ export default function ListEvent() {
 
   React.useEffect(() => {
     // if (listEvents.length === 0)
-    dispatch(fetchListEventAdmin());
+    dispatch(fetchListEvent());
     // if (listTenant.length === 0)
     // dispatch(fetchListTenant());
   }, []);
@@ -98,9 +80,16 @@ export default function ListEvent() {
       );
       console.log(eventInfo);
       dispatch(newEventAction(eventInfo));
-      navigate("/admin/event/detail");
+      dispatch(resetEventApiState());
+      sessionStorage.getItem("role") === "admin"
+        ? navigate("/admin/event/detail")
+        : navigate("/event-admin/event/detail");
     }
     if (fieldName === "checkin") console.log("checkin");
+  };
+
+  const handleFilterByName = (e) => {
+    setFilterName(e.target.value);
   };
 
   return (
@@ -132,7 +121,10 @@ export default function ListEvent() {
                   </Grid>
                   <Grid item xs={8}>
                     <Box display="flex" justifyContent="flex-end">
-                      <SearchEvent />
+                      <SearchEvent
+                        filterName={filterName}
+                        onFilterName={handleFilterByName}
+                      />
                       <EventFilter />
                       <Button
                         variant="contained"
