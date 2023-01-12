@@ -357,3 +357,45 @@ exports.update_active_account = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
+exports.number_of_poc_account = async (req, res) => {
+  const role = req.user.userRole;
+  const username = req.user.username;
+
+  try {
+    if (role === "admin") {
+      const numberOfPocAccounts = await Accounts.count({
+        where: {
+          enable: true,
+          role: "poc",
+        },
+        distinct: true,
+        col: "username",
+      });
+
+      return res.json({ numberOfPocAccounts: numberOfPocAccounts });
+    } else if (role === "tenant") {
+      const tenantCode = await Accounts.findOne({
+        where: {
+          username: req.user.username,
+        },
+        attributes: ["tenantCode"],
+        raw: true,
+      });
+      const numberOfPocAccounts = await Accounts.count({
+        where: {
+          enable: true,
+          role: "poc",
+          tenantCode: tenantCode.tenantCode,
+        },
+        distinct: true,
+        col: "username",
+      });
+
+      return res.json({ numberOfPocAccounts: numberOfPocAccounts });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};

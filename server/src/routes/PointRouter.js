@@ -3,6 +3,8 @@ const router = express.Router();
 const { PointOfCheckins } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddlewares");
 const pointController = require("../controller/PointController");
+const { route } = require("./AccountRouter");
+const { authPermission } = require("../middlewares/AuthPermission");
 
 // router.get("/:event_id", async (req, res) => {
 //   const id = req.params.event_id;
@@ -100,6 +102,28 @@ router.post(
   "/check-delete-condition",
   validateToken,
   pointController.check_delete_condition
+);
+
+/**
+ * Thống kê số lượng gian hàng poc
+ * Nếu tenant = số lượng poc của tất cả sự kiện
+ * Nếu admin = số lượng poc của tất cả tenant
+ */
+router.get(
+  "/statistic/number-of-poc",
+  validateToken,
+  authPermission(["tenant", "admin"]),
+  pointController.number_of_poc
+);
+
+/**
+ * Thống kê số lượng gian hàng poc của sự kiện cụ thể
+ */
+router.post(
+  "/statistic/number-of-poc-event",
+  validateToken,
+  authPermission(["tenant", "admin"]),
+  pointController.number_of_poc_event
 );
 
 module.exports = router;

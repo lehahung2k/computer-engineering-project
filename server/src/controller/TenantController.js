@@ -171,6 +171,13 @@ exports.add_tenant = async (req, res) => {
   }
 };
 
+/**
+ * Kiểm tra điều kiện xóa của tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns {boolean} Điều kiện xóa tenant, true: có thể xóa, false: ngược lại
+ */
 exports.check_delete_condition = async (req, res) => {
   const listTenant = req.body;
   if (!listTenant || listTenant.length === 0) return res.sendStatus(400);
@@ -194,6 +201,13 @@ exports.check_delete_condition = async (req, res) => {
   }
 };
 
+/**
+ * Xóa thông tin tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns
+ */
 exports.delete_tenant = async (req, res) => {
   const listTenant = req.body;
   if (!listTenant || listTenant.length === 0) return res.sendStatus(400);
@@ -214,6 +228,30 @@ exports.delete_tenant = async (req, res) => {
       },
     });
     return res.json(listTenantRemain);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+
+/**
+ * Thống kê số lượng tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng tenant trong hệ thống
+ */
+exports.number_of_tenant = async (req, res) => {
+  try {
+    const numberOfTenant = await Tenants.count({
+      distinct: true,
+      col: "tenantCode",
+      where: {
+        enable: true,
+      },
+    });
+
+    return res.json({ numberOfTenant: numberOfTenant });
   } catch (err) {
     console.log(err);
     return res.sendStatus(500);

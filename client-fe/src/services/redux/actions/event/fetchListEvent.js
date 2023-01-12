@@ -1,4 +1,4 @@
-import eventApi from "../../../../api/eventAPI";
+import eventApi from "../../../../api/EventApi";
 
 export const fetchListEvent = () => async (dispatch) => {
   dispatch({ type: "EVENT/FETCH_LIST_EVENT" });

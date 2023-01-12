@@ -64,6 +64,13 @@ exports.get_list_event = async (req, res) => {
   }
 };
 
+/**
+ * Lấy danh sách sự kiện với role admin (tất cả sự kiện)
+ *
+ * @param {string} username
+ * @param {Object} res
+ * @returns Danh sách sự kiện
+ */
 const getListEventsAdmin = async (username, res) => {
   const listEvents = await EventsMng.findAll({
     where: { enable: true },
@@ -86,6 +93,13 @@ const getListEventsAdmin = async (username, res) => {
   return res.json(formattedListEvent);
 };
 
+/**
+ * Lấy danh sách sự kiện với role tenant (sự kiện của tenant)
+ *
+ * @param {string} username
+ * @param {Object} res
+ * @returns Danh sách sự kiện
+ */
 const getListEventsTenant = async (username, res) => {
   const tenantCode = await Accounts.findOne({
     where: {
@@ -122,6 +136,14 @@ const getListEventsTenant = async (username, res) => {
   return res.json(formattedListEvent);
 };
 
+/**
+ * Lấy danh sách sự kiện với role poc
+ * Sự kiện mà tài khoản poc tham gia
+ *
+ * @param {string} username
+ * @param {Object} res
+ * @returns Danh sách sự kiện
+ */
 const getListEventsPoc = async (username, res) => {
   let listEventCode = await PointOfCheckins.findAll({
     where: { username: username },
@@ -139,8 +161,9 @@ const getListEventsPoc = async (username, res) => {
     let formattedEvent = { ...event, eventImg: formattedEventImage };
     listEvent.push(formattedEvent);
   }
-  res.json(listEvent);
+  return res.json(listEvent);
 };
+
 /**
  * Tạo mới event
  *
@@ -221,6 +244,13 @@ exports.delete_event = async (req, res) => {
   }
 };
 
+/**
+ * Kiểm tra điều kiện xóa của sự kiện
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Điều kiện xóa của sự kiện (true: có thể xóa, false: không thể xóa)
+ */
 exports.check_delete_condition = async (req, res) => {
   const eventInfo = req.body;
   if (!eventInfo || eventInfo === {}) return res.sendStatus(400);
@@ -244,6 +274,15 @@ exports.check_delete_condition = async (req, res) => {
   }
 };
 
+/**
+ * Thống kê số lượng sự kiện được tổ chức
+ * Nếu tenant = số lượng sự kiện tenant đó tổ chức
+ * Nếu admin = tổng số lượng sự kiện của các tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng sự kiện được tổ chức
+ */
 exports.number_of_event = async (req, res) => {
   try {
     if (req.user.userRole === "admin") {
@@ -255,13 +294,14 @@ exports.number_of_event = async (req, res) => {
         },
       });
 
-      res.json({ numberOfEvent: numberOfEvent });
+      return res.json({ numberOfEvent: numberOfEvent });
     } else if (req.user.userRole === "tenant") {
       const tenantCode = await Accounts.findOne({
         where: {
           username: req.user.username,
         },
         attributes: ["tenantCode"],
+        raw: true,
       });
 
       const numberOfEvent = await EventsMng.count({
@@ -273,10 +313,10 @@ exports.number_of_event = async (req, res) => {
         },
       });
 
-      res.json({ numberOfEvent: numberOfEvent });
+      return res.json({ numberOfEvent: numberOfEvent });
     }
   } catch (err) {
     console.log(err);
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 };

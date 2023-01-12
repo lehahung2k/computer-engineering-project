@@ -5,7 +5,7 @@ export const fetchListPocAccount = (payload) => async (dispatch) => {
   dispatch({ type: "ACCOUNT/FETCH_LIST_POC_ACCOUNT" });
 
   let params = payload;
-  let response = accountApi.fetchListPocAccountAvailable(params);
+  let response = accountApi.fetchListPocAccount(params);
 
   response
     .then((res) => {

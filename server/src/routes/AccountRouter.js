@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { validateToken } = require("../middlewares/AuthMiddlewares");
+const { authPermission } = require("../middlewares/AuthPermission");
 const accountController = require("../controller/AccountController");
 
 /**
@@ -56,4 +57,15 @@ router.put(
 /**
  * Xóa tài khoản tenant
  */
+
+/**
+ * Thống kê số lượng tài khoản poc
+ */
+router.get(
+  "/statistic/number-of-poc-account",
+  validateToken,
+  authPermission(["admin", "tenant"]),
+  accountController.number_of_poc_account
+);
+
 module.exports = router;

@@ -32,6 +32,7 @@ import AlertResponse from "./components/alert";
 
 export default function ListEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
+  const [filterName, setFilterName] = React.useState("");
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
 
@@ -87,6 +88,10 @@ export default function ListEvent() {
     if (fieldName === "checkin") console.log("checkin");
   };
 
+  const handleFilterByName = (e) => {
+    setFilterName(e.target.value);
+  };
+
   return (
     <div className={style.body}>
       <Grid container spacing={0}>
@@ -116,7 +121,10 @@ export default function ListEvent() {
                   </Grid>
                   <Grid item xs={8}>
                     <Box display="flex" justifyContent="flex-end">
-                      <SearchEvent />
+                      <SearchEvent
+                        filterName={filterName}
+                        onFilterName={handleFilterByName}
+                      />
                       <EventFilter />
                       <Button
                         variant="contained"

@@ -1,44 +1,10 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/point-of-checkin";
-class PocApi {
-  addNew = (params, token) => {
-    const url = baseUrl + "/add-point";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-    return axios.post(url, params, config);
-  };
+const baseUrl = "http://localhost:8080/tenant";
 
-  addNewList = (params) => {
-    const url = baseUrl + "/add-point";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-
-    return axios.post(url, params, config);
-  };
-
-  updateListPoc = (params) => {
-    const url = baseUrl + "/update-list-poc";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-
-    return axios.put(url, params, config);
-  };
-
-  findAllBasedEventId = (params, token) => {
-    const url = baseUrl + "/" + params.id;
+class TenantApi {
+  getAll = (token) => {
+    const url = baseUrl + "/get-list-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -48,8 +14,8 @@ class PocApi {
     return axios.get(url, config);
   };
 
-  getAllByEventCode = (params, token) => {
-    const url = baseUrl + "/get-all-poc-by-event-code";
+  addNew = (params, token) => {
+    const url = baseUrl + "/add-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -59,8 +25,16 @@ class PocApi {
     return axios.post(url, params, config);
   };
 
-  fetchPocInfo = (params) => {
-    const url = baseUrl + "/get-poc-info-by-username";
+  updateTenant = (params, token) => {
+    const url = baseUrl + "/update-tenant";
+    const config = {
+      headers: { accessToken: token, "Content-Type": "application/json" },
+    };
+    return axios.put(url, params, config);
+  };
+
+  fetchTenantInfoByTenantCode = (params) => {
+    const url = baseUrl + "/get-tenant-info-by-tenant-code";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -70,8 +44,19 @@ class PocApi {
     return axios.post(url, params, config);
   };
 
-  deleteListPoc = (params) => {
-    const url = baseUrl + "/delete-point";
+  fetchTenantInfo = () => {
+    const url = baseUrl + "/get-tenant-info";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
+
+  deleteTenant = (params) => {
+    const url = baseUrl + "/delete-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -95,30 +80,17 @@ class PocApi {
   /**
    * Statistic
    */
-  getNumberOfPocAll = () => {
-    const url = baseUrl + "/statistic/number-of-poc";
+  getNumberOfTenant = () => {
+    const url = baseUrl + "/statistic/number-of-tenant";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
     };
-
     return axios.get(url, config);
-  };
-
-  getNumberOfPocEvent = (params) => {
-    const url = baseUrl + "/statistic/number-of-poc-event";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-
-    return axios.post(url, params, config);
   };
 }
 
-const pocApi = new PocApi();
-export default pocApi;
+const tenantApi = new TenantApi();
+export default tenantApi;

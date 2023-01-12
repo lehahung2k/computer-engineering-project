@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/tenant";
+const baseUrl = "http://localhost:8080/events-management";
 
-class TenantApi {
+class EventApi {
   getAll = (token) => {
-    const url = baseUrl + "/get-list-tenant";
+    const url = baseUrl + "/get-list-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -15,7 +15,7 @@ class TenantApi {
   };
 
   addNew = (params, token) => {
-    const url = baseUrl + "/add-tenant";
+    const url = baseUrl + "/add-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -25,38 +25,19 @@ class TenantApi {
     return axios.post(url, params, config);
   };
 
-  updateTenant = (params, token) => {
-    const url = baseUrl + "/update-tenant";
+  updateEventInfo = (params, token) => {
+    const url = baseUrl + "/update-event";
     const config = {
-      headers: { accessToken: token, "Content-Type": "application/json" },
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
     };
     return axios.put(url, params, config);
   };
 
-  fetchTenantInfoByTenantCode = (params) => {
-    const url = baseUrl + "/get-tenant-info-by-tenant-code";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-    return axios.post(url, params, config);
-  };
-
-  fetchTenantInfo = () => {
-    const url = baseUrl + "/get-tenant-info";
-    const config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
-        "Content-Type": "application/json",
-      },
-    };
-    return axios.get(url, config);
-  };
-
-  deleteTenant = (params) => {
-    const url = baseUrl + "/delete-tenant";
+  deleteEvent = (params) => {
+    const url = baseUrl + "/delete-event";
     const config = {
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
@@ -76,7 +57,21 @@ class TenantApi {
     };
     return axios.post(url, params, config);
   };
+
+  /**
+   * Statistic
+   */
+  getNumberOfEvent = () => {
+    const url = baseUrl + "/statistic/number-of-event";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
 }
 
-const tenantApi = new TenantApi();
-export default tenantApi;
+const eventApi = new EventApi();
+export default eventApi;

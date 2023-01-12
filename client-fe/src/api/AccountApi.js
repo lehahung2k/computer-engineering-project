@@ -47,6 +47,17 @@ class AccountApi {
     };
     return axios.put(url, params, config);
   };
+
+  getNumberOfPocAccount = () => {
+    const url = baseUrl + "/statistic/number-of-poc-account";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
 }
 
 const accountApi = new AccountApi();

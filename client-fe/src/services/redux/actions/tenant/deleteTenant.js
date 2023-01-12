@@ -1,4 +1,4 @@
-import tenantAPI from "../../../../api/tenantApi";
+import tenantAPI from "../../../../api/TenantApi";
 
 export const deleteTenant = (listTenant) => async (dispatch) => {
   dispatch({ type: "TENANT/DELETE_TENANT" });

@@ -1,4 +1,4 @@
-import eventApi from "../../../../api/eventAPI";
+import eventApi from "../../../../api/EventApi";
 
 export const deleteEvent = (event) => async (dispatch) => {
   dispatch({ type: "EVENT/DELETE_EVENT" });

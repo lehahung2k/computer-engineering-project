@@ -18,7 +18,11 @@ import { ListEvent, ListEventHeadNormal } from "../../../assets/fakeData";
 import NormalTable from "../../../components/tables/normal";
 import { FakeChart } from "../../../assets/fakeData/fakeChart";
 import { useDispatch, useSelector } from "react-redux";
-
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import BarChartYearFilter from "./components/filterBarChartYear";
 export default function AdminDashBoard() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
 
@@ -35,6 +39,12 @@ export default function AdminDashBoard() {
       },
     ],
   });
+
+  const [barChartYear, setBarChartYear] = React.useState(2023);
+
+  const handleChange = (event) => {
+    setBarChartYear(event.target.value);
+  };
   const navigate = useNavigate();
 
   const handleClickAddNewEvent = () => {
@@ -63,6 +73,7 @@ export default function AdminDashBoard() {
               <Grid container spacing={2}>
                 <Grid item xs={7}>
                   <div className={style.barchart}>
+                    <BarChartYearFilter />
                     <Bar data={fakeData}></Bar>
                     <h4>Thống kê số sự kiện theo tháng</h4>
                   </div>
