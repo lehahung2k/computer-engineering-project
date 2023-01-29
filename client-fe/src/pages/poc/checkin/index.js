@@ -16,7 +16,7 @@ import { fetchListEventByUsername } from "../../../services/redux/actions/event/
 import { fetchPocInfo } from "../../../services/redux/actions/poc/fetchListPoc";
 import { newEventAction } from "../../../services/redux/actions/event/event";
 import pocApi from "../../../api/PocApi";
-
+import AlertResponse from "./components/alert";
 export default function Checkin() {
   const [capture, setCapture] = React.useState("hello");
   const [image1, setImage1] = React.useState("");
@@ -36,38 +36,48 @@ export default function Checkin() {
   const pocInfo = useSelector((state) => state.pocState.poc);
   const tenant = useSelector((state) => state.tenantState.tenant);
   const listEvent = useSelector((state) => state.eventState.listEvents);
+  const loadingListEvent = useSelector((state) => state.eventState.loading);
+  const successListEvent = useSelector((state) => state.eventState.success);
+  const failureListEvent = useSelector((state) => state.eventState.failure);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (listEvent.length === 0) {
-      console.log("Fetch list event");
-      dispatch(fetchListEventByUsername());
-    } else {
-      console.log("Fetch poc info");
-      const compareTime = (startTime, endTime) => {
-        const currentTime = new Date();
-        if (
-          Date.parse(startTime) <= Date.parse(currentTime) &&
-          Date.parse(endTime) >= Date.parse(currentTime)
-        ) {
-          return true;
-        }
-        return false;
-      };
-      const currentEvent = listEvent.find((event) =>
-        compareTime(event.startTime, event.endTime)
-      );
-      if (currentEvent) {
-        dispatch(newEventAction(currentEvent));
-        dispatch(fetchPocInfo(currentEvent.eventCode));
-      } else {
-        alert("Không có sự kiện nào đang diễn ra");
-        // navigate("/poc/event");
-      }
-    }
-  }, [listEvent]);
+    dispatch(fetchListEventByUsername());
+  }, []);
+
+  // if (!loadingListEvent && successListEvent) {
+  //   if (listEvent.length === 0) {
+  //     alert("Không có sự kiện nào đang diễn ra 0001");
+  //     navigate("/poc/event");
+  //   } else {
+  //     console.log("Fetch poc info");
+  //     const compareTime = (startTime, endTime) => {
+  //       const currentTime = new Date();
+  //       if (
+  //         Date.parse(startTime) <= Date.parse(currentTime) &&
+  //         Date.parse(endTime) >= Date.parse(currentTime)
+  //       ) {
+  //         return true;
+  //       }
+  //       return false;
+  //     };
+  //     const currentEvent = listEvent.find((event) =>
+  //       compareTime(event.startTime, event.endTime)
+  //     );
+  //     if (currentEvent) {
+  //       dispatch(newEventAction(currentEvent));
+  //       dispatch(fetchPocInfo(currentEvent.eventCode));
+  //     } else {
+  //       alert("Không có sự kiện nào đang diễn ra");
+  //       navigate("/poc/event");
+  //     }
+  //   }
+  // } else if (!loadingListEvent && failureListEvent) {
+  //   alert("Không thể tải thông tin sự kiện");
+  //   navigate("/poc/event");
+  // }
 
   const handleImageWebCam = (image, camId) => {
     if (camId === 1) setImage1(image);
@@ -79,7 +89,7 @@ export default function Checkin() {
       pointCode: pocInfo.pointCode,
       guestCode: guestCode,
       createTime: moment().format(),
-      note: note,
+      note: note + name,
       enable: true,
       checkinImg1: enableImage === "on" ? image1 : "",
       checkinImg2: enableImage === "on" ? image2 : "",
@@ -191,6 +201,7 @@ export default function Checkin() {
                         InputLabelProps={{ shrink: true }}
                         fullWidth
                         key={refresh}
+                        onChange={(e) => setName(e.target.value)}
                       />
                     </Grid>
 
@@ -213,7 +224,9 @@ export default function Checkin() {
                             required
                           />
                         )}
-                        onChange={(event, value) => setIdentityType(value)}
+                        onChange={(event, value) =>
+                          setIdentityType(value.label)
+                        }
                         key={refresh}
                       />
                     </Grid>
@@ -259,6 +272,8 @@ export default function Checkin() {
           </div>
         </Grid>
       </Grid>
+
+      <AlertResponse />
     </div>
   );
 }
