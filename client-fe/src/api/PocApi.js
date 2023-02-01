@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/point-of-checkin";
+const baseUrl = "https://checkin.love:27090/point-of-checkin";
 class PocApi {
   addNew = (params, token) => {
     const url = baseUrl + "/add-point";
