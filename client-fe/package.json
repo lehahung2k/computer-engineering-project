@@ -2,6 +2,8 @@
   "name": "test_web_cam_01",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://checkin.love",
+  "url":"https://github.com/lehahung2k/computer-engineering-project/issues",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
@@ -43,6 +45,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+"startSSL":"HTTPS=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:8080/tenant";
+
+const baseUrl = "https://checkin.love:27090/tenant";
+
 
 class TenantApi {
   getAll = (token) => {
@@ -28,10 +30,12 @@ class TenantApi {
   updateTenant = (params, token) => {
     const url = baseUrl + "/update-tenant";
     const config = {
+
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
         "Content-Type": "application/json",
       },
+
     };
     return axios.put(url, params, config);
   };
