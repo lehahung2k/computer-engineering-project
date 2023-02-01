@@ -3,6 +3,7 @@ const {
   Transactions,
   Accounts,
   PointOfCheckins,
+  EventsMng,
 } = require("../models");
 
 /**
@@ -28,13 +29,13 @@ exports.number_of_guest = async (req, res) => {
     } else if (req.user.userRole === "tenant") {
       const tenantCode = await Accounts.findOne({
         where: {
-          username: username,
+          username: req.user.username,
         },
         attributes: ["tenantCode"],
         raw: true,
       });
-
-      const listEvent = await Events.findAll({
+      console.log("************************", tenantCode);
+      const listEvent = await EventsMng.findAll({
         where: {
           tenantCode: tenantCode.tenantCode,
           enable: true,
@@ -44,7 +45,7 @@ exports.number_of_guest = async (req, res) => {
       });
 
       const listEventCode = listEvent.map((event) => event.eventCode);
-
+      console.log("************************", listEventCode);
       const listPoc = await PointOfCheckins.findAll({
         where: {
           enable: true,
@@ -55,7 +56,7 @@ exports.number_of_guest = async (req, res) => {
       });
 
       const listPointCode = listPoc.map((point) => point.pointCode);
-
+      console.log("************************", listPointCode);
       const numberOfGuest = await Transactions.count({
         distinct: true,
         col: "guestCode",
@@ -104,7 +105,7 @@ exports.number_of_guest_each_event = async (req, res) => {
         enable: true,
       },
     });
-    return res.json({ numberOfGuest: numberOfGuest });
+    return res.json({ numberOfGuest: numberOfGuest, eventCode: eventCode });
   } catch (err) {
     console.log(err);
     res.sendStatus(500);

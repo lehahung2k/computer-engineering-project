@@ -23,9 +23,20 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import BarChartYearFilter from "./components/filterBarChartYear";
+import {
+  getNumberOfEvent,
+  getNumberOfGuestAll,
+} from "../../../services/redux/actions/event/statisticEvent";
+import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statisticTenant";
+import { getNumberOfPocAccount } from "../../../services/redux/actions/accounts/statisticAccount";
+
 export default function AdminDashBoard() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
 
+  // statistic state selector
+  const statisticEvent = useSelector((state) => state.eventState.statistic);
+  const statisticTenant = useSelector((state) => state.tenantState.statistic);
+  const statisticAccount = useSelector((state) => state.accountState.statistic);
   const listEvent = useSelector((state) => state.eventState.listEvents);
   const [fakeData, setFakeData] = useState({
     labels: FakeChart.map((data) => data.month),
@@ -46,10 +57,18 @@ export default function AdminDashBoard() {
     setBarChartYear(event.target.value);
   };
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleClickAddNewEvent = () => {
     navigate("/admin/create-event");
   };
+
+  React.useEffect(() => {
+    dispatch(getNumberOfEvent());
+    dispatch(getNumberOfGuestAll());
+    dispatch(getNumberOfTenant());
+    dispatch(getNumberOfPocAccount());
+  }, []);
 
   return (
     <>
@@ -136,7 +155,7 @@ export default function AdminDashBoard() {
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Sự kiện đã được tổ chức"
-                          total={100}
+                          total={statisticEvent.numberOfEvent}
                           icon={"akar-icons:check-in"}
                           color="warning"
                         />
@@ -144,7 +163,7 @@ export default function AdminDashBoard() {
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Doanh nghiệp tham gia"
-                          total={100}
+                          total={statisticTenant.numberOfTenant}
                           icon={"ion:business-sharp"}
                           color="secondary"
                         />
@@ -152,15 +171,15 @@ export default function AdminDashBoard() {
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Khách check-in"
-                          total={100}
+                          total={statisticEvent.numberOfGuestAll}
                           icon={"fluent:guest-28-regular"}
                           color="info"
                         />
                       </div>
                       <div className={style.statistic__card}>
                         <StatisticCard
-                          title="Người dùng"
-                          total={100}
+                          title="Cộng tác viên"
+                          total={statisticAccount.numberOfPocAccount}
                           icon={
                             "material-symbols:supervisor-account-outline-sharp"
                           }

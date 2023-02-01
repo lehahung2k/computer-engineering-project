@@ -78,7 +78,7 @@ router.get(
 router.get(
   "/statistic/number-of-event",
   validateToken,
-  authPermission(["admin"]),
+  authPermission(["admin", "tenant"]),
   eventController.number_of_event
 );
 
