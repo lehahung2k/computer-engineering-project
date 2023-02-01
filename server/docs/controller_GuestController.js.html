@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controller/GuestController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controller/GuestController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const {
+  Guests,
+  Transactions,
+  Accounts,
+  PointOfCheckins,
+  EventsMng,
+} = require("../models");
+
+/**
+ * Thống kê số lượng khách tham gia đã check-in qua hệ thống
+ * Nếu tenant => Số lượng khách tham gia của tất cả sự kiện mình tổ chức
+ * Nếu admin => Tổng số lượng khách tham gia của tất cả tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng khách tham dự tất cả sự kiện
+ */
+exports.number_of_guest = async (req, res) => {
+  try {
+    if (req.user.userRole === "admin") {
+      const numberOfGuest = await Transactions.count({
+        distinct: true,
+        col: "guestCode",
+        where: {
+          enable: true,
+        },
+      });
+      return res.json({ numberOfGuest: numberOfGuest });
+    } else if (req.user.userRole === "tenant") {
+      const tenantCode = await Accounts.findOne({
+        where: {
+          username: req.user.username,
+        },
+        attributes: ["tenantCode"],
+        raw: true,
+      });
+      console.log("************************", tenantCode);
+      const listEvent = await EventsMng.findAll({
+        where: {
+          tenantCode: tenantCode.tenantCode,
+          enable: true,
+        },
+        attributes: ["eventCode"],
+        raw: true,
+      });
+
+      const listEventCode = listEvent.map((event) => event.eventCode);
+      console.log("************************", listEventCode);
+      const listPoc = await PointOfCheckins.findAll({
+        where: {
+          enable: true,
+          eventCode: listEventCode,
+        },
+        attributes: ["pointCode"],
+        raw: true,
+      });
+
+      const listPointCode = listPoc.map((point) => point.pointCode);
+      console.log("************************", listPointCode);
+      const numberOfGuest = await Transactions.count({
+        distinct: true,
+        col: "guestCode",
+        where: {
+          pointCode: listPointCode,
+          enable: true,
+        },
+      });
+      return res.json({ numberOfGuest: numberOfGuest });
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
+/**
+ * Thống kê số lượng khách tham gia một sự kiện cụ thể nào đó
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng khách tham dự của một sự kiện cụ thể
+ */
+exports.number_of_guest_each_event = async (req, res) => {
+  const eventCode = req.body.eventCode;
+  if (!eventCode) {
+    res.sendStatus(400);
+  }
+  try {
+    const listPoc = await PointOfCheckins.findAll({
+      where: {
+        enable: true,
+        eventCode: eventCode,
+      },
+      attributes: ["pointCode"],
+      raw: true,
+    });
+
+    const listPointCode = listPoc.map((point) => point.pointCode);
+
+    const numberOfGuest = await Transactions.count({
+      distinct: true,
+      col: "guestCode",
+      where: {
+        pointCode: listPointCode,
+        enable: true,
+      },
+    });
+    return res.json({ numberOfGuest: numberOfGuest, eventCode: eventCode });
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#add_event">add_event</a></li><li><a href="global.html#add_point">add_point</a></li><li><a href="global.html#add_tenant">add_tenant</a></li><li><a href="global.html#add_transaction">add_transaction</a></li><li><a href="global.html#check_delete_condition">check_delete_condition</a></li><li><a href="global.html#delete_event">delete_event</a></li><li><a href="global.html#delete_tenant">delete_tenant</a></li><li><a href="global.html#delete_transaction">delete_transaction</a></li><li><a href="global.html#getListEventsAdmin">getListEventsAdmin</a></li><li><a href="global.html#getListEventsPoc">getListEventsPoc</a></li><li><a href="global.html#getListEventsTenant">getListEventsTenant</a></li><li><a href="global.html#get_account_info_by_username">get_account_info_by_username</a></li><li><a href="global.html#get_all_by_point_code">get_all_by_point_code</a></li><li><a href="global.html#get_all_poc_by_event_code">get_all_poc_by_event_code</a></li><li><a href="global.html#get_list_account">get_list_account</a></li><li><a href="global.html#get_list_account_available">get_list_account_available</a></li><li><a href="global.html#get_list_event">get_list_event</a></li><li><a href="global.html#get_list_tenant">get_list_tenant</a></li><li><a href="global.html#get_poc_info_by_username">get_poc_info_by_username</a></li><li><a href="global.html#get_tenant_info">get_tenant_info</a></li><li><a href="global.html#get_tenant_info_by_tenantCode">get_tenant_info_by_tenantCode</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#number_of_event">number_of_event</a></li><li><a href="global.html#number_of_guest">number_of_guest</a></li><li><a href="global.html#number_of_guest_each_event">number_of_guest_each_event</a></li><li><a href="global.html#number_of_poc">number_of_poc</a></li><li><a href="global.html#number_of_poc_event">number_of_poc_event</a></li><li><a href="global.html#number_of_tenant">number_of_tenant</a></li><li><a href="global.html#signup">signup</a></li><li><a href="global.html#update_active_account">update_active_account</a></li><li><a href="global.html#update_event">update_event</a></li><li><a href="global.html#update_list_poc">update_list_poc</a></li><li><a href="global.html#update_tenant">update_tenant</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Thu Feb 02 2023 00:47:51 GMT+0700 (Indochina Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

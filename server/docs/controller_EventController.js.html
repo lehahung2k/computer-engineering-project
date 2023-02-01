@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controller/EventController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controller/EventController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { Tenants, Accounts, EventsMng, PointOfCheckins } = require("../models");
+
+/**
+ * Lấy danh sách các sự kiện của tenant (ban tổ chức đã tạo)
+ *
+ * @param {Object} req user (username, userRole) từ token
+ * @param {Object} res
+ * @returns response list event if success and error code (401, 500)
+ */
+// exports.get_list_event_of_tenant = async (req, res) => {
+//   if (!req.user.username) return res.status(401).send("Invalid token");
+//   try {
+//     const tenantCode = await Accounts.findOne({
+//       where: {
+//         username: req.user.username,
+//       },
+//       attributes: ["tenantCode"],
+//       raw: true,
+//     });
+
+//     const listEvent = await EventsMng.findAll({
+//       where: {
+//         tenantCode: tenantCode.tenantCode,
+//       },
+//       raw: true,
+//     });
+//     const formattedListEvent = listEvent.map((event) => {
+//       const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
+//       const formattedEvent = { ...event, eventImg: formattedEventImage };
+//       return formattedEvent;
+//     });
+
+//     return res.json(formattedListEvent);
+//   } catch (err) {
+//     console.log(err);
+//     return res.sendStatus(500);
+//   }
+// };
+
+/**
+ * Lấy danh sách thông tin tât cả các sự kiện
+ * Nếu là admin: Trả về tất cả các sự kiện
+ * Nếu là tenant: Trả về các sự kiện mà tenant đã tạo
+ * Nếu là poc: Trả về các sự kiện mà tài khoản poc đó được phân công tham gia
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Danh sách các sự kiện
+ */
+exports.get_list_event = async (req, res) => {
+  const username = req.user.username;
+  const userRole = req.user.userRole;
+  try {
+    if (userRole === "tenant") {
+      await getListEventsTenant(username, res);
+    } else if (userRole === "admin") {
+      await getListEventsAdmin(username, res);
+    } else if (userRole === "poc") {
+      await getListEventsPoc(username, res);
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
+/**
+ * Lấy danh sách sự kiện với role admin (tất cả sự kiện)
+ *
+ * @param {string} username
+ * @param {Object} res
+ * @returns Danh sách sự kiện
+ */
+const getListEventsAdmin = async (username, res) => {
+  const listEvents = await EventsMng.findAll({
+    where: { enable: true },
+    raw: true,
+  });
+  const listTenant = await Tenants.findAll({ raw: true });
+
+  const formattedListEvent = listEvents.map((event) => {
+    const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
+    const tenantName = listTenant.find(
+      (tenant) => tenant.tenantCode === event.tenantCode
+    );
+    const formattedEvent = {
+      ...event,
+      eventImg: formattedEventImage,
+      tenantName: tenantName.tenantName,
+    };
+    return formattedEvent;
+  });
+  return res.json(formattedListEvent);
+};
+
+/**
+ * Lấy danh sách sự kiện với role tenant (sự kiện của tenant)
+ *
+ * @param {string} username
+ * @param {Object} res
+ * @returns Danh sách sự kiện
+ */
+const getListEventsTenant = async (username, res) => {
+  const tenantCode = await Accounts.findOne({
+    where: {
+      username: username,
+    },
+    raw: true,
+    attributes: ["tenantCode"],
+  });
+
+  const tenantName = await Tenants.findOne({
+    where: {
+      tenantCode: tenantCode.tenantCode,
+    },
+    attributes: ["tenantName"],
+    raw: true,
+  });
+
+  const listEvents = await EventsMng.findAll({
+    where: {
+      tenantCode: tenantCode.tenantCode,
+      enable: true,
+    },
+    raw: true,
+  });
+  const formattedListEvent = listEvents.map((event) => {
+    const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
+    const formattedEvent = {
+      ...event,
+      eventImg: formattedEventImage,
+      ...tenantName,
+    };
+    return formattedEvent;
+  });
+  return res.json(formattedListEvent);
+};
+
+/**
+ * Lấy danh sách sự kiện với role poc
+ * Sự kiện mà tài khoản poc tham gia
+ *
+ * @param {string} username
+ * @param {Object} res
+ * @returns Danh sách sự kiện
+ */
+const getListEventsPoc = async (username, res) => {
+  let listEventCode = await PointOfCheckins.findAll({
+    where: { username: username },
+    attributes: ["eventCode"],
+  });
+  let listEvent = [];
+  console.log(listEventCode);
+  for (let eventCode of listEventCode) {
+    console.log(eventCode.dataValues.eventCode);
+    let event = await EventsMng.findOne({
+      where: { eventCode: eventCode.dataValues.eventCode, enable: true },
+      raw: true,
+    });
+    const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
+    let formattedEvent = { ...event, eventImg: formattedEventImage };
+    listEvent.push(formattedEvent);
+  }
+  return res.json(listEvent);
+};
+
+/**
+ * Tạo mới event
+ *
+ * @param {Object} req {body{newEventObject}}
+ * @param {Object} res
+ * @returns Thông tin event mới đã tạo thành công
+ */
+exports.add_event = async (req, res) => {
+  const post = req.body;
+  if (!post || post === {}) return res.sendStatus(400);
+  try {
+    const newEvent = await EventsMng.create(post);
+    return res.json(newEvent);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+
+/**
+ * Cập nhật thông tin của sự kiện
+ *
+ * @param {Object} req {body{eventObject}}
+ * @param {Object} res
+ * @returns Trả về thông tin event đã update
+ */
+exports.update_event = async (req, res) => {
+  const eventInfo = req.body;
+  if (!eventInfo || eventInfo === {}) return res.sendStatus(400);
+  const eventId = eventInfo.eventId;
+  try {
+    const updateResult = await EventsMng.update(eventInfo, {
+      where: { eventId: eventId },
+    });
+    if (!updateResult) throw Error("Update failed!");
+    const updatedEvent = await EventsMng.findOne({
+      where: { eventId: eventId },
+      raw: true,
+    });
+
+    const formattedEventImage = Buffer.from(updatedEvent.eventImg).toString(
+      "utf8"
+    );
+    const formattedEvent = { ...updatedEvent, eventImg: formattedEventImage };
+
+    return res.json(formattedEvent);
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+
+/**
+ * Xóa thông tin của sự kiện
+ *
+ * @param {Object} req {body{eventObject}}
+ * @param {Object} res
+ * @returns
+ */
+exports.delete_event = async (req, res) => {
+  const eventInfo = req.body;
+  console.log(eventInfo);
+  if (!eventInfo || eventInfo === {}) return res.sendStatus(400);
+  const eventId = eventInfo.eventId;
+  try {
+    const updateResult = await EventsMng.update(
+      { enable: false },
+      {
+        where: { eventId: eventId },
+      }
+    );
+    if (!updateResult) throw Error("Update delete event failed!");
+
+    return res.json({ delete: "Success" });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+
+/**
+ * Kiểm tra điều kiện xóa của sự kiện
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Điều kiện xóa của sự kiện (true: có thể xóa, false: không thể xóa)
+ */
+exports.check_delete_condition = async (req, res) => {
+  const eventInfo = req.body;
+  if (!eventInfo || eventInfo === {}) return res.sendStatus(400);
+
+  try {
+    const listPoc = await PointOfCheckins.findAll({
+      where: {
+        eventCode: eventInfo.eventCode,
+        enable: true,
+      },
+      raw: true,
+    });
+    if (listPoc.length > 0) {
+      return res.json({ check: false });
+    } else {
+      return res.json({ check: true });
+    }
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+};
+
+/**
+ * Thống kê số lượng sự kiện được tổ chức
+ * Nếu tenant = số lượng sự kiện tenant đó tổ chức
+ * Nếu admin = tổng số lượng sự kiện của các tenant
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng sự kiện được tổ chức
+ */
+exports.number_of_event = async (req, res) => {
+  try {
+    if (req.user.userRole === "admin") {
+      const numberOfEvent = await EventsMng.count({
+        distinct: true,
+        col: "eventCode",
+        where: {
+          enable: true,
+        },
+      });
+
+      return res.json({ numberOfEvent: numberOfEvent });
+    } else if (req.user.userRole === "tenant") {
+      const tenantCode = await Accounts.findOne({
+        where: {
+          username: req.user.username,
+        },
+        attributes: ["tenantCode"],
+        raw: true,
+      });
+
+      const numberOfEvent = await EventsMng.count({
+        distinct: true,
+        col: "eventCode",
+        where: {
+          enable: true,
+          tenantCode: tenantCode.tenantCode,
+        },
+      });
+
+      return res.json({ numberOfEvent: numberOfEvent });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#add_event">add_event</a></li><li><a href="global.html#add_point">add_point</a></li><li><a href="global.html#add_tenant">add_tenant</a></li><li><a href="global.html#add_transaction">add_transaction</a></li><li><a href="global.html#check_delete_condition">check_delete_condition</a></li><li><a href="global.html#delete_event">delete_event</a></li><li><a href="global.html#delete_tenant">delete_tenant</a></li><li><a href="global.html#delete_transaction">delete_transaction</a></li><li><a href="global.html#getListEventsAdmin">getListEventsAdmin</a></li><li><a href="global.html#getListEventsPoc">getListEventsPoc</a></li><li><a href="global.html#getListEventsTenant">getListEventsTenant</a></li><li><a href="global.html#get_account_info_by_username">get_account_info_by_username</a></li><li><a href="global.html#get_all_by_point_code">get_all_by_point_code</a></li><li><a href="global.html#get_all_poc_by_event_code">get_all_poc_by_event_code</a></li><li><a href="global.html#get_list_account">get_list_account</a></li><li><a href="global.html#get_list_account_available">get_list_account_available</a></li><li><a href="global.html#get_list_event">get_list_event</a></li><li><a href="global.html#get_list_tenant">get_list_tenant</a></li><li><a href="global.html#get_poc_info_by_username">get_poc_info_by_username</a></li><li><a href="global.html#get_tenant_info">get_tenant_info</a></li><li><a href="global.html#get_tenant_info_by_tenantCode">get_tenant_info_by_tenantCode</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#number_of_event">number_of_event</a></li><li><a href="global.html#number_of_guest">number_of_guest</a></li><li><a href="global.html#number_of_guest_each_event">number_of_guest_each_event</a></li><li><a href="global.html#number_of_poc">number_of_poc</a></li><li><a href="global.html#number_of_poc_event">number_of_poc_event</a></li><li><a href="global.html#number_of_tenant">number_of_tenant</a></li><li><a href="global.html#signup">signup</a></li><li><a href="global.html#update_active_account">update_active_account</a></li><li><a href="global.html#update_event">update_event</a></li><li><a href="global.html#update_list_poc">update_list_poc</a></li><li><a href="global.html#update_tenant">update_tenant</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Thu Feb 02 2023 00:47:50 GMT+0700 (Indochina Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
