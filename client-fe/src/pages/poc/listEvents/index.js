@@ -24,7 +24,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { fetchPocInfo } from "../../../services/redux/actions/poc/fetchListPoc";
 import { fetchPocAccountInfo } from "../../../services/redux/actions/accounts/fetchListAccount";
-
+import AlertResponse from "./components/alert";
 export default function PocManageEvent() {
   const [filterName, setFilterName] = useState("");
   const [openSidebar, setOpenSidebar] = useState(true);
@@ -131,6 +131,7 @@ export default function PocManageEvent() {
           </Grid>
         </Grid>
       </div>
+      <AlertResponse />
     </div>
   );
 }

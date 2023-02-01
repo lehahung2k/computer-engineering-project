@@ -20,6 +20,7 @@ const initialState = {
   failure: false,
   enableDelete: false,
   message: "",
+  statistic: {},
 };
 
 const tenantReducer = (state = initialState, action) => {
@@ -356,6 +357,38 @@ const tenantReducer = (state = initialState, action) => {
     case "TENANT/RESET_STATE": {
       return {
         ...initialState,
+      };
+    }
+
+    /**
+     * Statistic
+     */
+    case "TENANT/STATISTIC_NUMBER_OF_TENANT": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "TENANT/STATISTIC_NUMBER_OF_TENANT_SUCCESS": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfTenant: action.payload.numberOfTenant,
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "TENANT/STATISTIC_NUMBER_OF_TENANT_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
       };
     }
 

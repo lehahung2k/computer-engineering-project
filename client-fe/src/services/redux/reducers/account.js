@@ -13,6 +13,7 @@ const initialState = {
   success: false,
   failure: false,
   message: "",
+  statistic: {},
 };
 
 const accountReducer = (state = initialState, action) => {
@@ -203,6 +204,38 @@ const accountReducer = (state = initialState, action) => {
         success: false,
         message: "",
         failure: false,
+      };
+    }
+
+    /**
+     * Statistic
+     */
+    case "ACCOUNT/STATISTIC_NUMBER_OF_ACCOUNT": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "ACCOUNT/STATISTIC_NUMBER_OF_ACCOUNT_SUCCESS": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfPocAccount: action.payload.numberOfPocAccounts,
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "ACCOUNT/STATISTIC_NUMBER_OF_ACCOUNT_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
       };
     }
 

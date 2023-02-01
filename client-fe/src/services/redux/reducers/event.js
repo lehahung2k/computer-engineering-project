@@ -17,6 +17,7 @@ const initialState = {
   failure: false,
   message: "",
   enableDelete: false,
+  statistic: {},
 };
 
 const eventReducer = (state = initialState, action) => {
@@ -248,6 +249,100 @@ const eventReducer = (state = initialState, action) => {
       return {
         ...state,
         pinnedEventId: action.payload,
+      };
+    }
+
+    /**
+     * Statistic
+     */
+
+    case "EVENT/STATISTIC_NUMBER_OF_EVENT": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_EVENT_SUCCESS": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfEvent: action.payload.numberOfEvent,
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_EVENT_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST/ALL": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/ALL": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfGuestAll: action.payload.numberOfGuest,
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/ALL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfGuestEvent: {
+          eventCode: action.payload.eventCode,
+          numberOfGuest: action.payload.numberOfGuest,
+        },
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
       };
     }
 

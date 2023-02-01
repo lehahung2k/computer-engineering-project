@@ -142,7 +142,11 @@ exports.update_tenant = async (req, res) => {
   const post = req.body;
   if (!post) return res.sendStatus(400);
   try {
-    const updatedTenant = await Tenants.update(post, {
+    const updateResult = await Tenants.update(post, {
+      where: { tenantId: post.id },
+    });
+
+    const updatedTenant = await Tenants.findOne({
       where: { tenantId: post.id },
     });
     res.json(updatedTenant);

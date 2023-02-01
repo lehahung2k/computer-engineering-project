@@ -1,4 +1,4 @@
-const { Transactions } = require("../models");
+const { Transactions, Guests } = require("../models");
 
 /**
  * Lấy danh sách các lượt checkin tại quầy poc theo mã point code
@@ -34,6 +34,18 @@ exports.add_transaction = async (req, res) => {
   if (!post) return res.sendStatus(400);
   try {
     const newTransaction = await Transactions.create(post);
+    const newGuest = {
+      guestCode: post.guestCode,
+      guestDescription: post.note,
+      frontImg: post.checkinImg1,
+      backImg: post.checkinImg2,
+      identityType: post.identityType,
+      enable: true,
+    };
+
+    const createNewGuest = await Guests.bulkCreate([newGuest], {
+      updateOnDuplicate: ["fontImg", "backImg"],
+    });
     res.json(newTransaction);
   } catch (err) {
     console.log(err);
