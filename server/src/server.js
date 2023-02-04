@@ -4,6 +4,7 @@ const cors = require("cors");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv");
+const path = require("path");
 
 dotenv.config();
 const app = express();
@@ -59,6 +60,9 @@ app.use("/transaction", transactionRouter);
 
 const guestRouter = require("./routes/GuestRouter");
 app.use("/guest", guestRouter);
+
+// Show document in public folder
+app.use("/help", express.static(path.join(__dirname, "docs")));
 
 db.sequelize.sync().then(() => {
   app.listen(process.env.PORT || port, () => {

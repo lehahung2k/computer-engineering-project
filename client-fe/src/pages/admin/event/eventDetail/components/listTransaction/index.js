@@ -17,6 +17,7 @@ import CheckTable from "../../../../../../components/tables/check";
 import { CustomFieldListTransaction } from "../customField/listTransaction";
 import Box from "@mui/material/Box";
 import { AlertDeleteTransaction } from "../popup/alertListTransaction";
+import { ShowTransactionImage } from "../popup/showTransactionImage";
 import { deleteListTransaction } from "../../../../../../services/redux/actions/transaction/deleteTransaction";
 import moment from "moment";
 
@@ -64,17 +65,22 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
   const eventCode = useSelector((state) => state.eventState.event.eventCode);
   const loading = useSelector((state) => state.pocState.loading);
   const filteredListPoc = listPoc.filter((poc) => poc.enable === true);
+
+  const [transactionForShowImage, setTransactionForShowImage] = React.useState(
+    {}
+  );
+  const [showTransactionImage, setShowTransactionImage] = React.useState(false);
+
   const dispatch = useDispatch();
   const listTransaction = useSelector(
     (state) => state.transactionState.listTransaction
   );
   const filteredListTransaction = listTransaction
-    .filter((transaction) => transaction.enable === true)
+    .filter((transaction) => transaction.enable === 1)
     .map((transaction) => ({
       ...transaction,
       createTime: moment(transaction.createTime).format("YYYY-MM-DD HH:mm:ss"),
     }));
-
   const handleClickDeleteListTransaction = () => {
     console.log("delete list transaction", selectedTransaction);
     setMessage("Bạn có muốn xóa các giao dịch check-in này không ?");
@@ -154,6 +160,21 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
                   );
                 },
               },
+              {
+                id: "image",
+                component(row, index) {
+                  return (
+                    <CustomFieldListTransaction
+                      width="10%"
+                      field="image"
+                      row={row}
+                      key={index}
+                      setMessage={setTransactionForShowImage}
+                      setOpenDialog={setShowTransactionImage}
+                    />
+                  );
+                },
+              },
             ]}
           />
         </Grid>
@@ -176,6 +197,13 @@ export default function ListTransaction({ setActiveStep = (f) => f }) {
         setDeleteList={setDeleteListTransaction}
         setSelectedListTransaction={setSelectedTransaction}
         selectedListTransaction={selectedTransaction}
+      />
+
+      <ShowTransactionImage
+        open={showTransactionImage}
+        setOpen={setShowTransactionImage}
+        image1={transactionForShowImage.checkinImg1}
+        image2={transactionForShowImage.checkinImg2}
       />
     </div>
   );
