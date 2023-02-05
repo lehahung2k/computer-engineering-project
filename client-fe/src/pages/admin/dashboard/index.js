@@ -29,6 +29,28 @@ import {
 } from "../../../services/redux/actions/event/statisticEvent";
 import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statisticTenant";
 import { getNumberOfPocAccount } from "../../../services/redux/actions/accounts/statisticAccount";
+import { fetchListEvent } from "../../../services/redux/actions/event/fetchListEvent";
+import moment from "moment";
+
+const filterNumberOfEventEachMonth = (year, listEvent) => {
+  const filterYear = listEvent.filter(
+    (event) => moment(event.startTime).year() === year
+  );
+  const filterMonth = [];
+  for (let i = 0; i < 12; i++) {
+    let tmpFilter = filterYear.filter(
+      (event) => moment(event.startTime).month() === i
+    );
+    let currentMonth = i + 1;
+    let tmpInfo = {
+      id: i,
+      noEvent: tmpFilter.length,
+      month: "Tháng " + currentMonth,
+    };
+    filterMonth.push(tmpInfo);
+  }
+  return filterMonth;
+};
 
 export default function AdminDashBoard() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
@@ -38,6 +60,27 @@ export default function AdminDashBoard() {
   const statisticTenant = useSelector((state) => state.tenantState.statistic);
   const statisticAccount = useSelector((state) => state.accountState.statistic);
   const listEvent = useSelector((state) => state.eventState.listEvents);
+  const [barChartYear, setBarChartYear] = React.useState(2023);
+
+  const listEventForChart = filterNumberOfEventEachMonth(
+    barChartYear,
+    listEvent
+  );
+  const chartData = {
+    labels: listEventForChart.map((event) => event.month),
+    datasets: [
+      {
+        label: "Số sự kiện diễn ra",
+        data: listEventForChart.map((data) => data.noEvent),
+        backgroundColor: ["rgba(75,192,192,1)"],
+        borderColor: "black",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  console.log("filter event chart: ", listEventForChart);
+
   const [fakeData, setFakeData] = useState({
     labels: FakeChart.map((data) => data.month),
     datasets: [
@@ -50,8 +93,6 @@ export default function AdminDashBoard() {
       },
     ],
   });
-
-  const [barChartYear, setBarChartYear] = React.useState(2023);
 
   const handleChange = (event) => {
     setBarChartYear(event.target.value);
@@ -68,6 +109,7 @@ export default function AdminDashBoard() {
     dispatch(getNumberOfGuestAll());
     dispatch(getNumberOfTenant());
     dispatch(getNumberOfPocAccount());
+    dispatch(fetchListEvent());
   }, []);
 
   return (
@@ -92,9 +134,18 @@ export default function AdminDashBoard() {
               <Grid container spacing={2}>
                 <Grid item xs={7}>
                   <div className={style.barchart}>
-                    <BarChartYearFilter />
-                    <Bar data={fakeData}></Bar>
-                    <h4>Thống kê số sự kiện theo tháng</h4>
+                    <BarChartYearFilter setBarChartYear={setBarChartYear} />
+                    <Bar
+                      data={chartData}
+                      options={{
+                        scales: {
+                          yAxes: {
+                            ticks: { stepSize: 1 },
+                          },
+                        },
+                      }}
+                    ></Bar>
+                    <h4>Thống kê số sự kiện theo tháng năm {barChartYear}</h4>
                   </div>
                 </Grid>
 
@@ -105,52 +156,6 @@ export default function AdminDashBoard() {
                   justifyContent="center"
                 >
                   <Grid item xs>
-                    {/* <div className={style.statistic}>
-                      <div className={style.statistic__card}>
-                        <div className={style.statistic__card__icon}>
-                          <FestivalIcon
-                            sx={{ color: "#27258b", fontSize: "20px" }}
-                          />
-                        </div>
-                        <h2>100</h2>
-                        <div className={style.statistic__card__text}>
-                          Sự kiện được tổ chức
-                        </div>
-                      </div>
-                      <div className={style.statistic__card}>
-                        <div className={style.statistic__card__icon}>
-                          <BusinessIcon
-                            sx={{ color: "#27258b", fontSize: "20px" }}
-                          />
-                        </div>
-                        <h2>1000</h2>
-                        <div className={style.statistic__card__text}>
-                          POC đăng ký tham gia
-                        </div>
-                      </div>
-                      <div className={style.statistic__card}>
-                        <div className={style.statistic__card__icon}>
-                          <PeopleIcon
-                            sx={{ color: "#27258b", fontSize: "20px" }}
-                          />
-                        </div>
-                        <h2>10000</h2>
-                        <div className={style.statistic__card__text}>
-                          Lượt khách check-in
-                        </div>
-                      </div>
-                      <div className={style.statistic__card}>
-                        <div className={style.statistic__card__icon}>
-                          <AccountCircleIcon
-                            sx={{ color: "#27258b", fontSize: "20px" }}
-                          />
-                        </div>
-                        <h2>10000</h2>
-                        <div className={style.statistic__card__text}>
-                          Tài khoản người dùng
-                        </div>
-                      </div>
-                    </div> */}
                     <div className={style.statistic}>
                       <div className={style.statistic__card}>
                         <StatisticCard

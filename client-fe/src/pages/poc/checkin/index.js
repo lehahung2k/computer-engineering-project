@@ -150,7 +150,7 @@ export default function Checkin() {
 
           <div id="check-in">
             <Grid container spacing={2}>
-              <Grid item xs={6} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={4}>
                 <WebCam
                   image={image1}
                   camId={1}
@@ -159,7 +159,7 @@ export default function Checkin() {
                 />
               </Grid>
 
-              <Grid item xs={6} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={4}>
                 <WebCam
                   image={image2}
                   camId={2}
