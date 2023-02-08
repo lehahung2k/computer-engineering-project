@@ -14,7 +14,7 @@ import FestivalIcon from "@mui/icons-material/Festival";
 import BusinessIcon from "@mui/icons-material/Business";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import PeopleIcon from "@mui/icons-material/People";
-import { ListEvent, ListEventHeadNormal } from "../../../assets/fakeData";
+import { headCellsListFakeEvents } from "../../../assets/fakeData/fakeEvent";
 import NormalTable from "../../../components/tables/normal";
 import { FakeChart } from "../../../assets/fakeData/fakeChart";
 import { useDispatch, useSelector } from "react-redux";
@@ -78,6 +78,16 @@ export default function AdminDashBoard() {
       },
     ],
   };
+
+  const customListEvents = listEvent.map((event) => {
+    let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
+    let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
+    return {
+      ...event,
+      startTime: startTime,
+      endTime: endTime,
+    };
+  });
 
   console.log("filter event chart: ", listEventForChart);
 
@@ -217,8 +227,8 @@ export default function AdminDashBoard() {
 
                       <Grid item xs={12}>
                         <NormalTable
-                          rows={listEvent}
-                          headCells={ListEventHeadNormal}
+                          rows={customListEvents}
+                          headCells={headCellsListFakeEvents}
                           numOfRowsPerPage={3}
                         />
                       </Grid>

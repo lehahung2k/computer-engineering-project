@@ -83,13 +83,13 @@ export const headCellsListFakeEvents = [
     link: "#",
     time: false,
   },
-  {
-    id: "checkin",
-    label: "Thông tin check-in",
-    sort: false,
-    width: "10%",
-    button: true,
-    link: "/admin/event/detail",
-    time: false,
-  },
+  // {
+  //   id: "checkin",
+  //   label: "Thông tin check-in",
+  //   sort: false,
+  //   width: "10%",
+  //   button: true,
+  //   link: "/admin/event/detail",
+  //   time: false,
+  // },
 ];
