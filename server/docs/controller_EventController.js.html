@@ -1,4 +1,32 @@
-const { Tenants, Accounts, EventsMng, PointOfCheckins } = require("../models");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controller/EventController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controller/EventController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { Tenants, Accounts, EventsMng, PointOfCheckins } = require("../models");
 
 /**
  * Lấy danh sách các sự kiện của tenant (ban tổ chức đã tạo)
@@ -150,24 +178,13 @@ const getListEventsPoc = async (username, res) => {
     attributes: ["eventCode"],
   });
   let listEvent = [];
-  let listEventCodeRemovedDuplicate = [];
   console.log(listEventCode);
   for (let eventCode of listEventCode) {
-    if (
-      listEventCodeRemovedDuplicate.indexOf(eventCode.dataValues.eventCode) !==
-      -1
-    ) {
-      continue;
-    }
-    listEventCodeRemovedDuplicate.push(eventCode.dataValues.eventCode);
     console.log(eventCode.dataValues.eventCode);
     let event = await EventsMng.findOne({
       where: { eventCode: eventCode.dataValues.eventCode, enable: true },
       raw: true,
     });
-    if (event === null) {
-      continue;
-    }
     const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
     let formattedEvent = { ...event, eventImg: formattedEventImage };
     listEvent.push(formattedEvent);
@@ -184,17 +201,7 @@ const getListEventsPoc = async (username, res) => {
  */
 exports.add_event = async (req, res) => {
   const post = req.body;
-  if (
-    !post ||
-    post === {} ||
-    !post.enable ||
-    !post.eventCode ||
-    !post.eventName ||
-    !post.tenantCode ||
-    !post.startTime ||
-    !post.endTime
-  )
-    return res.sendStatus(400);
+  if (!post || post === {}) return res.sendStatus(400);
   try {
     const newEvent = await EventsMng.create(post);
     return res.json(newEvent);
@@ -341,3 +348,26 @@ exports.number_of_event = async (req, res) => {
     return res.sendStatus(500);
   }
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#add_event">add_event</a></li><li><a href="global.html#add_point">add_point</a></li><li><a href="global.html#add_tenant">add_tenant</a></li><li><a href="global.html#add_transaction">add_transaction</a></li><li><a href="global.html#check_delete_condition">check_delete_condition</a></li><li><a href="global.html#delete_event">delete_event</a></li><li><a href="global.html#delete_tenant">delete_tenant</a></li><li><a href="global.html#delete_transaction">delete_transaction</a></li><li><a href="global.html#getListEventsAdmin">getListEventsAdmin</a></li><li><a href="global.html#getListEventsPoc">getListEventsPoc</a></li><li><a href="global.html#getListEventsTenant">getListEventsTenant</a></li><li><a href="global.html#get_account_info_by_username">get_account_info_by_username</a></li><li><a href="global.html#get_all_by_point_code">get_all_by_point_code</a></li><li><a href="global.html#get_all_poc_by_event_code">get_all_poc_by_event_code</a></li><li><a href="global.html#get_list_account">get_list_account</a></li><li><a href="global.html#get_list_account_available">get_list_account_available</a></li><li><a href="global.html#get_list_event">get_list_event</a></li><li><a href="global.html#get_list_tenant">get_list_tenant</a></li><li><a href="global.html#get_poc_info_by_username">get_poc_info_by_username</a></li><li><a href="global.html#get_tenant_info">get_tenant_info</a></li><li><a href="global.html#get_tenant_info_by_tenantCode">get_tenant_info_by_tenantCode</a></li><li><a href="global.html#login">login</a></li><li><a href="global.html#number_of_event">number_of_event</a></li><li><a href="global.html#number_of_guest">number_of_guest</a></li><li><a href="global.html#number_of_guest_each_event">number_of_guest_each_event</a></li><li><a href="global.html#number_of_poc">number_of_poc</a></li><li><a href="global.html#number_of_poc_event">number_of_poc_event</a></li><li><a href="global.html#number_of_tenant">number_of_tenant</a></li><li><a href="global.html#signup">signup</a></li><li><a href="global.html#update_active_account">update_active_account</a></li><li><a href="global.html#update_event">update_event</a></li><li><a href="global.html#update_list_poc">update_list_poc</a></li><li><a href="global.html#update_tenant">update_tenant</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Thu Feb 02 2023 00:47:50 GMT+0700 (Indochina Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

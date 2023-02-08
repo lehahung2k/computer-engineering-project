@@ -7,13 +7,13 @@ import { Button, Menu } from "@mui/material";
 import Iconify from "../../../../../components/iconify";
 
 const SORT_BY_OPTIONS = [
-  { value: 2022, label: "2022" },
   { value: 2023, label: "2023" },
+  { value: 2022, label: "2022" },
 ];
 
-export default function BarChartYearFilter() {
+export default function BarChartYearFilter({ setBarChartYear = (f) => f }) {
   const [open, setOpen] = React.useState(null);
-  const [option, setOption] = React.useState("2022");
+  const [option, setOption] = React.useState("2023");
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -22,6 +22,7 @@ export default function BarChartYearFilter() {
     setOpen(null);
     console.log(option);
     setOption(option);
+    setBarChartYear(option);
   };
 
   return (
@@ -58,7 +59,7 @@ export default function BarChartYearFilter() {
           <MenuItem
             key={option.value}
             selected={option.value === "newest"}
-            onClick={() => handleClose(option.label)}
+            onClick={() => handleClose(option.value)}
             sx={{ typography: "body2" }}
           >
             {option.label}

@@ -14,8 +14,24 @@ exports.get_all_by_point_code = async (req, res) => {
   try {
     const listTransactions = await Transactions.findAll({
       where: { pointCode: pointCode },
+      raw: true,
     });
-    res.json(listTransactions);
+
+    let formattedListTransaction = listTransactions.map((transaction) => {
+      const formattedImage01 = Buffer.from(transaction.checkinImg1).toString(
+        "utf8"
+      );
+      const formattedImage02 = Buffer.from(transaction.checkinImg2).toString(
+        "utf8"
+      );
+
+      return {
+        ...transaction,
+        checkinImg1: formattedImage01,
+        checkinImg2: formattedImage02,
+      };
+    });
+    res.json(formattedListTransaction);
   } catch (err) {
     console.error(err);
     res.sendStatus(500);
@@ -31,6 +47,7 @@ exports.get_all_by_point_code = async (req, res) => {
  */
 exports.add_transaction = async (req, res) => {
   const post = req.body;
+  console.log(req.body);
   if (!post) return res.sendStatus(400);
   try {
     const newTransaction = await Transactions.create(post);

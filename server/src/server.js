@@ -6,6 +6,7 @@ const swaggerUi = require("swagger-ui-express");
 const dotenv = require("dotenv");
 const https = require("https");
 const fs = require("fs");
+const path = require("path");
 
 dotenv.config();
 const app = express();
@@ -62,17 +63,22 @@ app.use("/transaction", transactionRouter);
 const guestRouter = require("./routes/GuestRouter");
 app.use("/guest", guestRouter);
 
+// Show document in public folder
+app.use("/help", express.static(path.join(__dirname, "docs")));
+
 db.sequelize.sync().then(() => {
-  const httpsServer = https.createServer({
-    cert: fs.readFileSync(process.env.SSL_CRT_FILE),
-    key: fs.readFileSync(process.env.SSL_KEY_FILE),
-  },
+  const httpsServer = https.createServer(
+    {
+      cert: fs.readFileSync(process.env.SSL_CRT_FILE),
+      key: fs.readFileSync(process.env.SSL_KEY_FILE),
+    },
     app
   );
   httpsServer.listen(process.env.PORT, () => {
-    console.log(`Server running with SSL Cert on port https://xephang.online:${process.env.PORT}`);
+    console.log(
+      `Server running with SSL Cert on port https://xephang.online:${process.env.PORT}`
+    );
   });
 });
 
-
-
+module.exports = app;

@@ -39,6 +39,11 @@ export function CustomFieldListTransaction({
         console.log("Open dialog click");
         break;
       }
+      case "image": {
+        console.log(row);
+        setMessage(row);
+        setOpenDialog(true);
+      }
 
       default: {
         console.log("Default case");
@@ -85,6 +90,22 @@ const customTableCell = (width, key, type, clickHandler = (f) => f) => {
             sx={{ whiteSpace: "normal", fontSize: "10px" }}
           >
             {"Xóa"}
+          </Button>
+        </TableCell>
+      );
+    }
+
+    case "image": {
+      return (
+        <TableCell align="center" width={width} key={key}>
+          <Button
+            style={{ textTransform: "none" }}
+            variant="outlined"
+            color={"error"}
+            onClick={() => clickHandler()}
+            sx={{ whiteSpace: "normal", fontSize: "10px" }}
+          >
+            {"Xem"}
           </Button>
         </TableCell>
       );

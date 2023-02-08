@@ -1,24 +1,15 @@
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
-import style from "./style.module.css";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  pinEventId,
-  newEventAction,
-} from "../../../../../../services/redux/actions/event/event";
 import dayjs from "dayjs";
+import moment from "moment";
+import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
 import { AlertDeleteEvent } from "../popup/alertEvent";
-import moment from "moment";
+import style from "./style.module.css";
 
 const checkEnableEditUI = (startTime) => {
   return dayjs(startTime).isAfter(dayjs());
