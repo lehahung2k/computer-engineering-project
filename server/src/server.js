@@ -69,3 +69,5 @@ db.sequelize.sync().then(() => {
     console.log("Hello NodeJS");
   });
 });
+
+module.exports = app;

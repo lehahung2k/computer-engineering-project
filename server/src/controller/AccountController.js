@@ -20,14 +20,32 @@ exports.signup = async (req, res) => {
     tenantCode,
     email,
   } = req.body;
-  const user = await Accounts.findOne({
-    where: {
-      username: username,
-    },
-  });
-  if (user === null || !user) {
-    bcrypt.hash(password, 6).then((hash) => {
-      Accounts.create({
+
+  if (!username || !password || !tenantCode || !role) {
+    return res.sendStatus(400);
+  }
+
+  try {
+    const user = await Accounts.findOne({
+      where: {
+        username: username,
+      },
+    });
+    if (user === null || !user) {
+      // bcrypt.hash(password, 6).then((hash) => {
+      // Accounts.create({
+      //   username: username,
+      //   passwd: hash,
+      //   fullName: fullName,
+      //   active: active,
+      //   role: role,
+      //   companyName: companyName,
+      //   phoneNumber: phoneNumber,
+      //   tenantCode: tenantCode,
+      //   email: email,
+      // });
+      const hash = await bcrypt.hash(password, 6);
+      const response = await Accounts.create({
         username: username,
         passwd: hash,
         fullName: fullName,
@@ -38,10 +56,12 @@ exports.signup = async (req, res) => {
         tenantCode: tenantCode,
         email: email,
       });
-      res.json("SUCCESS");
-    });
-  } else {
-    res.json({ error: "Error: Username is existed!" });
+      return res.json({ result: "SUCCESS" });
+    } else {
+      return res.json({ error: "Error: Username is existed!" });
+    }
+  } catch (err) {
+    return res.status(500).json({ error: err });
   }
 };
 

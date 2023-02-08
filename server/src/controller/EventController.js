@@ -150,13 +150,24 @@ const getListEventsPoc = async (username, res) => {
     attributes: ["eventCode"],
   });
   let listEvent = [];
+  let listEventCodeRemovedDuplicate = [];
   console.log(listEventCode);
   for (let eventCode of listEventCode) {
+    if (
+      listEventCodeRemovedDuplicate.indexOf(eventCode.dataValues.eventCode) !==
+      -1
+    ) {
+      continue;
+    }
+    listEventCodeRemovedDuplicate.push(eventCode.dataValues.eventCode);
     console.log(eventCode.dataValues.eventCode);
     let event = await EventsMng.findOne({
       where: { eventCode: eventCode.dataValues.eventCode, enable: true },
       raw: true,
     });
+    if (event === null) {
+      continue;
+    }
     const formattedEventImage = Buffer.from(event.eventImg).toString("utf8");
     let formattedEvent = { ...event, eventImg: formattedEventImage };
     listEvent.push(formattedEvent);
@@ -173,7 +184,17 @@ const getListEventsPoc = async (username, res) => {
  */
 exports.add_event = async (req, res) => {
   const post = req.body;
-  if (!post || post === {}) return res.sendStatus(400);
+  if (
+    !post ||
+    post === {} ||
+    !post.enable ||
+    !post.eventCode ||
+    !post.eventName ||
+    !post.tenantCode ||
+    !post.startTime ||
+    !post.endTime
+  )
+    return res.sendStatus(400);
   try {
     const newEvent = await EventsMng.create(post);
     return res.json(newEvent);
