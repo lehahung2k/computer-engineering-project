@@ -31,6 +31,11 @@ import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statis
 import { getNumberOfPocAccount } from "../../../services/redux/actions/accounts/statisticAccount";
 import { fetchListEvent } from "../../../services/redux/actions/event/fetchListEvent";
 import moment from "moment";
+import {
+  pinEventId,
+  newEventAction,
+  resetApiState as resetEventApiState,
+} from "../../../services/redux/actions/event/event";
 
 const filterNumberOfEventEachMonth = (year, listEvent) => {
   const filterYear = listEvent.filter(
@@ -121,6 +126,22 @@ export default function AdminDashBoard() {
     dispatch(getNumberOfPocAccount());
     dispatch(fetchListEvent());
   }, []);
+
+  const handleClickButtonField = (fieldName, row) => {
+    if (fieldName === "eventName") {
+      dispatch(pinEventId(row["eventId"]));
+      const eventInfo = listEvent.find(
+        (event) => event.eventId === row["eventId"]
+      );
+      console.log(eventInfo);
+      dispatch(newEventAction(eventInfo));
+      dispatch(resetEventApiState());
+      sessionStorage.getItem("role") === "admin"
+        ? navigate("/admin/event/detail")
+        : navigate("/event-admin/event/detail");
+    }
+    if (fieldName === "checkin") console.log("checkin");
+  };
 
   return (
     <>
@@ -230,6 +251,7 @@ export default function AdminDashBoard() {
                           rows={customListEvents}
                           headCells={headCellsListFakeEvents}
                           numOfRowsPerPage={3}
+                          handleClickButtonField={handleClickButtonField}
                         />
                       </Grid>
                     </Grid>
