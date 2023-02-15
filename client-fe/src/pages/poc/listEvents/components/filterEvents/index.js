@@ -13,7 +13,7 @@ const SORT_BY_OPTIONS = [
   { value: "done", label: "Đã kết thúc" },
 ];
 
-export default function EventFilter() {
+export default function EventFilter({ setFilterEvent = (f) => f }) {
   const [open, setOpen] = React.useState(null);
   const [option, setOption] = React.useState("Tất cả");
   const handleOpen = (event) => {
@@ -23,7 +23,8 @@ export default function EventFilter() {
   const handleClose = (option) => {
     setOpen(null);
     console.log(option);
-    setOption(option);
+    setOption(option.label);
+    setFilterEvent(option.value);
   };
 
   return (
@@ -60,7 +61,7 @@ export default function EventFilter() {
           <MenuItem
             key={option.value}
             selected={option.value === "newest"}
-            onClick={() => handleClose(option.label)}
+            onClick={() => handleClose(option)}
             sx={{ typography: "body2" }}
           >
             {option.label}

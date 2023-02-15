@@ -221,7 +221,7 @@ export default function Checkin() {
                             label="Loại thẻ định danh"
                             variant="standard"
                             InputLabelProps={{ shrink: true }}
-                            required
+                            // required
                           />
                         )}
                         onChange={(event, value) =>

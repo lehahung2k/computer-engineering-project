@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
 import { getNumberOfPocEvent } from "../../../../../../services/redux/actions/poc/statisticPoc";
 import { getNumberOfGuestEvent } from "../../../../../../services/redux/actions/event/statisticEvent";
+import { resetApiState as resetEventApiState } from "../../../../../../services/redux/actions/event/event";
 import { AlertDeleteEvent } from "../popup/alertEvent";
 import style from "./style.module.css";
 
@@ -75,6 +76,8 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const eventInfo = useSelector((state) => state.eventState.event);
   const numberOfPoc = useSelector((state) => state.pocState.statistic);
   const numberOfGuest = useSelector((state) => state.eventState.statistic);
+  const successEvent = useSelector((state) => state.eventState.success);
+  const failureEvent = useSelector((state) => state.eventState.failure);
 
   const enableEdit = checkEnableEditUI(eventInfo.startTime);
   const enableDelete = checkEnableDeleteUI(
@@ -107,6 +110,11 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
     setMessage("Bạn có muốn xóa sự kiện không ?");
     setOpenDialog(true);
   };
+
+  if (failureEvent || successEvent) {
+    console.log("resetApiState as resetEventApiState");
+    dispatch(resetEventApiState());
+  }
 
   return (
     <div>

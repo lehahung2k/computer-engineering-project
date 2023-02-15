@@ -18,7 +18,9 @@ import { fetchListEvent } from "../../../services/redux/actions/event/fetchListE
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import BarChartYearFilter from "./components/filterBarChartYear";
+import { Chart, registerables } from "chart.js";
 
+Chart.register(...registerables);
 const filterNumberOfEventEachMonth = (year, listEvent) => {
   const filterYear = listEvent.filter(
     (event) => moment(event.startTime).year() === year
