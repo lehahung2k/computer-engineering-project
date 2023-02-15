@@ -1,4 +1,9 @@
-const { PointOfCheckins, Accounts, Transactions } = require("../models");
+const {
+  PointOfCheckins,
+  Accounts,
+  Transactions,
+  EventsMng,
+} = require("../models");
 
 /**
  * Thêm mới quầy hàng POC
@@ -170,7 +175,7 @@ exports.check_delete_condition = async (req, res) => {
  */
 exports.number_of_poc = async (req, res) => {
   const role = req.user.userRole;
-  const username = req.user.userName;
+  const username = req.user.username;
   try {
     if (role === "admin") {
       const numberOfPoc = await PointOfCheckins.count({
@@ -191,7 +196,7 @@ exports.number_of_poc = async (req, res) => {
         raw: true,
       });
 
-      const listEvent = await Events.findAll({
+      const listEvent = await EventsMng.findAll({
         where: {
           tenantCode: tenantCode.tenantCode,
           enable: true,

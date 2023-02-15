@@ -8,6 +8,8 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchListPocByEventCode } from "../../../../../../services/redux/actions/poc/fetchListPoc";
+import { getNumberOfPocEvent } from "../../../../../../services/redux/actions/poc/statisticPoc";
+import { getNumberOfGuestEvent } from "../../../../../../services/redux/actions/event/statisticEvent";
 import { AlertDeleteEvent } from "../popup/alertEvent";
 import style from "./style.module.css";
 
@@ -71,12 +73,19 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const pinnedEventId = useSelector((state) => state.eventState.pinnedEventId);
   const eventInfo = useSelector((state) => state.eventState.event);
+  const numberOfPoc = useSelector((state) => state.pocState.statistic);
+  const numberOfGuest = useSelector((state) => state.eventState.statistic);
 
   const enableEdit = checkEnableEditUI(eventInfo.startTime);
   const enableDelete = checkEnableDeleteUI(
     eventInfo.startTime,
     eventInfo.endTime
   );
+
+  React.useEffect(() => {
+    dispatch(getNumberOfPocEvent(eventInfo.eventCode));
+    dispatch(getNumberOfGuestEvent(eventInfo.eventCode));
+  }, []);
 
   const handleShowListPoc = () => {
     setActiveStep(1);
@@ -199,9 +208,18 @@ export default function EventInfo({ setActiveStep = (f) => f, event }) {
 
         <Grid item xs={10} align="left">
           <ul style={{ paddingTop: 0, marginTop: 0 }}>
-            <li>100 Doanh nghiệp tham gia</li>
-            <li>120 Quầy POC</li>
-            <li>2000 Khách tham dự</li>
+            <li>
+              {!numberOfPoc.hasOwnProperty("numberOfPoc")
+                ? 0
+                : numberOfPoc.numberOfPoc}{" "}
+              Quầy POC
+            </li>
+            <li>
+              {!numberOfGuest.hasOwnProperty("numberOfGuestEvent")
+                ? 0
+                : numberOfGuest.numberOfGuestEvent.numberOfGuest}{" "}
+              Khách tham dự
+            </li>
           </ul>
         </Grid>
         <Grid item xs={12}>
