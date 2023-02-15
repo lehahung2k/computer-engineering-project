@@ -86,6 +86,10 @@ export default function ListCompany() {
     navigate("/admin");
     dispatch(resetApiState);
   };
+
+  if (success) {
+    dispatch(resetApiState());
+  }
   return (
     <div className={style.body}>
       <Grid container spacing={0}>

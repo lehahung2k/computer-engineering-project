@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 export function AlertDeleteTenant({ open, message, setOpen = (f) => f }) {
   const [confirmQuestion, setConfirmQuestion] = React.useState(true);
+  const [forceClose, setForceClose] = React.useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ export function AlertDeleteTenant({ open, message, setOpen = (f) => f }) {
     <>
       <Dialog
         open={open && confirmQuestion}
-        onClose={() => setConfirmQuestion(false)}
+        onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -78,7 +79,7 @@ export function AlertDeleteTenant({ open, message, setOpen = (f) => f }) {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Xóa sự kiện không thành công
+            Xóa ban tổ chức không thành công
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -99,8 +100,8 @@ export function AlertDeleteTenant({ open, message, setOpen = (f) => f }) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {enableDelete
-              ? "Bạn đã xóa thành công tenant"
-              : "Bạn không thể xóa tenant vì còn thông tin sự kiện chưa được xóa"}
+              ? "Bạn đã xóa thành công ban tổ chức"
+              : "Bạn không thể xóa ban tổ chức vì còn thông tin sự kiện chưa được xóa"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

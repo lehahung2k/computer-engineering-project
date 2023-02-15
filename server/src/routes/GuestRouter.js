@@ -24,4 +24,9 @@ router.post(
   guestController.number_of_guest_each_event
 );
 
+router.get(
+  "/statistic/number-of-guest-poc",
+  validateToken,
+  guestController.number_of_guest_poc_account
+);
 module.exports = router;

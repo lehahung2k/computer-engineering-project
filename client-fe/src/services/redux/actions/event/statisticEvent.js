@@ -46,7 +46,7 @@ export const getNumberOfGuestAll = () => async (dispatch) => {
 };
 
 export const getNumberOfGuestEvent = (eventCode) => async (dispatch) => {
-  dispatch({ type: "EVENT/STATISTIC_NUMBER_OF_GUEST" });
+  dispatch({ type: "EVENT/STATISTIC_NUMBER_OF_GUEST/EVENT" });
 
   const params = { eventCode: eventCode };
   const response = guestApi.getNumberOfGuestAll(params);
@@ -54,16 +54,38 @@ export const getNumberOfGuestEvent = (eventCode) => async (dispatch) => {
   response
     .then((res) => {
       dispatch({
-        type: "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS",
+        type: "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/EVENT",
         payload: res.data,
       });
-      console.log("EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS", res.data);
+      console.log("EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/EVENT", res.data);
     })
     .catch((err) => {
       dispatch({
-        type: "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL",
+        type: "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/EVENT",
         message: err.message,
       });
-      console.log("EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL", err.message);
+      console.log("EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/EVENT", err.message);
+    });
+};
+
+export const getNumberOfGuestPoc = () => async (dispatch) => {
+  dispatch({ type: "EVENT/STATISTIC_NUMBER_OF_GUEST/POC" });
+
+  const response = guestApi.getNumberOfGuestPoc();
+
+  response
+    .then((res) => {
+      dispatch({
+        type: "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/POC",
+        payload: res.data,
+      });
+      console.log("EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/POC", res.data);
+    })
+    .catch((err) => {
+      dispatch({
+        type: "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/POC",
+        message: err.message,
+      });
+      console.log("EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/POC", err.message);
     });
 };
