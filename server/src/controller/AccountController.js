@@ -82,6 +82,7 @@ exports.login = async (req, res) => {
     const user = await Accounts.findOne({
       where: {
         username: username,
+        enable: true,
       },
     });
 

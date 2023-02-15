@@ -4,18 +4,16 @@ import * as React from "react";
 // @mui
 import { Button, Menu } from "@mui/material";
 // component
-import Iconify from "../../../../../../components/iconify";
+import Iconify from "../../../../../components/iconify";
 
 const SORT_BY_OPTIONS = [
-  { value: "all", label: "Tất cả" },
-  { value: "upcoming", label: "Sắp diễn ra" },
-  { value: "ongoing", label: "Đang diễn ra" },
-  { value: "done", label: "Đã kết thúc" },
+  { value: 2023, label: "2023" },
+  { value: 2022, label: "2022" },
 ];
 
-export default function EventFilter({ setFilterEvent = (f) => f }) {
+export default function BarChartYearFilter({ setBarChartYear = (f) => f }) {
   const [open, setOpen] = React.useState(null);
-  const [option, setOption] = React.useState("Tất cả");
+  const [option, setOption] = React.useState("2023");
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -23,8 +21,8 @@ export default function EventFilter({ setFilterEvent = (f) => f }) {
   const handleClose = (option) => {
     setOpen(null);
     console.log(option);
-    setOption(option.label);
-    setFilterEvent(option.value);
+    setOption(option);
+    setBarChartYear(option);
   };
 
   return (
@@ -40,7 +38,7 @@ export default function EventFilter({ setFilterEvent = (f) => f }) {
           />
         }
       >
-        Lọc sự kiện:&nbsp;
+        Thống kê năm:&nbsp;
         <Typography
           component="span"
           variant="body2"
@@ -61,7 +59,7 @@ export default function EventFilter({ setFilterEvent = (f) => f }) {
           <MenuItem
             key={option.value}
             selected={option.value === "newest"}
-            onClick={() => handleClose(option)}
+            onClick={() => handleClose(option.value)}
             sx={{ typography: "body2" }}
           >
             {option.label}

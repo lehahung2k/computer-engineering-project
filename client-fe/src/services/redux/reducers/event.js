@@ -314,14 +314,14 @@ const eventReducer = (state = initialState, action) => {
       };
     }
 
-    case "EVENT/STATISTIC_NUMBER_OF_GUEST": {
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST/EVENT": {
       return {
         ...state,
         loading: true,
       };
     }
 
-    case "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS": {
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/EVENT": {
       const newStatistic = {
         ...state.statistic,
         numberOfGuestEvent: {
@@ -337,7 +337,36 @@ const eventReducer = (state = initialState, action) => {
       };
     }
 
-    case "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL": {
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/EVENT": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST/POC": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_SUCCESS/POC": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfGuest: action.payload.numberOfGuest,
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "EVENT/STATISTIC_NUMBER_OF_GUEST_FAIL/POC": {
       return {
         ...state,
         loading: false,

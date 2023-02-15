@@ -13,6 +13,7 @@ const initialPoc = {
   failure: false,
   enableDelete: false,
   message: "",
+  statistic: {},
 };
 
 const pocReducer = (state = initialPoc, action) => {
@@ -314,6 +315,38 @@ const pocReducer = (state = initialPoc, action) => {
         ...state,
         loading: false,
         failure: true,
+      };
+    }
+
+    /**
+     * Statistic
+     */
+    case "POC/STATISTIC_NUMBER_OF_POC": {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+
+    case "POC/STATISTIC_NUMBER_OF_POC_SUCCESS": {
+      const newStatistic = {
+        ...state.statistic,
+        numberOfPoc: action.payload.numberOfPoc,
+      };
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        statistic: newStatistic,
+      };
+    }
+
+    case "POC/STATISTIC_NUMBER_OF_POC_FAIL": {
+      return {
+        ...state,
+        loading: false,
+        failure: true,
+        message: action.message,
       };
     }
 

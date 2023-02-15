@@ -21,6 +21,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import NormalTable from "../../../components/tables/normal";
+import moment from "moment";
+import { ShowTransactionImage } from "./components/popup/showTransactionImage";
+import { CustomFieldListTransaction } from "./components/customField/listTransaction";
 
 const headCells = [
   {
@@ -56,6 +59,10 @@ export default function PocListGuest() {
   const [listTransactions, setListTransactions] = React.useState([]);
   const [failure, setFailure] = React.useState(false);
   const pocInfo = useSelector((state) => state.pocState.poc);
+  const [transactionForShowImage, setTransactionForShowImage] = React.useState(
+    {}
+  );
+  const [showTransactionImage, setShowTransactionImage] = React.useState(false);
 
   const breadcrumbs = [
     { link: "/poc/event", label: "Danh sách sự kiện" },
@@ -69,12 +76,24 @@ export default function PocListGuest() {
     const params = { pointCode: pocInfo.pointCode };
     const responseFetchListTransaction =
       checkinApi.getAllTransactionByPointCode(params);
+    console.log("Point code: ", params);
 
     responseFetchListTransaction
       .then((res) => {
-        const filteredListTransaction = res.data.filter(
-          (transaction) => transaction.enable === true
-        );
+        const filteredListTransaction = res.data
+          .filter((transaction) => transaction.enable === 1)
+          .map((event) => {
+            let name = event.note.split("-")[0];
+            let note = event.note.split(name + "-")[1];
+            return {
+              ...event,
+              createTime: moment(event.createTime).format(
+                "YYYY-MM-DD HH:mm:ss"
+              ),
+              name: name,
+              note: note,
+            };
+          });
         setListTransactions((listTransactions) => [...filteredListTransaction]);
         console.log(res.data);
       })
@@ -110,7 +129,27 @@ export default function PocListGuest() {
                 </div>
 
                 <div>
-                  <NormalTable rows={listTransactions} headCells={headCells} />
+                  <NormalTable
+                    rows={listTransactions}
+                    headCells={headCells}
+                    customField={[
+                      {
+                        id: "image",
+                        component(row, index) {
+                          return (
+                            <CustomFieldListTransaction
+                              width="10%"
+                              field="image"
+                              row={row}
+                              key={index}
+                              setMessage={setTransactionForShowImage}
+                              setOpenDialog={setShowTransactionImage}
+                            />
+                          );
+                        },
+                      },
+                    ]}
+                  />
                 </div>
               </div>
             </Grid>
@@ -140,6 +179,12 @@ export default function PocListGuest() {
           </DialogActions>
         </Dialog>
       </div>
+      <ShowTransactionImage
+        open={showTransactionImage}
+        setOpen={setShowTransactionImage}
+        image1={transactionForShowImage.checkinImg1}
+        image2={transactionForShowImage.checkinImg2}
+      />
     </div>
   );
 }

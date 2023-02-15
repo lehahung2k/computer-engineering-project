@@ -111,3 +111,41 @@ exports.number_of_guest_each_event = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
+/**
+ * Tổng số lượng khách checkin tại gian hàng mà tài khoản poc phụ trách
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @returns Số lượng khách checkin tại các gian hàng mà tài khoản poc phụ trách (nếu hiểu mỗi poc account đại diện
+ * cho một doanh nghiệp tham gia vào sự kiện thì đây là số lượng khách tham quan gian hàng của doanh nghiệp này
+ * trong các sự kiện khác nhau)
+ */
+exports.number_of_guest_poc_account = async (req, res) => {
+  const username = req.user.username;
+
+  try {
+    const listPoc = await PointOfCheckins.findAll({
+      where: {
+        username: username,
+        enable: true,
+      },
+      raw: true,
+      attributes: ["pointCode"],
+    });
+
+    const numberOfGuest = await Transactions.count({
+      distinct: true,
+      col: "guestCode",
+      where: {
+        pointCode: listPoc,
+        enable: true,
+      },
+    });
+
+    return res.json({ numberOfGuest: numberOfGuest });
+  } catch (err) {
+    console.log(err);
+    return res.sendStatus(500);
+  }
+};

@@ -27,6 +27,17 @@ class GuestApi {
     };
     return axios.post(url, params, config);
   };
+
+  getNumberOfGuestPoc = () => {
+    const url = baseUrl + "/statistic/number-of-guest-poc";
+    const config = {
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("accessToken"),
+        "Content-Type": "application/json",
+      },
+    };
+    return axios.get(url, config);
+  };
 }
 
 const guestApi = new GuestApi();

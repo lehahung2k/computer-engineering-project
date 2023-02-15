@@ -30,9 +30,53 @@ import { fetchListTenant } from "../../../../services/redux/actions/tenant/fetch
 import moment from "moment";
 import AlertResponse from "./components/alert";
 
+const filterEventByTime = (listEvent, time) => {
+  console.log("filterEventByTime function, time: " + time);
+  switch (time) {
+    case "all": {
+      return listEvent;
+    }
+    case "upcoming": {
+      console.log("Current time: ", moment());
+      const listUpcoming = listEvent
+        .map((event) => {
+          console.log("Event time: ", moment(event.startTime));
+          console.log(
+            "Compare time: ",
+            moment().isBefore(moment(event.startTime))
+          );
+          return event;
+        })
+        .filter((event) => moment().isBefore(moment(event.startTime)));
+      return listUpcoming;
+    }
+
+    case "ongoing": {
+      const listOngoing = listEvent.filter(
+        (event) =>
+          moment().isBefore(moment(event.endTime)) &&
+          moment(event.startTime).isBefore(moment())
+      );
+      return listOngoing;
+    }
+
+    case "done": {
+      const listDone = listEvent.filter((event) =>
+        moment(event.endTime).isBefore(moment())
+      );
+      return listDone;
+    }
+
+    default: {
+      return listEvent;
+    }
+  }
+};
+
 export default function ListEvent() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [filterName, setFilterName] = React.useState("");
+  const [filterTime, setFilterTime] = React.useState("");
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
 
@@ -47,7 +91,17 @@ export default function ListEvent() {
           { link: "#", label: "Sự kiện" },
         ];
 
-  const customListEvents = listEvents.map((event) => {
+  const filteredEvents = listEvents.filter((event) => {
+    return (
+      event.eventName.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
+      event.eventDescription.toLowerCase().indexOf(filterName.toLowerCase()) !==
+        -1
+    );
+  });
+
+  const filteredEventByTime = filterEventByTime(filteredEvents, filterTime);
+
+  const customListEvents = filteredEventByTime.map((event) => {
     let startTime = moment(event.startTime).format("YYYY-MM-DD HH:mm:ss");
     let endTime = moment(event.endTime).format("YYYY-MM-DD HH:mm:ss");
     return {
@@ -56,6 +110,7 @@ export default function ListEvent() {
       endTime: endTime,
     };
   });
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -89,6 +144,7 @@ export default function ListEvent() {
   };
 
   const handleFilterByName = (e) => {
+    console.log(e.target.value);
     setFilterName(e.target.value);
   };
 
@@ -125,7 +181,7 @@ export default function ListEvent() {
                         filterName={filterName}
                         onFilterName={handleFilterByName}
                       />
-                      <EventFilter />
+                      <EventFilter setFilterEvent={setFilterTime} />
                       <Button
                         variant="contained"
                         sx={{ textTransform: "none" }}

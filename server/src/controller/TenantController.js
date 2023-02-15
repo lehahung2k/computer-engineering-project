@@ -24,6 +24,7 @@ exports.get_list_tenant = async (req, res) => {
             role: "tenant",
           },
           raw: true,
+          attributes: ["username"],
         });
 
         listTenantInfoFull.push({ ...tenant, ...username });
@@ -216,6 +217,7 @@ exports.delete_tenant = async (req, res) => {
   const listTenant = req.body;
   if (!listTenant || listTenant.length === 0) return res.sendStatus(400);
   const listTenantId = listTenant.map((tenant) => tenant.tenantId);
+  const listTenantCode = listTenant.map((tenant) => tenant.tenantCode);
 
   try {
     const updateResult = await Tenants.update(
@@ -223,6 +225,15 @@ exports.delete_tenant = async (req, res) => {
       {
         where: {
           tenantId: listTenantId,
+        },
+      }
+    );
+
+    const updateAccount = await Accounts.update(
+      { enable: false },
+      {
+        where: {
+          tenantCode: listTenantCode,
         },
       }
     );

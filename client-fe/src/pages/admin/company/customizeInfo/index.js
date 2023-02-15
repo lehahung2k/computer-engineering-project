@@ -27,6 +27,7 @@ import {
   newTenantCodeAction,
 } from "../../../../services/redux/actions/tenant/tenant";
 import { updateTenant } from "../../../../services/redux/actions/tenant/updateTenant";
+import { AlertEditTenant } from "./components/popup/alertResponse";
 
 const company = {
   name: "Công ty TNHH A",
@@ -40,6 +41,8 @@ const company = {
 export default function CustomInfoCompany() {
   const [openSidebar, setOpenSidebar] = React.useState(true);
   const [openBackdrop, setOpenBackdrop] = React.useState(false);
+  const [openEditAlert, setOpenEditAlert] = React.useState(false);
+
   const [code, setCode] = React.useState("");
   const tenantInfo = useSelector((state) => state.tenantState.tenant);
   const pinnedTenantId = useSelector(
@@ -66,6 +69,7 @@ export default function CustomInfoCompany() {
     // setOpenBackdrop(true);
     // setTimeout(setOpenBackdrop, 3000, false);
     dispatch(updateTenant(tenantInfo, pinnedTenantId));
+    setOpenEditAlert(true);
   };
   return (
     <div className={style.body}>
@@ -103,14 +107,6 @@ export default function CustomInfoCompany() {
                     fullWidth
                     autoComplete="company-name"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newNameTenantAction(e.target.value))
@@ -126,14 +122,6 @@ export default function CustomInfoCompany() {
                     fullWidth
                     autoComplete="company-website"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newWebsiteTenantAction(e.target.value))
@@ -150,14 +138,6 @@ export default function CustomInfoCompany() {
                     fullWidth
                     autoComplete="company-address"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newAddressTenantAction(e.target.value))
@@ -211,14 +191,6 @@ export default function CustomInfoCompany() {
                     fullWidth
                     autoComplete="contact-name"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newContactNameTenantAction(e.target.value))
@@ -236,14 +208,6 @@ export default function CustomInfoCompany() {
                     fullWidth
                     autoComplete="contact-mail"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newContactMailTenantAction(e.target.value))
@@ -260,14 +224,6 @@ export default function CustomInfoCompany() {
                     fullWidth
                     autoComplete="contact-number"
                     variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
                     InputLabelProps={{ shrink: true }}
                     onChange={(e) =>
                       dispatch(newContactNumberTenantAction(e.target.value))
@@ -276,57 +232,7 @@ export default function CustomInfoCompany() {
                   />
                 </Grid>
 
-                {/* <Grid item xs={6}>
-                  <TextField
-                    required
-                    id="username"
-                    name="usernam"
-                    label="Tên đăng nhập"
-                    fullWidth
-                    autoComplete="username"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    onChange={(e) =>
-                      dispatch(newUsernameTenantAction(e.target.value))
-                    }
-                    defaultValue={tenantInfo.username}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <TextField
-                    required
-                    id="password"
-                    name="password"
-                    label="Mật khẩu"
-                    fullWidth
-                    autoComplete="password"
-                    variant="standard"
-                    // helperText={
-                    //   name.length === 0 && checkName === 0
-                    //     ? "Tên không được để trống"
-                    //     : ""
-                    // }
-                    // onChange={(e) => setName(e.target.value)}
-                    // onClick={() => setCheckName(0)}
-                    // error={name.length === 0 && checkName === 0 ? true : false}
-                    InputLabelProps={{ shrink: true }}
-                    onChange={(e) =>
-                      dispatch(newPasswordTenantAction(e.target.value))
-                    }
-                    defaultValue={tenantInfo.password}
-                  />
-                </Grid> */}
-
-                <Grid item xs={6} align="right">
+                <Grid item xs={12} align="center">
                   <Button
                     variant="contained"
                     onClick={() => handleEditTenantInfo()}
@@ -334,9 +240,9 @@ export default function CustomInfoCompany() {
                     Sửa thông tin
                   </Button>
                 </Grid>
-                <Grid item xs={6} align="left">
+                {/* <Grid item xs={6} align="left">
                   <Button variant="contained">Đổi tài khoản đăng nhập</Button>
-                </Grid>
+                </Grid> */}
               </Grid>
             </div>
           </Grid>
@@ -348,6 +254,8 @@ export default function CustomInfoCompany() {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      <AlertEditTenant open={openEditAlert} setOpen={setOpenEditAlert} />
     </div>
   );
 }

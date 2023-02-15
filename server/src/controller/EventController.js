@@ -187,7 +187,6 @@ exports.add_event = async (req, res) => {
   if (
     !post ||
     post === {} ||
-    !post.enable ||
     !post.eventCode ||
     !post.eventName ||
     !post.tenantCode ||
