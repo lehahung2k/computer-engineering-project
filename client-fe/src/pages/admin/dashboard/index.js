@@ -30,6 +30,7 @@ import {
 import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statisticTenant";
 import { getNumberOfPocAccount } from "../../../services/redux/actions/accounts/statisticAccount";
 import { fetchListEvent } from "../../../services/redux/actions/event/fetchListEvent";
+import { getNumberOfPoc } from "../../../services/redux/actions/poc/statisticPoc";
 import moment from "moment";
 import {
   pinEventId,
@@ -64,6 +65,7 @@ export default function AdminDashBoard() {
   const statisticEvent = useSelector((state) => state.eventState.statistic);
   const statisticTenant = useSelector((state) => state.tenantState.statistic);
   const statisticAccount = useSelector((state) => state.accountState.statistic);
+  const statisticPoc = useSelector((state) => state.pocState.statistic);
   const listEvent = useSelector((state) => state.eventState.listEvents);
   const [barChartYear, setBarChartYear] = React.useState(2023);
 
@@ -122,9 +124,12 @@ export default function AdminDashBoard() {
   React.useEffect(() => {
     dispatch(getNumberOfEvent());
     dispatch(getNumberOfGuestAll());
-    dispatch(getNumberOfTenant());
+
     dispatch(getNumberOfPocAccount());
     dispatch(fetchListEvent());
+    sessionStorage.getItem("role") === "tenant"
+      ? dispatch(getNumberOfPoc())
+      : dispatch(getNumberOfTenant());
   }, []);
 
   const handleClickButtonField = (fieldName, row) => {
@@ -196,14 +201,25 @@ export default function AdminDashBoard() {
                           color="warning"
                         />
                       </div>
-                      <div className={style.statistic__card}>
-                        <StatisticCard
-                          title="Doanh nghiệp tham gia"
-                          total={statisticTenant.numberOfTenant}
-                          icon={"ion:business-sharp"}
-                          color="secondary"
-                        />
-                      </div>
+                      {sessionStorage.getItem("role") === "tenant" ? (
+                        <div className={style.statistic__card}>
+                          <StatisticCard
+                            title="Gian hàng đã đặt"
+                            total={statisticPoc.numberOfPoc}
+                            icon={"ion:business-sharp"}
+                            color="secondary"
+                          />
+                        </div>
+                      ) : (
+                        <div className={style.statistic__card}>
+                          <StatisticCard
+                            title="Doanh nghiệp tham gia"
+                            total={statisticTenant.numberOfTenant}
+                            icon={"ion:business-sharp"}
+                            color="secondary"
+                          />
+                        </div>
+                      )}
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Khách check-in"
