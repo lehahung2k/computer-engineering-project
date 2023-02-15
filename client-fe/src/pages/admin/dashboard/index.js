@@ -1,42 +1,33 @@
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
-import { Bar } from "react-chartjs-2";
-import Header from "../../../components/header";
-import SideBar from "../../../components/navigation";
-import StatisticCard from "../dashboard/statisticCard";
-import style from "./style.module.css";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
-import { Chart as ChartJS } from "chart.js/auto";
-import FestivalIcon from "@mui/icons-material/Festival";
-import BusinessIcon from "@mui/icons-material/Business";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import PeopleIcon from "@mui/icons-material/People";
-import { headCellsListFakeEvents } from "../../../assets/fakeData/fakeEvent";
-import NormalTable from "../../../components/tables/normal";
-import { FakeChart } from "../../../assets/fakeData/fakeChart";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import moment from "moment";
+import React, { useState } from "react";
+import { Bar } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import BarChartYearFilter from "./components/filterBarChartYear";
+import { useNavigate } from "react-router-dom";
+import { FakeChart } from "../../../assets/fakeData/fakeChart";
+import { headCellsListFakeEvents } from "../../../assets/fakeData/fakeEvent";
+import Header from "../../../components/header";
+import SideBar from "../../../components/navigation";
+import NormalTable from "../../../components/tables/normal";
+import { getNumberOfPocAccount } from "../../../services/redux/actions/accounts/statisticAccount";
+import {
+  newEventAction,
+  pinEventId,
+  resetApiState as resetEventApiState,
+} from "../../../services/redux/actions/event/event";
+import { fetchListEvent } from "../../../services/redux/actions/event/fetchListEvent";
 import {
   getNumberOfEvent,
   getNumberOfGuestAll,
 } from "../../../services/redux/actions/event/statisticEvent";
-import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statisticTenant";
-import { getNumberOfPocAccount } from "../../../services/redux/actions/accounts/statisticAccount";
-import { fetchListEvent } from "../../../services/redux/actions/event/fetchListEvent";
 import { getNumberOfPoc } from "../../../services/redux/actions/poc/statisticPoc";
-import moment from "moment";
-import {
-  pinEventId,
-  newEventAction,
-  resetApiState as resetEventApiState,
-} from "../../../services/redux/actions/event/event";
+import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statisticTenant";
+import StatisticCard from "../dashboard/statisticCard";
+import BarChartYearFilter from "./components/filterBarChartYear";
+import style from "./style.module.css";
 
 const filterNumberOfEventEachMonth = (year, listEvent) => {
   const filterYear = listEvent.filter(
