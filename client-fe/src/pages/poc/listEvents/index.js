@@ -25,10 +25,54 @@ import { useNavigate } from "react-router-dom";
 import { fetchPocInfo } from "../../../services/redux/actions/poc/fetchListPoc";
 import { fetchPocAccountInfo } from "../../../services/redux/actions/accounts/fetchListAccount";
 import AlertResponse from "./components/alert";
+
+const filterEventByTime = (listEvent, time) => {
+  console.log("filterEventByTime function, time: " + time);
+  switch (time) {
+    case "all": {
+      return listEvent;
+    }
+    case "upcoming": {
+      console.log("Current time: ", moment());
+      const listUpcoming = listEvent
+        .map((event) => {
+          console.log("Event time: ", moment(event.startTime));
+          console.log(
+            "Compare time: ",
+            moment().isBefore(moment(event.startTime))
+          );
+          return event;
+        })
+        .filter((event) => moment().isBefore(moment(event.startTime)));
+      return listUpcoming;
+    }
+
+    case "ongoing": {
+      const listOngoing = listEvent.filter(
+        (event) =>
+          moment().isBefore(moment(event.endTime)) &&
+          moment(event.startTime).isBefore(moment())
+      );
+      return listOngoing;
+    }
+
+    case "done": {
+      const listDone = listEvent.filter((event) =>
+        moment(event.endTime).isBefore(moment())
+      );
+      return listDone;
+    }
+
+    default: {
+      return listEvent;
+    }
+  }
+};
+
 export default function PocManageEvent() {
   const [filterName, setFilterName] = useState("");
   const [openSidebar, setOpenSidebar] = useState(true);
-
+  const [filterTime, setFilterTime] = React.useState("");
   const listEvent = useSelector((state) => state.eventState.listEvents);
   const tenantName = useSelector(
     (state) => state.tenantState.tenant.tenantName
@@ -64,6 +108,9 @@ export default function PocManageEvent() {
         -1
     );
   });
+
+  const filteredEventByTime = filterEventByTime(filteredEvents, filterTime);
+
   console.log(filteredEvents);
   const handleFilterByName = (e) => {
     setFilterName(e.target.value);
@@ -112,7 +159,7 @@ export default function PocManageEvent() {
                         filterName={filterName}
                         onFilterName={handleFilterByName}
                       />
-                      <EventFilter />
+                      <EventFilter setFilterEvent={setFilterTime} />
                     </Box>
                   </div>
                 </div>
@@ -121,7 +168,7 @@ export default function PocManageEvent() {
                   {/* <EventTable key={filteredEvents} rows={filteredEvents} /> */}
                   <NormalTable
                     key={filteredEvents}
-                    rows={filteredEvents}
+                    rows={filteredEventByTime}
                     headCells={headCellsListFakeEvents}
                     handleClickButtonField={handleClickButtonField}
                   />

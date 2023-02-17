@@ -79,6 +79,8 @@ export default function ListEvent() {
   const [filterTime, setFilterTime] = React.useState("");
   const listEvents = useSelector((state) => state.eventState.listEvents);
   const listTenant = useSelector((state) => state.tenantState.listTenant);
+  const successEvent = useSelector((state) => state.eventState.success);
+  const failureEvent = useSelector((state) => state.eventState.failure);
 
   const breadcrumbs =
     sessionStorage.getItem("role") === "admin"
@@ -147,6 +149,10 @@ export default function ListEvent() {
     console.log(e.target.value);
     setFilterName(e.target.value);
   };
+
+  if (failureEvent || successEvent) {
+    dispatch(resetEventApiState);
+  }
 
   return (
     <div className={style.body}>

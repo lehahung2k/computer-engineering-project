@@ -10,7 +10,7 @@ module.exports = {
       {
         // Báo cáo dạng web rất đẹp
         publicPath: "./jest-report",
-        filename: "report.html",
+        filename: "index.html",
         openReport: true,
       },
     ],

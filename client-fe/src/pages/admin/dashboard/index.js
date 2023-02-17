@@ -28,7 +28,9 @@ import { getNumberOfTenant } from "../../../services/redux/actions/tenant/statis
 import StatisticCard from "../dashboard/statisticCard";
 import BarChartYearFilter from "./components/filterBarChartYear";
 import style from "./style.module.css";
+import { Chart, registerables } from "chart.js";
 
+Chart.register(...registerables);
 const filterNumberOfEventEachMonth = (year, listEvent) => {
   const filterYear = listEvent.filter(
     (event) => moment(event.startTime).year() === year
@@ -187,7 +189,11 @@ export default function AdminDashBoard() {
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Sự kiện đã được tổ chức"
-                          total={statisticEvent.numberOfEvent}
+                          total={
+                            statisticEvent.numberOfEvent
+                              ? statisticEvent.numberOfEvent
+                              : 0
+                          }
                           icon={"akar-icons:check-in"}
                           color="warning"
                         />
@@ -196,7 +202,11 @@ export default function AdminDashBoard() {
                         <div className={style.statistic__card}>
                           <StatisticCard
                             title="Gian hàng đã đặt"
-                            total={statisticPoc.numberOfPoc}
+                            total={
+                              statisticPoc.numberOfPoc
+                                ? statisticPoc.numberOfPoc
+                                : 0
+                            }
                             icon={"ion:business-sharp"}
                             color="secondary"
                           />
@@ -205,7 +215,11 @@ export default function AdminDashBoard() {
                         <div className={style.statistic__card}>
                           <StatisticCard
                             title="Doanh nghiệp tham gia"
-                            total={statisticTenant.numberOfTenant}
+                            total={
+                              statisticTenant.numberOfTenant
+                                ? statisticTenant.numberOfTenant
+                                : 0
+                            }
                             icon={"ion:business-sharp"}
                             color="secondary"
                           />
@@ -214,7 +228,11 @@ export default function AdminDashBoard() {
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Khách check-in"
-                          total={statisticEvent.numberOfGuestAll}
+                          total={
+                            statisticEvent.numberOfGuestAll
+                              ? statisticEvent.numberOfGuestAll
+                              : 0
+                          }
                           icon={"fluent:guest-28-regular"}
                           color="info"
                         />
@@ -222,7 +240,11 @@ export default function AdminDashBoard() {
                       <div className={style.statistic__card}>
                         <StatisticCard
                           title="Cộng tác viên"
-                          total={statisticAccount.numberOfPocAccount}
+                          total={
+                            statisticAccount.numberOfPocAccount
+                              ? statisticAccount.numberOfPocAccount
+                              : 0
+                          }
                           icon={
                             "material-symbols:supervisor-account-outline-sharp"
                           }

@@ -17,49 +17,98 @@ const testAccountPoc = {
   password: "nghiemhongthuy535",
 };
 let server;
-describe("Kiểm thử chức năng thêm mới checkin", () => {
-  beforeAll(() => {
-    server = app.listen(10002); // Random number is needed to avoid using same port in different tests if you run in parallel
-  });
+// describe("Kiểm thử chức năng thêm mới checkin", () => {
+//   beforeAll(() => {
+//     server = app.listen(10002); // Random number is needed to avoid using same port in different tests if you run in parallel
+//   });
 
-  afterAll(() => {
-    server.close();
-  });
-  it("Thêm mới thông tin checkin chỉ với mã định danh", async () => {
-    let response = await request(server).post("/auth/login").send({
-      username: testAccountPoc.username,
-      password: testAccountPoc.password,
+//   afterAll(() => {
+//     server.close();
+//   });
+//   it("Thêm mới thông tin checkin chỉ với mã định danh", async () => {
+//     let response = await request(server).post("/auth/login").send({
+//       username: testAccountPoc.username,
+//       password: testAccountPoc.password,
+//     });
+
+//     let token = response.body.accessToken;
+//     console.log(token);
+//     response = await request(server)
+//       .post("/transaction/add-transaction")
+//       .send({
+//         guestCode: testCheckin.guestCode,
+//         pointCode: testCheckin.pointCode,
+//         enable: true,
+//       })
+//       .set("Authorization", `Bearer ${token}`);
+
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body.guestCode).toBe(testCheckin.guestCode);
+//   });
+
+//   it("Thêm mới thông tin checkin đầy đủ thông tin mô tả", async () => {
+//     let response = await request(server).post("/auth/login").send({
+//       username: testAccountPoc.username,
+//       password: testAccountPoc.password,
+//     });
+
+//     let token = response.body.accessToken;
+//     console.log(token);
+//     response = await request(server)
+//       .post("/transaction/add-transaction")
+//       .send(testCheckin)
+//       .set("Authorization", `Bearer ${token}`);
+
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body.guestCode).toBe(testCheckin.guestCode);
+//   });
+// });
+
+exports.testCheckin = (app, request) => {
+  describe("Kiểm thử chức năng thêm mới checkin", () => {
+    beforeAll(() => {
+      server = app.listen(10002); // Random number is needed to avoid using same port in different tests if you run in parallel
     });
 
-    let token = response.body.accessToken;
-    console.log(token);
-    response = await request(server)
-      .post("/transaction/add-transaction")
-      .send({
-        guestCode: testCheckin.guestCode,
-        pointCode: testCheckin.pointCode,
-        enable: true,
-      })
-      .set("Authorization", `Bearer ${token}`);
+    afterAll(() => {
+      server.close();
+    });
+    it("Thêm mới thông tin checkin chỉ với mã định danh", async () => {
+      let response = await request(server).post("/auth/login").send({
+        username: testAccountPoc.username,
+        password: testAccountPoc.password,
+      });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.guestCode).toBe(testCheckin.guestCode);
-  });
+      let token = response.body.accessToken;
+      console.log(token);
+      response = await request(server)
+        .post("/transaction/add-transaction")
+        .send({
+          guestCode: testCheckin.guestCode,
+          pointCode: testCheckin.pointCode,
+          enable: true,
+        })
+        .set("Authorization", `Bearer ${token}`);
 
-  it("Thêm mới thông tin checkin đầy đủ thông tin mô tả", async () => {
-    let response = await request(server).post("/auth/login").send({
-      username: testAccountPoc.username,
-      password: testAccountPoc.password,
+      expect(response.statusCode).toBe(200);
+      expect(response.body.guestCode).toBe(testCheckin.guestCode);
     });
 
-    let token = response.body.accessToken;
-    console.log(token);
-    response = await request(server)
-      .post("/transaction/add-transaction")
-      .send(testCheckin)
-      .set("Authorization", `Bearer ${token}`);
+    it("Thêm mới thông tin checkin đầy đủ thông tin mô tả", async () => {
+      let response = await request(server).post("/auth/login").send({
+        username: testAccountPoc.username,
+        password: testAccountPoc.password,
+      });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.guestCode).toBe(testCheckin.guestCode);
+      let token = response.body.accessToken;
+      console.log(token);
+      response = await request(server)
+        .post("/transaction/add-transaction")
+        .send(testCheckin)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body.guestCode).toBe(testCheckin.guestCode);
+    });
   });
-});
+};

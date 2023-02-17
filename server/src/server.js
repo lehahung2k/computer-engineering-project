@@ -64,7 +64,9 @@ const guestRouter = require("./routes/GuestRouter");
 app.use("/guest", guestRouter);
 
 // Show document in public folder
-app.use("/help", express.static(path.join(__dirname, "docs")));
+app.use("/help", express.static("docs"));
+
+app.use("/test", express.static("jest-report"));
 
 db.sequelize.sync().then(() => {
   const httpsServer = https.createServer(
