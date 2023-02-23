@@ -179,6 +179,7 @@ export default function Checkin() {
                         variant="outlined"
                         InputLabelProps={{ shrink: true }}
                         fullWidth
+                        required
                         // defaultValue={guestCode}
                         onKeyPress={(e) => {
                           if (e.key === "Enter") {

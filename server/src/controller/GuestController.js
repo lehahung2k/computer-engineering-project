@@ -133,12 +133,12 @@ exports.number_of_guest_poc_account = async (req, res) => {
       raw: true,
       attributes: ["pointCode"],
     });
-
+    const listPointCode = listPoc.map((poc) => poc.pointCode);
     const numberOfGuest = await Transactions.count({
       distinct: true,
       col: "guestCode",
       where: {
-        pointCode: listPoc,
+        pointCode: listPointCode,
         enable: true,
       },
     });
