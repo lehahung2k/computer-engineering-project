@@ -13,6 +13,7 @@ import NormalTable from "../../../components/tables/normal";
 import StatisticCard from "./components/statisticCard";
 import style from "./style.module.css";
 import PocInfo from "./components/accountInfo";
+import { resetApiState } from "../../../services/redux/actions/event/event";
 import { getNumberOfGuestPoc } from "../../../services/redux/actions/event/statisticEvent";
 import { fetchListEvent } from "../../../services/redux/actions/event/fetchListEvent";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,6 +49,8 @@ export default function PocDashBoard() {
     (state) => state.eventState.statistic.numberOfGuest
   );
   const listEvent = useSelector((state) => state.eventState.listEvents);
+  const successEvent = useSelector((state) => state.eventState.success);
+  const failureEvent = useSelector((state) => state.eventState.failure);
 
   const listEventForChart = filterNumberOfEventEachMonth(
     barChartYear,
@@ -96,6 +99,10 @@ export default function PocDashBoard() {
 
   console.log("Number of guest: ", numberOfGuest);
   console.log("List event: ", listEvent);
+
+  if (successEvent || failureEvent) {
+    dispatch(resetApiState());
+  }
 
   return (
     <div className={style.wrapper}>
