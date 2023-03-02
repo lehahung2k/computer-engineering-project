@@ -27,7 +27,7 @@ export default function AlertResponse() {
   React.useEffect(() => {
     if (successEvent) {
       if (listEvent.length === 0) {
-        alert("Không có sự kiện nào đang diễn ra 0001");
+        alert("Không có sự kiện nào đang diễn ra");
         navigate("/poc/event");
       } else {
         console.log("Fetch poc info");
