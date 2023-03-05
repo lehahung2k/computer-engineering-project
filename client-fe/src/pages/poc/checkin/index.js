@@ -91,8 +91,8 @@ export default function Checkin() {
       createTime: moment().format(),
       note: note + name,
       enable: true,
-      checkinImg1: enableImage === "on" ? image1 : "",
-      checkinImg2: enableImage === "on" ? image2 : "",
+      checkinImg1: enableImage ? image1 : "",
+      checkinImg2: enableImage ? image2 : "",
       identityType: identityType,
     };
     console.log(params);
@@ -101,14 +101,16 @@ export default function Checkin() {
       params,
       sessionStorage.getItem("accessToken")
     );
-
+    console.log("Adding new transaction!");
     responseAddNewCheckin
       .then((response) => {
+        // alert(response.data);
         alert("Khách checkin thành công");
         setImage1("");
         setImage2("");
       })
       .catch((error) => {
+        alert("Error: " + error.message);
         console.log(error);
       });
 
@@ -235,7 +237,9 @@ export default function Checkin() {
                     <Grid item xs={6}>
                       <Checkbox
                         color="primary"
-                        onChange={(e) => setEnableImage(e.target.value)}
+                        onChange={(e) => {
+                          setEnableImage(!enableImage);
+                        }}
                         key={refresh}
                       />
                       Cho phép ảnh

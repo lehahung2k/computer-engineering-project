@@ -7,19 +7,12 @@ const WebCam = React.forwardRef(
     const webcamRef = React.useRef(null);
     const [deviceId, setDeviceId] = React.useState();
     const [devices, setDevices] = React.useState([]);
-    const videoConstraints =
-      deviceId === ""
-        ? {
-            width: 300,
-            height: 300,
-            facingMode: "user",
-          }
-        : {
-            width: 300,
-            height: 300,
-            facingMode: "user",
-            deviceId: deviceId,
-          };
+    const videoConstraints = {
+      width: 300,
+      height: 300,
+      // facingMode: "user",
+      deviceId: deviceId,
+    };
 
     React.useImperativeHandle(ref, () => ({
       captureCamera,
@@ -42,7 +35,7 @@ const WebCam = React.forwardRef(
       //   setImage(imageSrc);
       captureImage(imageSrc, camId);
     };
-
+    if (devices.length === 0) return <div>Không tìm thấy thiết bị</div>;
     return (
       <div className="poc-cam">
         <div className="webcam-container">
@@ -59,7 +52,7 @@ const WebCam = React.forwardRef(
             ) : (
               <img src={image} alt="Check-in guest" />
             )}
-            {image === "" ? <div></div> : console.log(image)}
+            {/* {image === "" ? <div></div> : console.log(image)} */}
           </div>
           <div>
             {image !== "" ? (
@@ -88,12 +81,20 @@ const WebCam = React.forwardRef(
           <div>
             <select
               id="device-selection"
-              onChange={(e) => setDeviceId(e.target.value)}
+              onChange={(e) => {
+                setDeviceId(e.target.value);
+                console.log("Selected device :", e.target.value);
+              }}
             >
+              <option label="Chọn thiết bị camera"></option>
               {devices.map((device, key) => (
-                <option key={key}>
+                <option
+                  key={key}
+                  value={device.id}
+                  label={device.label || `Device ${key + 1}`}
+                >
                   {/* <Webcam audio={false} videoConstraints={{ deviceId: device.deviceId }} /> */}
-                  {device.label || `Device ${key + 1}`}
+                  {device.deviceId}
                 </option>
               ))}
             </select>

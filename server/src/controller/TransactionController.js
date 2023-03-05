@@ -50,7 +50,9 @@ exports.add_transaction = async (req, res) => {
   console.log(req.body);
   if (!post) return res.sendStatus(400);
   try {
-    const newTransaction = await Transactions.create(post);
+    console.log("Post transaction: " + post.pointCode);
+    const newTransaction = await Transactions.create(post, { raw: true });
+    console.log("newTransaction :", newTransaction);
     const newGuest = {
       guestCode: post.guestCode,
       guestDescription: post.note,
