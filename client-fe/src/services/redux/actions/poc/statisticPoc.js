@@ -26,7 +26,7 @@ export const getNumberOfPocEvent = (eventCode) => async (dispatch) => {
   dispatch({ type: "POC/STATISTIC_NUMBER_OF_POC" });
 
   const params = { eventCode: eventCode };
-  const response = pocApi.getNumberOfPocAll(params);
+  const response = pocApi.getNumberOfPocEvent(params);
 
   response
     .then((res) => {
