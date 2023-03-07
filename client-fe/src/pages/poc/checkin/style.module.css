@@ -30,11 +30,11 @@
 
 #event-name-label,
 #poc-name-label {
-  text-align: left;
+  /* text-align: left; */
   /* background-color: aqua; */
-  padding-left: 100px;
+  /* padding-left: 100px; */
   margin: 10px;
-  padding: 10px 10px 10px 100px;
+  /* padding: 10px 10px 10px 100px; */
   font-size: 16px;
   font-weight: bold;
 }
@@ -123,19 +123,8 @@
   width: 10px;
 }
 
-@media only screen and (max-width: 900px) {
+@media screen and (max-width: 900px) {
   .camera_01 {
     display: none;
-  }
-
-  #event-name-label,
-  #poc-name-label {
-    /* text-align: left; */
-    /* background-color: aqua; */
-    /* padding-left: 100px; */
-    margin: 10px;
-    /* padding: 10px 10px 10px 100px; */
-    font-size: 16px;
-    font-weight: bold;
   }
 }
