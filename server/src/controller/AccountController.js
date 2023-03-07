@@ -279,6 +279,7 @@ exports.get_list_account_available = async (req, res) => {
         where: {
           role: "poc",
           tenantCode: tenantCode,
+          active: 1,
           username: {
             [Op.not]: listUsernameUsed,
           },
