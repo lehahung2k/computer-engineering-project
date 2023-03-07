@@ -108,6 +108,7 @@ export default function Checkin() {
         alert("Khách checkin thành công");
         setImage1("");
         setImage2("");
+        setEnableImage(false);
       })
       .catch((error) => {
         alert("Error: " + error.message);
