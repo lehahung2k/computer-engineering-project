@@ -153,7 +153,7 @@ export default function Checkin() {
 
           <div id="check-in">
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={4} className={style.camera_01}>
                 <WebCam
                   image={image1}
                   camId={1}
