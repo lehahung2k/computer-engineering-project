@@ -89,7 +89,7 @@ export default function Checkin() {
       pointCode: pocInfo.pointCode,
       guestCode: guestCode,
       createTime: moment().format(),
-      note: note + name,
+      note: name + " - " + note,
       enable: true,
       checkinImg1: enableImage ? (image1 === "data:," ? "" : image1) : "",
       checkinImg2: enableImage ? image2 : "",

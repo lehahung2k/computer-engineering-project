@@ -58,7 +58,7 @@ export default function DetailInfoCompany() {
 
   const handleDeleteTenant = () => {
     console.log("Delete tenant");
-    setMessage("Bạn có muốn xóa sự kiện không ?");
+    setMessage("Bạn có muốn xóa ban tổ chức này không ?");
     setOpenDialog(true);
   };
 

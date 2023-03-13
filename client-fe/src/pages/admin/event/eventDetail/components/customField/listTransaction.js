@@ -43,6 +43,7 @@ export function CustomFieldListTransaction({
         console.log(row);
         setMessage(row);
         setOpenDialog(true);
+        break;
       }
 
       default: {
@@ -101,7 +102,7 @@ const customTableCell = (width, key, type, clickHandler = (f) => f) => {
           <Button
             style={{ textTransform: "none" }}
             variant="outlined"
-            color={"error"}
+            color={"primary"}
             onClick={() => clickHandler()}
             sx={{ whiteSpace: "normal", fontSize: "10px" }}
           >
