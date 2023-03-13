@@ -23,12 +23,12 @@ import moment from "moment";
 
 const headCells = [
   { id: "id", label: "", sort: false },
-  {
-    id: "name",
-    label: "Họ và tên",
+  // {
+  //   id: "name",
+  //   label: "Họ và tên",
 
-    sort: true,
-  },
+  //   sort: true,
+  // },
   {
     id: "guestCode",
     label: "Mã định danh",
