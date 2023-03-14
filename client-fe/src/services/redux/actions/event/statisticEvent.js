@@ -49,7 +49,7 @@ export const getNumberOfGuestEvent = (eventCode) => async (dispatch) => {
   dispatch({ type: "EVENT/STATISTIC_NUMBER_OF_GUEST/EVENT" });
 
   const params = { eventCode: eventCode };
-  const response = guestApi.getNumberOfGuestAll(params);
+  const response = guestApi.getNumberOfGuestEvent(params);
 
   response
     .then((res) => {
